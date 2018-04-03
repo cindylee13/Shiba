@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import GetUserID, GetUserKey, LoginValidate, User, FilterUser, DepositWalletMoney, WithdrawWalletMoney
 from django.contrib.auth.decorators import login_required
-
+from django.db import IntegrityError
 
 def Register(request):
     error = []
@@ -15,12 +15,21 @@ def Register(request):
             username = data['username']
             email = data['email']
             password2 = data['password2']
+            password = data['password']
             if not User.objects.all().filter(username=username):
                 if form.pwd_validate(password, password2):
-                    user = User.objects.create_user(username, email, password)
-                    user.save()
-                    LoginValidate(request, username, password)
-                    return render(request,'welcome.html', {'user': username})
+                    try:
+                        user = User.objects.create_user(username, email, password)
+                        user.save()
+                    except IntegrityError as e:
+                        # print e.message
+                        if 'UNIQUE constraint failed' in e.message:
+                            LoginValidate(request, username, password)
+                            
+                            return render(request,'welcome.html', {'user': username})
+                    else:
+                        LoginValidate(request, username, password)
+                        return render(request,'welcome.html', {'user': username})
                 else:
                     error.append('Please input the same password')
             else:
