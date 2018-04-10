@@ -14,17 +14,20 @@ class User(AbstractUser):
 		return self.userID
  
 # GET----------------------------------------------
+# 取得我的使用者的ID
 def GetUserID(request):
     userID = None
     if request.user.is_authenticated():
         userID = request.user.userID
     return userID
 
+#拿取獨一無二的使用者Session地址
 def GetUserKey(userID):
     return Session.objects.all()[userID]
 # GET----------------------------------------------
 
 # function-----------------------------------------
+# 判斷我的帳號使否有登入成功
 def LoginValidate(request,username,password):  
     rtvalue = False  
     user = authenticate(username=username,password=password)  
