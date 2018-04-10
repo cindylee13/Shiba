@@ -1,0 +1,170 @@
+  <!DCTYPE html>
+  <html>
+
+  <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>I come from template!!</title>
+    <style>
+      body {
+        background-color: lightyellow;
+      }
+
+      em {
+        color: LightSeaGreen;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <pre>{{ans}}</pre>
+        <form action="test1" method="get">
+          <button name="subject" type="submit" value="Submit">确定</button>
+        </form>
+      </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~Bittrex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+      <div class="row">
+        <em>{{ current_time }}</em>
+        <em>{{ change_time }}</em>
+      </div>
+      <div class="row">
+        <div class="table-responsive">
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th style="width:10%">#Bittrex</th>
+              <th style="width:20%">bid</th>
+              <th style="width:20%">ask</th>
+              <th style="width:20%">last</th>
+              <th style="width:30%">time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Bittrex in BittrexBTCTable %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{Bittrex.bid}}</td>
+              <td>{{Bittrex.ask}}</td>
+              <td>{{Bittrex.last}}</td>
+              <td>{{Bittrex.created_at}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~Bittrex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Cex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+      <div class="row"> 
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th style="width:10%">#Cex</th>
+              <th style="width:20%">bid</th>
+              <th style="width:20%">ask</th>
+              <th style="width:20%">last</th>
+              <th style="width:30%">time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Cex in CexBTCTable %}
+            <tr>
+              <th scope="col">{{forloop.counter}}</th>
+              <td>{{Cex.bid}}</td>
+              <td>{{Cex.ask}}</td>
+              <td>{{Cex.last}}</td>
+              <td>{{Cex.created_at}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Cex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Binance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+      <div class="row"> 
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th style="width:10%">#binance</th>
+              <th style="width:20%">bid</th>
+              <th style="width:20%">ask</th>
+              <th style="width:20%">last</th>
+              <th style="width:30%">time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Binance in BinanceBTCTable %}
+            <tr>
+              <th scope="col">{{forloop.counter}}</th>
+              <td>{{Binance.bid}}</td>
+              <td>{{Binance.ask}}</td>
+              <td>{{Binance.last}}</td>
+              <td>{{Binance.created_at}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Binance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Bitfinex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+      <div class="row"> 
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th style="width:10%">#Bitfinex</th>
+              <th style="width:20%">bid</th>
+              <th style="width:20%">ask</th>
+              <th style="width:20%">last</th>
+              <th style="width:30%">time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Bitfinex in BitfinexBTCTable %}
+            <tr>
+              <th scope="col">{{forloop.counter}}</th>
+              <td>{{Bitfinex.bid}}</td>
+              <td>{{Bitfinex.ask}}</td>
+              <td>{{Bitfinex.last}}</td>
+              <td>{{Bitfinex.created_at}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Bitfinex~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Cryptopia~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+      <div class="row"> 
+        <table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th style="width:10%">#Cryptopia</th>
+              <th style="width:20%">bid</th>
+              <th style="width:20%">ask</th>
+              <th style="width:20%">last</th>
+              <th style="width:30%">time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for Cryptopia in CryptopiaBTCTable %}
+            <tr>
+              <th scope="col">{{forloop.counter}}</th>
+              <td>{{Cryptopia.bid}}</td>
+              <td>{{Cryptopia.ask}}</td>
+              <td>{{Cryptopia.last}}</td>
+              <td>{{Cryptopia.created_at}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~Cryptopia~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+    </div>
+  </body>
+
+  </html>

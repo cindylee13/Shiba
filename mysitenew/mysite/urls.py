@@ -1,11 +1,12 @@
 from django.conf.urls import include, url  
 from django.contrib import admin  
+from trips.views import BTC
 from users.views import Register, Login, Logout, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
 admin.autodiscover()  
   
 urlpatterns = [  
     url(r'^admin/', include(admin.site.urls)),  
-
+    url(r'^BTC/$', BTC),
     url(r'^users/login/$',Login), 
     url(r'^users/login/register/$',Register),  
     url(r'^users/logout/$', Logout), 
