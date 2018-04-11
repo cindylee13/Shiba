@@ -11,7 +11,7 @@ def hello_world():
 @shared_task
 def BittrexForSecond():
 		BittrexBTC()
-		CexBTC()
+		#CexBTC()
 		BinanceBTC()
 		BitfinexBTC()
 		CryptopiaBTC()

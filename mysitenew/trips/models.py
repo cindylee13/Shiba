@@ -6,8 +6,10 @@ from django.utils import timezone
 import pandas as pd
 import json
 import requests
+import redis
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
+from django.core import serializers
 #transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable
 
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
@@ -138,11 +140,15 @@ def UpdateOrCreate(table,bid,ask,last):
 		result = table.objects.filter(created_at__lt=time_threshold)[0]
 	except IndexError:
 		table.objects.create(bid = bid, ask = ask, last= last)
+		coin = serializers.serialize('json', table.objects.all())
+		Update('PriceRealTime',coin)
 		return 'empty'
 	result.bid = bid
 	result.ask = ask 
 	result.last= last
 	result.save()
+	coin = serializers.serialize('json', table.objects.all())
+	Update('price',coin)
 	return result.bid
 #Get the bid and ask difference----------------------------------------------------------
 def GetBidAsk():   #bid-ask
@@ -184,8 +190,12 @@ def GetDifference():
 		tran.update({transections[i]:difference})
 		difference={}
 		index.append(transections[i])
-		print tran
+		print 'differenct calculating ...'
 	return tran
+#realtime web-------------------------------------------------------------
+def Update(portname,objectname):
+	r = redis.StrictRedis(host='localhost', port=6379, db=0)
+	r.publish(portname, objectname)
 '''
 def crawal():
 	#url = 'https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC'
