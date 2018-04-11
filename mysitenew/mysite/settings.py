@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'users',
     'trips',
     'djcelery',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,12 @@ DATABASES = {
     }
 }
 
+CRONJOBS = [
+    #('*/1 * * * *', 'django.core.management.call_command', ['crontab']),#for all file
+    ('*/1 * * * *', 'trips.crontab.RunForSecond'),#ten second once
+    #('*/1 * * * *', 'trips.models.BittrexForSecond'),
+    
+]
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

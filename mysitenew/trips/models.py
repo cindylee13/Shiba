@@ -16,6 +16,8 @@ class BittrexBTCTable(models.Model):
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
 	def __str__(self):
 		return 'BittrexBTCTable'
 
@@ -39,6 +41,8 @@ class CexBTCTable(models.Model):
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
 	def __str__(self):
 		return 'CexBTCTable'
 
@@ -61,6 +65,8 @@ class BinanceBTCTable(models.Model):
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
 	def __str__(self):
 		return 'BinanceBTCTable'
 
@@ -83,6 +89,8 @@ class BitfinexBTCTable(models.Model):
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
 	def __str__(self):
 		return 'BitfinexBTCTable'
 
@@ -105,6 +113,8 @@ class CryptopiaBTCTable(models.Model):
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
 	def __str__(self):
 		return 'CryptopiaBTCTable'
 
@@ -169,11 +179,12 @@ def GetDifference():
 		for j in range(0,len(transections)):
 			if(i==j):
 				continue
-			ask=asks[transections[j]+'Ask']['ask__avg']
+			ask= asks[transections[j]+'Ask']['ask__avg']
 			difference.update({transections[j]:bid-ask})
 		tran.update({transections[i]:difference})
 		difference={}
 		index.append(transections[i])
+		print tran
 	return tran
 '''
 def crawal():
