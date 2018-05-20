@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, render
-from users.form import RegisterForm, LoginForm, ChangepwdForm ,StoredMoneyForm , TakeMoneyForm
+from users.form import SignUpForm, SignInForm, ChangepwdForm ,StoredMoneyForm , TakeMoneyForm, ForgotPasswordForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import GetUserID, GetUserKey, LoginValidate, User, FilterUser, DepositWalletMoney, WithdrawWalletMoney
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-def Register(request):
+def SignUp(request):
     error = [] # 創建可以顯示error的陣列
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             username = data['username']   # 把web的資料丟到username
@@ -37,34 +37,50 @@ def Register(request):
                 error.append(
                     'The username has existed,please change your username')
     else:
-        form = RegisterForm()
-    return render(request,'register.html', {'form': form, 'error': error})
+        form = SignUpForm()
+    return render(request,'signup.html', {'form': form, 'error': error})
 
 
-def Login(request):
+def SignIn(request):
     error = []
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = SignInForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             username = data['username']
             password = data['password'] # 確認密碼有沒有對
             if LoginValidate(request, username, password):
-                # GetUserKey(GetUserID(request))
+                # print GetUserKey(GetUserID(request))
                 return render(request,'welcome.html', {'username': username})
             else:
                 error.append('Please input the correct password')
         else:
             error.append('Please input both username and password')
     else:
-        form = LoginForm()
-    return render(request,'login.html', {'error': error, 'form': form})
+        form = SignInForm()
+    return render(request,'signin.html', {'error': error, 'form': form})
 
 
-def Logout(request):
+def SignOut(request):
     auth_logout(request)
-    return HttpResponseRedirect('/users/login/')
+    return HttpResponseRedirect('/users/signin/')
 
+def ForgotPassword(request):
+    error = []
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            email = data['email']
+            if LoginValidate(request, email):
+                return render(request,'index.html', {'username': username})
+            else:
+                error.append('Please input the correct password')
+        else:
+            error.append('Please input both username and password')
+    else:
+        form = ForgotPasswordForm()
+    return render(request,'forgot.html', {'error': error, 'form': form}) 
 
 @login_required(login_url='/users/error/') # 如果在使用者已登出 直接改網頁位置是沒有辦法進入的就會直接跳轉到這裡
 def ChangePassword(request):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms  
-class RegisterForm(forms.Form):  
+class SignUpForm(forms.Form):  
     username = forms.CharField()  
     email = forms.EmailField()  
     password = forms.CharField(widget=forms.PasswordInput)  
@@ -9,7 +9,7 @@ class RegisterForm(forms.Form):
     def pwd_validate(self,p1,p2):  
         return p1==p2  
 
-class LoginForm(forms.Form):  
+class SignInForm(forms.Form):  
     username = forms.CharField()  
     password = forms.CharField(widget=forms.PasswordInput)
 
@@ -25,3 +25,6 @@ class TakeMoneyForm(forms.Form):
 
 class StoredMoneyForm(forms.Form):
     storedmoney = forms.FloatField()
+
+class ForgotPasswordForm(forms.Form):  
+    email = forms.EmailField() 

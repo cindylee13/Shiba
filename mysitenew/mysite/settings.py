@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+HERE = os.path.dirname(os.path.abspath(__file__))  
+HERE = os.path.join(HERE, '../') 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -82,6 +84,15 @@ TEMPLATES = [
     },
 ]
 
+# Additional locations of static files  
+STATICFILES_DIRS = (  
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".  
+    # Always use forward slashes, even on Windows.  
+    # Don't forget to use absolute paths, not relative paths.  
+    os.path.join(os.path.dirname(__file__), '..', 'static').replace('\\','/'),  
+    os.path.join('static'),  
+)  
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
@@ -94,12 +105,12 @@ DATABASES = {
     }
 }
 
-CRONJOBS = [
-    #('*/1 * * * *', 'django.core.management.call_command', ['crontab']),#for all file
-    ('*/1 * * * *', 'trips.crontab.RunForSecond'),#ten second once
-    #('*/1 * * * *', 'trips.models.BittrexForSecond'),
+# CRONJOBS = [
+#     #('*/1 * * * *', 'django.core.management.call_command', ['crontab']),#for all file
+#     ('*/1 * * * *', 'trips.crontab.RunForSecond'),#ten second once
+#     #('*/1 * * * *', 'trips.models.BittrexForSecond'),
     
-]
+# ]
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
