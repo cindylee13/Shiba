@@ -1,0 +1,317 @@
+/*
+ * Author: Carlos Alvarez
+ * URL: http://alvarez.is
+ *
+ * Project Name: Victoria vCard - Free Bootstrap 3 Theme
+ * Version: 1.0
+ * URL: http://blacktie.co
+ */
+
+body {
+  	background-color: #f2f2f2;
+    font-family: "Lato";
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+    padding-top: 150px;
+
+	background-image: url(../img/trading.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+  }
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway";
+    font-weight: 100;
+    color: rgba(255,255,255,1);
+}
+
+
+/* Paragraph & Typographic */
+p {
+    line-height: 28px;
+    margin-bottom: 25px;
+}
+
+.centered {
+    text-align: center;
+}
+
+/* Links */
+a {
+    color: #F58D03;
+    word-wrap: break-word;
+
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: #7b7b7b;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+ hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: -.2em 0;
+    padding: 0;
+}
+
+.w {
+	background-color: #4f4f4f;
+
+}
+
+
+.col-md-4 {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.col-xs-6 {
+    width: 40%;
+}
+.col-md-8 {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+
+.nav-tabs {
+	border-bottom: 1px solid #dddddd;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #bdc3c7;
+	cursor: default;
+	background-color: #4f4f4f;
+	border-left: 5px solid #F58D03;
+	border-bottom-color: transparent;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	width: 100%;
+}
+
+.nav-tabs > li > a {
+	margin-right: 2px;
+	line-height: 1.428571429;
+	border-bottom: 1px solid #3c3c3c;
+	border-radius: 0 0 0 0;
+	width: 100%;
+	background-color: #6c6c6c;
+}
+
+.tab-content {
+	background-color: #4f4f4f;
+	padding-left: 15px;
+	padding-top: 20px;
+	padding-right: 15px;
+}
+
+.tab-content h5 {
+	color: #bdc3c7;
+  font-family: 'Raleway';
+  font-size: 14px;
+  font-weight: 400;
+  margin: 3em 0;
+}
+.tab-content h3 {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+	font-weight: 500;
+	letter-spacing: 0px;
+}
+
+.tab-content h4 {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+	font-weight: 500;
+	letter-spacing: 0px;
+  text-transform: uppercase;
+}
+
+.red i {
+	font-size: 12px;
+	color: #e74c3c;
+}
+
+i {
+	vertical-align: middle;
+}
+
+.sm {
+	font-size: 14px;
+  margin:1em 0;
+  color: #bdc3c7;
+}
+.cm {
+	font-size: 14px;
+  margin:2em 0;
+  color: #bdc3c7;
+}
+.lm {
+	font-size: 14px;
+  margin:1em 2em;
+  color: #bdc3c7;
+  line-height:2;
+  margin-top:250px;
+}
+.xm {
+	font-size: 14px;
+  margin:1em 2.5em;
+  color: #bdc3c7;
+}
+
+a h6{
+	color: #1abc9c;
+}
+
+a h6:hover {
+	color: #7b7b7b;
+}
+
+grey {
+	color: #bdc3c7;
+  letter-spacing: 1px;
+  font-family: 'Raleway';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 3.5;
+}
+form
+{
+    width: 250px;
+    margin: 0 0;
+}
+
+
+form.login input[type="submit"]:hover
+{
+    transition: background-color 0.5s ease;
+}
+form.login input[type="text"] {
+    width: 80%;
+    margin: 0;
+    padding: 2px 5px;
+    background: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    outline: 0;
+    font-style: italic;
+    font-size: 12px;
+    font-weight: 350;
+    letter-spacing: 0.6px;
+    margin-bottom: 5px;
+    color: rgba(255,255,255,0.5);
+    outline: 0;
+    line-height: 2.5
+  }
+
+  .btn {
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: 1px;
+  }
+
+
+  .btn-primary {
+    background-color: rgba(255,255,255,0.5);
+    border-color: #FFF;
+  }
+
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    color: #000000;
+    background-color: rgba(255,255,255,0.9); !important;
+  }
+
+  .btn-primary:active, .btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(240, 95, 64, 0.5); !important;
+  }
+
+  i{
+    color:#bdc3c7;
+    font-family: 'Raleway';
+  }
+
+  @media (min-width: 992px) {
+    #mainNav {
+      border-color: transparent;
+      background-color: transparent;
+    }
+    #mainNav .navbar-brand {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    #mainNav .navbar-brand:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+  #mainNav {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    transition: all 0.2s;
+    font-weight: 700;
+  }
+  #mainNav .navbar-nav > li.nav-item > a.nav-link ,
+  #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .fixed-top {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1030;
+  }
+  #mainNav .navbar-nav > li.nav-item > a.nav-link {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-link{
+    padding: 0.5rem 1rem;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+  .nav-link:hover{
+    padding: 0.5rem 1rem;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255,255,255,1);
+  }
+
+  .navbar-brand {
+      float: left;
+      padding: 15px 15px;
+      font-size: 20px;
+      line-height: 20px;
+  }
