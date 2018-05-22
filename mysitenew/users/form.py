@@ -10,8 +10,9 @@ class SignUpForm(forms.Form):
         return p1==p2  
 
 class SignInForm(forms.Form):  
-    username = forms.CharField()  
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(label='username', 
+                widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': "Password"}))
 
 class ChangepwdForm(forms.Form):
     oldPassword = forms.CharField(widget=forms.PasswordInput)  
@@ -27,4 +28,4 @@ class StoredMoneyForm(forms.Form):
     storedmoney = forms.FloatField()
 
 class ForgotPasswordForm(forms.Form):  
-    email = forms.EmailField() 
+    email = forms.EmailField()  
