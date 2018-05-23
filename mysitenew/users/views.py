@@ -86,19 +86,20 @@ def ForgotPassword(request):
 def ChangePassword(request):
     if not request.user.is_authenticated():  # prevent anonymous Sign in
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) # 判斷使用者有沒有登出過
+        # return HttpResponseRedirect('/users/signin/')
     error = []
     if request.method == 'POST':
         form = ChangepwdForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            user = authenticate(username=username,
+            user = authenticate(username=request.user.username,
                                 password=data['oldPassword']) # 內建判斷舊使用者和使用者密碼
             if user is not None:
                 if data['newPassword'] == data['newPassword2']:
-                    newUser = User.objects.get(username__exact=username)
+                    newUser = User.objects.get(username__exact=request.user.username)
                     newUser.set_password(data['newPassword']) # 重新設定使用者密碼
                     newUser.save()
-                    return render(request,'welcome.html', {'user': username})
+                    return render(request,'welcome.html', {'user': request.user.username})
 
                 else:
                     error.append('Please input the same password')
@@ -158,3 +159,31 @@ def StoredWalletMoney(request):
     else :
         form = StoredMoneyForm() 
     return render(request,'storedWalletMoney.html',{'form':form,'error':error})
+
+def Trading(request):   #尚未登入看不到葉面  要顯示錯誤
+    if not request.user.is_authenticated():  # prevent anonymous Sign in
+        # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+        return HttpResponseRedirect('/users/signin/')
+    return render(request,'trading.html')
+
+def Order(request):   #尚未登入看不到葉面  要顯示錯誤
+    if not request.user.is_authenticated():  # prevent anonymous Sign in
+        # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+        return HttpResponseRedirect('/users/signin/')
+    return render(request,'order.html')
+
+def Withdraw(request):   #尚未登入看不到葉面  要顯示錯誤
+    if not request.user.is_authenticated():  # prevent anonymous Sign in
+    # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+        return HttpResponseRedirect('/users/signin/')
+    return render(request,'withdraw.html')
+
+def Deposit(request):   #尚未登入看不到葉面  要顯示錯誤
+    if not request.user.is_authenticated():  # prevent anonymous Sign in
+    # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+        return HttpResponseRedirect('/users/signin/')
+    return render(request,'deposit.html')
+    
+
+
+        

@@ -55,8 +55,10 @@
       <div class="row">
         <div class="col-lg-8 mx-auto">
           <g class="form-title"> FORGOT PASSWORD?</g>
-          <form class="login">
-            <input type="text_forgot" placeholder="Enter your Email to reset" />
+          <form class="login" method="post">
+            <table>
+              {{ form.as_table }}
+            </table>
             <input type="submit" value="Submit to reset " class="btn btn-primary btn-xl js-scroll-trigger" />
           </form>
         </div>
