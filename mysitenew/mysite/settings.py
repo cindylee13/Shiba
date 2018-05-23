@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'trips',
     'djcelery',
     'corsheaders',
-    'django_crontab',
+    # 'django_crontab',
 ]
 
 MIDDLEWARE = [

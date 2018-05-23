@@ -54,3 +54,5 @@ def WithdrawWalletMoney(userID,amount):#takemoney
     user.save()
     return user.money
 # walletfunction-----------------------------------------
+
+# http://www.victorgau.com/?p=5494
