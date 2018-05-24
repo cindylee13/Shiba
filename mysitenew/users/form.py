@@ -31,4 +31,4 @@ class StoredMoneyForm(forms.Form):
     storedmoney = forms.FloatField()
 
 class ForgotPasswordForm(forms.Form):  
-    email = forms.EmailField()  
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'email'})) 

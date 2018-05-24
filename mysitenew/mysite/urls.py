@@ -1,7 +1,7 @@
 from django.conf.urls import include, url  
 from django.contrib import admin  
 from .views import Index
-from users.views import ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
+from users.views import Trading, ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney, Order, Withdraw, Deposit
 admin.autodiscover()  
   
 urlpatterns = [  
@@ -19,4 +19,9 @@ urlpatterns = [
     url(r'^users/myWallet/storedWalletMoney/',StoredWalletMoney),  
     url(r'^users/myWallet/takeWalletMoney/',TakeWalletMoney),  
     url(r'^users/error/', Error), 
+    url(r'^users/trading/', Trading), 
+    url(r'^users/order/', Order), 
+    url(r'^users/withdraw/', Withdraw), 
+    url(r'^users/deposit/', Deposit), 
+    
 ]

@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout 
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import AbstractUser 
+import smtplib
 
 class User(AbstractUser): 
     money = models.FloatField(default=0.0)
@@ -54,3 +55,45 @@ def WithdrawWalletMoney(userID,amount):#takemoney
     user.save()
     return user.money
 # walletfunction-----------------------------------------
+
+import string
+import random
+def password_creater(size=10, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+# forgotpassword-----------------------------------------
+def CheckUserEmail(email):
+    if User.objects.filter(email=email)[0] :
+        return True
+    else:
+        return False
+
+def ResetUserPassword(email):
+    resetPassword = password_creater()
+    newUser = User.objects.get(email=email)
+    newUser.set_password(resetPassword) 
+    # 重新設定使用者密碼
+    newUser.save()
+    
+    host = "smtp.gmail.com"
+    port = 587
+    username = "frankboygx@gmail.com"
+    password = "qdudfhxlvfjrdmwd"
+    from_email = username
+    to_list = [email]
+    print "test1"
+    email_conn = smtplib.SMTP(host,port)
+    print "test2"
+    # 試試看能否跟Gmail Server溝通
+    print(email_conn.ehlo())
+    # TTLS安全認證機制
+    email_conn.starttls()
+    print "test3"
+    # 登錄Gmail
+    print(email_conn.login(username,password))
+    # 寄信
+    email_conn.sendmail(from_email, to_list, resetPassword)
+    # 關閉連線
+    email_conn.quit()
+    return  "success"
+
