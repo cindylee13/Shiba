@@ -5,7 +5,7 @@ from datetime import datetime
 from .models import BittrexBTCTable, BittrexBTC 
 from .models import CexBTCTable, CexBTC
 from .models import BinanceBTCTable, BinanceBTC
-from .models import BitfinexBTCTable, BitfinexBTC 
+from .models import BitfinexBTCTable, BitfinexBTC
 from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
 
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
@@ -34,6 +34,29 @@ def BTC(request):
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
         'transection':transection
+    })
+def Trading(request):
+    #a = BittrexBTC()    #move to crontab
+    BittrexList = ChangeDateGetObjects(BittrexBTCTable)
+    #BittrexList = BittrexBTCTable.objects.all()
+    #b = CexBTC()
+    CexList = ChangeDateGetObjects(CexBTCTable)
+    #c = BinanceBTC()
+    BinanceList = ChangeDateGetObjects(BinanceBTCTable)
+
+    #d = BitfinexBTC()
+    BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
+
+    #e = CryptopiaBTC()
+    CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
+    dif=GetDifference()
+    return render(request, 'trading.html', {
+        #'current_time': str(datetime.now()), 
+        'BittrexBTCTable' : BittrexList, 
+        'CexBTCTable' : CexList,
+        'BinanceBTCTable' : BinanceList,
+        'BitfinexBTCTable' : BitfinexList,
+        'CryptopiaBTCTable' : CryptopiaList,
     })
 
 def ChangeDateGetObjects(table):

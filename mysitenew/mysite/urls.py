@@ -1,12 +1,14 @@
 from django.conf.urls import include, url  
 from django.contrib import admin  
 from .views import Index
+from trips.views import BTC,Trading
 from users.views import ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
 admin.autodiscover()  
   
 urlpatterns = [  
     url(r'^admin/', include(admin.site.urls)),  
-
+    url(r'^BTC/$', BTC),
+    url(r'^trading/$', Trading),
     url(r'^index/', Index),
     url(r'^users/signin/',SignIn), 
     url(r'^users/forgot/',ForgotPassword), 
