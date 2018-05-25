@@ -7,6 +7,7 @@ import pandas as pd
 import json
 import requests
 import redis
+import time
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
 from django.core import serializers
@@ -33,7 +34,7 @@ def CrawlBittrexBTC():
 def BittrexBTC():
 	from trips.models import BittrexBTCTable
 	data = CrawlBittrexBTC()
-	a=UpdateOrCreate(BittrexBTCTable,data['Bid'],data['Ask'],data['Last'])
+	a=UpdateOrCreate('Bittrex',BittrexBTCTable,data['Bid'],data['Ask'],data['Last'])
 	return a
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
 
@@ -57,7 +58,7 @@ def CrawlCexBTC():
 def CexBTC():
 	from trips.models import CexBTCTable
 	data = CrawlCexBTC()
-	a=UpdateOrCreate(CexBTCTable,data['bid'],data['ask'],data['last'])
+	a=UpdateOrCreate('Cex',CexBTCTable,data['bid'],data['ask'],data['last'])
 	return a
 #Cex----------------------------------------Cex-----------------------------------------Cex-----------2
 
@@ -81,7 +82,7 @@ def CrawlBinanceBTC():
 def BinanceBTC():
 	from trips.models import BinanceBTCTable
 	data = CrawlBinanceBTC()
-	a=UpdateOrCreate(BinanceBTCTable,data['bidPrice'],data['askPrice'],data['lastPrice'])
+	a=UpdateOrCreate('Binance',BinanceBTCTable,data['bidPrice'],data['askPrice'],data['lastPrice'])
 	return a
 #Binance-----------------------------------Binance--------------------------------------Binance-------3
 
@@ -105,7 +106,7 @@ def CrawlBitfinexBTC():
 def BitfinexBTC():
 	from trips.models import BitfinexBTCTable
 	data = CrawlBitfinexBTC()
-	a=UpdateOrCreate(BitfinexBTCTable,data['bid'],data['ask'],data['last_price'])
+	a=UpdateOrCreate('Bitfinex',BitfinexBTCTable,data['bid'],data['ask'],data['last_price'])
 	return a
 #Bitfinex----------------------------------Bitfinex-------------------------------------Bitfinex------4
 
@@ -130,25 +131,33 @@ def CrawlCryptopiaBTC():
 def CryptopiaBTC():
 	from trips.models import CryptopiaBTCTable
 	data = CrawlCryptopiaBTC()
-	a=UpdateOrCreate(CryptopiaBTCTable,data['BidPrice'],data['AskPrice'],data['LastPrice'])
+	a=UpdateOrCreate('Cryptopia',CryptopiaBTCTable,data['BidPrice'],data['AskPrice'],data['LastPrice'])
 	return a
 #Cryptopia----------------------------------Cryptopia------------------------------------Cryptopia----5
 #if auto_now time>5minute update ,if not create.--------------------------------------
-def UpdateOrCreate(table,bid,ask,last):
+def UpdateOrCreate(transection,table,bid,ask,last):
 	time_threshold = datetime.now() - timedelta(hours=3)
 	try:
 		result = table.objects.filter(created_at__lt=time_threshold)[0]
 	except IndexError:
 		table.objects.create(bid = bid, ask = ask, last= last)
-		coin = serializers.serialize('json', table.objects.all())
+		#coin = serializers.serialize('json', table.objects.all())
+		coin={'transection':transection,'bid':bid,'ask':ask,'last':last,'created_at':time.time()}
+		#a = json.dumps(coin)
 		Update('price',coin)
 		return 'empty'
 	result.bid = bid
 	result.ask = ask 
 	result.last= last
 	result.save()
-	coin = serializers.serialize('json', table.objects.all())
-	Update('price',coin)
+	#coin = serializers.serialize('json', table.objects.all())
+	temp=datetime.now()
+	now=temp.strftime('%Y-%m-%d %H:%M:%S')
+	coin={'transection':transection,'bid':bid,'ask':ask,'created_at':now}
+	infor = json.dumps(coin)
+	#a = json.dumps(coin)
+	#print a
+	Update('price',infor)
 	return result.bid
 #difference load in sqilte--------------------------
 class Difference(models.Model):
