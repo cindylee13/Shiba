@@ -135,13 +135,13 @@ def CryptopiaBTC():
 #Cryptopia----------------------------------Cryptopia------------------------------------Cryptopia----5
 #if auto_now time>5minute update ,if not create.--------------------------------------
 def UpdateOrCreate(table,bid,ask,last):
-	time_threshold = datetime.now() - timedelta(minutes=5)
+	time_threshold = datetime.now() - timedelta(hours=3)
 	try:
 		result = table.objects.filter(created_at__lt=time_threshold)[0]
 	except IndexError:
 		table.objects.create(bid = bid, ask = ask, last= last)
 		coin = serializers.serialize('json', table.objects.all())
-		Update('PriceRealTime',coin)
+		Update('price',coin)
 		return 'empty'
 	result.bid = bid
 	result.ask = ask 
@@ -150,6 +150,15 @@ def UpdateOrCreate(table,bid,ask,last):
 	coin = serializers.serialize('json', table.objects.all())
 	Update('price',coin)
 	return result.bid
+#difference load in sqilte--------------------------
+class Difference(models.Model):
+	BidTransection = models.CharField(max_length=20)#CharField(max_length=100)
+	AskTransection = models.CharField(max_length=20)#CharField(max_length=100)
+	Bid = models.FloatField(default=0)#CharField(max_length=100)
+	Ask = models.FloatField(default=0)#CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	def __str__(self):
+		return '%s %s %s %s' % ((self.Bid-self.Ask)/self.Ask,self.BidTransection, self.AskTransection , self.created_at)
 #Get the bid and ask difference----------------------------------------------------------
 def GetBidAsk():   #bid-ask
 	bid={}
@@ -186,12 +195,40 @@ def GetDifference():
 			if(i==j):
 				continue
 			ask= asks[transections[j]+'Ask']['ask__avg']
-			difference.update({transections[j]:bid-ask})
+			difference.update({transections[j]:float(bid-ask)})
 		tran.update({transections[i]:difference})
 		difference={}
 		index.append(transections[i])
-		print 'differenct calculating ...'
+		print tran
 	return tran
+def GetPrice(table1,table2):
+	set1=table1.objects.order_by('-id')[0]
+	set2=table2.objects.order_by('-id')[0]
+	return set1.bid,set2.ask
+
+def CheckSave():
+	from trips.models import BittrexBTCTable
+	from trips.models import CexBTCTable
+	from trips.models import BinanceBTCTable
+	from trips.models import BitfinexBTCTable
+	from trips.models import CryptopiaBTCTable
+	bids={}
+	asks={}
+	transections=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,CryptopiaBTCTable]
+	transectionName=['BittrexBTCTable','CexBTCTable','BinanceBTCTable','CryptopiaBTCTable']
+	for i in range (0,len(transections)):
+		bids[transectionName[i]],asks[transectionName[i]]=GetPrice(transections[i],transections[i])
+	for i in range(0,len(transections)):
+		for j in range(0,len(transections)):
+			if(i==j):
+				continue
+			bid,ask=bids[transectionName[i]],asks[transectionName[j]]
+			percent=float((bid-ask)/ask)*100
+			if(percent>0.5):
+				Difference.objects.create(BidTransection = transectionName[i], AskTransection = transectionName[j] , Bid=bid , Ask=ask)
+				print str(transectionName[i]),str(transectionName[j]),bid,ask,percent
+
+	#	Difference.objects.create(BidTransection = bidTransection, AskTransection = askTransection , bid=bid , ask=ask)
 #realtime web-------------------------------------------------------------
 def Update(portname,objectname):
 	r = redis.StrictRedis(host='localhost', port=6379, db=0)

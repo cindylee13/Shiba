@@ -12,19 +12,18 @@ transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,Crypto
 
 def BTC(request):
     #a = BittrexBTC()    //move to crontab
-    BittrexList = BittrexBTCTable.objects.all()
-
+    BittrexList = ChangeDateGetObjects(BittrexBTCTable)
+    #BittrexList = BittrexBTCTable.objects.all()
     #b = CexBTC()
-    CexList = CexBTCTable.objects.all()
-
+    CexList = ChangeDateGetObjects(CexBTCTable)
     #c = BinanceBTC()
-    BinanceList = BinanceBTCTable.objects.all()
+    BinanceList = ChangeDateGetObjects(BinanceBTCTable)
 
     #d = BitfinexBTC()
-    BitfinexList = BitfinexBTCTable.objects.all()
+    BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
 
     #e = CryptopiaBTC()
-    CryptopiaList = CryptopiaBTCTable.objects.all()
+    CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     dif=GetDifference()
     return render(request, 'BTC.html', {
         'current_time': str(datetime.now()), 
@@ -37,6 +36,11 @@ def BTC(request):
         'transection':transection
     })
 
+def ChangeDateGetObjects(table):
+    rows = table.objects.all()
+    for row in rows:
+        row.created_at=row.created_at.strftime('20%y-%m-%dT%H:%M:%S%Z')
+    return rows
 
 def index1(request):
     #ans={}
