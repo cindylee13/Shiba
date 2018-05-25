@@ -51,7 +51,8 @@ def SignIn(request):
             password = data['password'] # 確認密碼有沒有對
             if LoginValidate(request, username, password):
                 # print GetUserKey(GetUserID(request))
-                return render(request,'trading.html', {'username': username})
+                return HttpResponseRedirect('/users/trading/')
+                # return render(request,'trading.html', {'username': username})
             else:
                 error.append('Please input the correct password')
         else:
