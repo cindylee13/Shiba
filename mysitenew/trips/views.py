@@ -36,7 +36,8 @@ def BTC(request):
         'transection':transection
     })
 def Trading(request):
-    #a = BittrexBTC()    #move to crontab
+    a = BittrexBTC()    #move to crontab
+    print a
     BittrexList = ChangeDateGetObjects(BittrexBTCTable)
     #BittrexList = BittrexBTCTable.objects.all()
     #b = CexBTC()
