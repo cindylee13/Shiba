@@ -23,7 +23,6 @@ CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -100,17 +99,21 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',#'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),#os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'USER': 'root',                       # Not used with sqlite3.
+        #'PASSWORD': '104590454',               # Not used with sqlite3.
+        #'HOST': '',                           # Set to empty string for localhost. Not used with sqlite3.
+        #'PORT': '',                           # Set to empty string for default. Not used with sqlite3.
     }
 }
 
-# CRONJOBS = [
+CRONJOBS = [
 #     #('*/1 * * * *', 'django.core.management.call_command', ['crontab']),#for all file
-#     ('*/1 * * * *', 'trips.crontab.RunForSecond'),#ten second once
+     ('*/1 * * * *', 'trips.crontab.RunForSecond')#ten second once
 #     #('*/1 * * * *', 'trips.models.BittrexForSecond'),
     
-# ]
+]
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

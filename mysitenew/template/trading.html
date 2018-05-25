@@ -86,23 +86,13 @@
             //table.innerHTML
           }
           function _buildRowColumns(names, item) {
-            //var row = item ? '<tr id='+item['transection']+'>': '<tr>';
             var row=''
-            //item?  UpdateTable(item['transection'])'';
-            //console.log(transectionId)
-            //var row = '<tr>'
-            //var i=0;
             if(item)
             {
               if(document.getElementById(item['transection'])==null)
-              {
                 AddRow(item,names)
-                return ''
-              }
               else
-              {
                 Update(item,names)
-              }
               return ''
             }
             else
@@ -114,25 +104,9 @@
               });
               row += '</tr>';
             }
-            /*if (names && names.length > 0)
-            {
-              $.each(names, function(index, name) {
-              var c = item ? item[name+''] : name;
-              //console.log(item ? name+item[name+'']:'')
-              row += '<td>' + c + '</td>';
-            });*/
-            //}
             return row;
           }
         
-        /** Builds and sets the headers of the table. */
-            function _setHeaders() {
-            // if no headers specified, we will use the fields as headers.
-            /*_headers = (_headers == null || _headers.length < 1) ? _fields : _headers; 
-            var h = _buildRowColumns(_headers);
-            if (_table.children('thead').length < 1) _table.prepend('<thead></thead>');
-            _table.children('thead').html(h);*/
-            }
 
           return {
             //* Configres the dynamic table. 
@@ -148,8 +122,6 @@
             /** Loads the specified data to the table body. */
             load: function(data, append) {
               var i=0;
-                if (_table.length < 1) return; //not configured.
-                _setHeaders();
                 //transectionId=data[0]['transection']
                 //console.log(data.length)
                 if (data && data.length > 0) {

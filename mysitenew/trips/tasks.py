@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 import os
-from .models import BittrexBTC,CexBTC,BinanceBTC,BitfinexBTC,CryptopiaBTC
+from .models import BittrexBTC,CexBTC,BinanceBTC,BitfinexBTC,CryptopiaBTC,CheckSave
 import time
 @shared_task
 def hello_world():
@@ -11,7 +11,8 @@ def hello_world():
 @shared_task
 def BittrexForSecond():
 		BittrexBTC()
-		#CexBTC()
+		CexBTC()
 		BinanceBTC()
-		BitfinexBTC()
+		#BitfinexBTC()
 		CryptopiaBTC()
+		CheckSave()
