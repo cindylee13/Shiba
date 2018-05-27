@@ -75,7 +75,7 @@
             console.log(megObjs[0].model)
             var dt = dynamicTable.config( megObjs[0].model, 
                 ['bid', 'ask', 'last','created_at'], 
-                ['bid', 'ask', 'last','time'], //set to null for field names 
+                ['Name', 'Bid', 'Ask','Time'], //set to null for field names 
                 'There are no items to list...');
             dt.load(outputMeg);
           });

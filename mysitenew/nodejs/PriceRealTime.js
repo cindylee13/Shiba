@@ -12,7 +12,7 @@ sub.subscribe('price');
 io.sockets.on('connection', function (socket) {
     //Grab message from Redis and send to client
     sub.on('message', function(channel, message){
-    	console.log("message");
+    	//console.log(message.model);
         socket.send(message);
     });
 });

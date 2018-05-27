@@ -76,7 +76,7 @@ def ResetUserPassword(email):
     newUser.save()
     
     host = "smtp.gmail.com"
-    port = 587
+    port = 25
     username = "frankboygx@gmail.com"
     password = "qdudfhxlvfjrdmwd"
     from_email = username
