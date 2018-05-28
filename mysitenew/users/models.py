@@ -37,6 +37,28 @@ def LoginValidate(request,username,password):
             auth_login(request,user)  
             return True  
     return rtvalue  
+
+# 判斷註冊時使用者有無重複 
+def IsUserPassword(username):
+    if(User.objects.all().filter(username=username)):
+        return True
+    return False
+# 判斷註冊時email有無重複
+def IsUserEmail(email):
+    if(User.objects.all().filter(email=email)):
+        return True
+    return False
+
+# 創建form 存入資料庫
+def CreateFrom(username, email, password):
+    user = User.objects.create_user(username, email, password) # 創建from
+    user.save()
+
+# 重新設定使用者密碼 重新存入資料庫
+def CreateNewFrom(request,newPassword):
+    newUser = User.objects.get(username__exact=request.user.username)
+    newUser.set_password(newPassword) # 重新設定使用者密碼
+    newUser.save()
 # function-----------------------------------------
 
 # walletfunction-----------------------------------------

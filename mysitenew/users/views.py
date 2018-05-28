@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, render
 from users.form import SignUpForm, SignInForm, ChangepwdForm ,StoredMoneyForm , TakeMoneyForm, ForgotPasswordForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import GetUserID, GetUserKey, LoginValidate, User, FilterUser, DepositWalletMoney, WithdrawWalletMoney, CheckUserEmail ,ResetUserPassword
+from .models import GetUserID, GetUserKey, LoginValidate, User, FilterUser, DepositWalletMoney, WithdrawWalletMoney, CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
@@ -17,25 +17,28 @@ def SignUp(request):
             email = data['email']
             password2 = data['password2']
             password = data['password']
-             # 判斷註冊時使用者有無重複 內建判斷密碼跟確認密碼有沒有相同
-            if not (User.objects.all().filter(username=username) or (User.objects.all().filter(email=email))):
-                if form.pwd_validate(password, password2):
-                    try:
-                        user = User.objects.create_user(username, email, password) # 創建from
-                        user.save() # 存入資料庫
-                    except IntegrityError as e:
-                        # print e.message
-                        if 'UNIQUE constraint failed' in e.message:
-                            LoginValidate(request, username, password) # 確認帳號密碼
-                            return render(request,'trading.html', {'user': username})
+             # 判斷註冊時使用者和email有無重複 內建判斷密碼跟確認密碼有沒有相同
+            if not (IsUserPassword(username)):
+                if not (IsUserEmail(email)):
+                    if form.pwd_validate(password, password2):
+                        try:
+                            CreateFrom(username, email, password)
+                        except IntegrityError as e:
+                            # print e.message
+                            if 'UNIQUE constraint failed' in e.message:
+                                LoginValidate(request, username, password) # 確認帳號密碼
+                                return render(request,'trading.html', {'username': username})
+                        else:
+                            LoginValidate(request, username, password)
+                            return render(request,'trading.html', {'username': username})
                     else:
-                        LoginValidate(request, username, password)
-                        return render(request,'trading.html', {'user': username})
+                        error.append('Please input the same password')
                 else:
-                    error.append('Please input the same password')
+                     error.append(
+                        'The email has existed,please change your username')
             else:
                 error.append(
-                    'The username or email has existed,please change your username')
+                    'The username has existed,please change your username')
     else:
         form = SignUpForm()
     return render(request,'signup.html', {'form': form, 'error': error})
@@ -92,7 +95,7 @@ def ChangePassword(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) # 判斷使用者有沒有登出過
         # return HttpResponseRedirect('/users/signin/')
     error = []
-    if request.method == 'POST':
+    if request.method== 'POST':
         form = ChangepwdForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -100,9 +103,8 @@ def ChangePassword(request):
                                 password=data['oldPassword']) # 內建判斷舊使用者和使用者密碼
             if user is not None:
                 if data['newPassword'] == data['newPassword2']:
-                    newUser = User.objects.get(username__exact=request.user.username)
-                    newUser.set_password(data['newPassword']) # 重新設定使用者密碼
-                    newUser.save()
+                    newPassword = data['newPassword']
+                    CreateNewFrom(request, newPassword)
                     return render(request,'welcome.html', {'user': request.user.username})
 
                 else:
@@ -113,7 +115,7 @@ def ChangePassword(request):
             error.append('Please input the required domain')
     else:
         form = ChangepwdForm()
-    return render(request,'changepassword.html', {'form': form, 'error': error})
+    return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username})
 
 
 def Error(request):
@@ -168,25 +170,25 @@ def Trading(request):   #尚未登入看不到葉面  要顯示錯誤
     if not request.user.is_authenticated():  # prevent anonymous Sign in
         # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'trading.html')
+    return render(request,'trading.html', {'username': request.user.username})
 
 def Order(request):   #尚未登入看不到葉面  要顯示錯誤
     if not request.user.is_authenticated():  # prevent anonymous Sign in
         # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'order.html')
+    return render(request,'order.html', {'username': request.user.username})
 
 def Withdraw(request):   #尚未登入看不到葉面  要顯示錯誤
     if not request.user.is_authenticated():  # prevent anonymous Sign in
     # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'withdraw.html')
+    return render(request,'withdraw.html', {'username': request.user.username})
 
 def Deposit(request):   #尚未登入看不到葉面  要顯示錯誤
     if not request.user.is_authenticated():  # prevent anonymous Sign in
     # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'deposit.html')
+    return render(request,'deposit.html', {'username': request.user.username})
     
 
 
