@@ -254,10 +254,13 @@
           <button type="button" class="btn btn-dark" value="Cex" onclick="getDate(this.value)">Cex</button>
           <button type="button" class="btn btn-dark" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
           <button type="button" class="btn btn-dark" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
+          <button type="button" class="btn btn-dark" value="Plus" onclick="Plus()">Plus</button>
+          <button type="button" class="btn btn-dark" value="Minus" onclick="Minus()">Minus</button>
+
 
         </div>
         <div class="card-body">
-          <svg width="960" height="500"></svg>
+          <svg id="Bittrex" width="960" height="500"></svg>
           <script src="https://d3js.org/d3.v4.min.js"></script>
           <script src={% static "bootstrap/moment.min.js" %}></script>
           <script src={% static "bootstrap/moment-timezone-with-data.js" %}></script>
@@ -302,7 +305,7 @@
                 console.log(data)
               function getDate(transectionName)
               {
-                draw(all[transectionName])
+                draw(all[transectionName],transectionName)
               }
               var margin = {top: 20, right: 50, bottom: 30, left: 50},
                 width = 960 - margin.left - margin.right,
@@ -378,7 +381,7 @@
                     .call(y1);
 
                 svg.append("path")
-                    .datum(data)
+                    .data(data)
                     .attr("fill", "none")
                     .attr("stroke", "#CC00CC")
                     .attr("stroke-linejoin", "round")
@@ -388,7 +391,7 @@
                     .attr("d", line);
 
                 svg.append("path")
-                    .datum(data)
+                    .data(data)
                     .attr("fill", "none")
                     .attr("stroke", "steelblue")
                     .attr("stroke-linejoin", "round")
@@ -428,33 +431,83 @@
                   focus.attr("transform", "translate(" + x(d.date) + "," + y(d.closeBid) + ")");
                   focus.select("text").text('('+d.date+','+formatCurrency(d.closeBid)+','+formatCurrency(d.closeAsk)+')');
               }
-              function draw(data)
+              function draw(data,transection)
               {
-                  svg = d3.select("svg").transition();
+                  svg = d3.select("svg");//.transition();
                   x.domain([data[0].date, data[data.length - 1].date]);
                   y.domain(d3.extent(data, function(d) { return d.closeBid; }));
                   y1.domain(d3.extent(data, function(d) { return d.closeAsk; }));
-                  svg.select(".linebid")   // change the line
-                     .duration(750)
+                  svg.attr("id",transection);
+                  svg.select(".linebid").transition()   // change the line
+                     //.duration(750)
                      .attr("d", line(data));
-                  svg.select(".lineask")   // change the line
-                     .duration(750)
+                  svg.data(data);
+                  svg.select(".lineask").transition()   // change the line
+                     //.duration(750)
                      .attr("d", lineAsk(data));
-                  svg.select(".x.axis") // change the x axis
-                      .duration(750)
+                  svg.select(".x.axis").transition() // change the x axis
+                      //.duration(750)
                       .call(x);
-                  svg.select(".y.axis") // change the y axis
-                      .duration(750)
+                  svg.select(".y.axis").transition() // change the y axis
+                      //.duration(750)
                       .call(y);
-                  svg.select(".y1.axis") // change the y axis
-                      .duration(750)
-                      .call(y1);                                    
+                  svg.select(".y1.axis").transition() // change the y axis
+                      //.duration(750)
+                      .call(y1);  
+                  //svg.duration(4000).transition();                                      
               }
-                //svg = svg? svg = d3.select("svg").transition();
-                
-              //});
+              //Minus();
+              function afas()
+              {
+                svg = d3.select("svg");
+                var paths = svg.selectAll('.path')
+                               .data(data)
+                               .enter();
+                pathData=[]
+                paths.each(function() { pathData.push(this.__data__); });
+                console.log(pathData);
 
+              }
+              function Minus()
+              {
+                svg = d3.select("svg");
+                var paths = svg.selectAll('.path')
+                               .data(data)
+                               .enter();
+                /*var paths = d3.select('svg').selectAll('.path')
+                               .data(data)
+                               .enter();*/
+                var id = d3.select('svg').attr('id');
+                var pathData = [];
+                g=paths._groups
+                firstTime=g[0][0].__data__.date
+                paths.each(function() { if(this.__data__.date-firstTime > 5*60*1000) pathData.push(this.__data__); });
+                draw(pathData,id);
+                console.log(pathData)
+                console.log("!!!")
+                afas()
+                //var ms = moment(pathData[0].date,"DD/MM/YYYY HH:mm:ss").diff(moment(then,"DD/MM/YYYY HH:mm:ss"));
+                //var d = moment.duration(ms);
+                //var s = d.format("hh:mm:ss");
+                //console.log((pathData[0].date+"_"+pathData[50].date))
+                //console.log((pathData[0].date-pathData[50].date))
+                //svg = svg? svg = d3.select("svg").transition();
+              }
+              //Plus('Cex');
+              function Plus()
+              {
+                var paths = svg.selectAll('.path')
+                                 .data(data)
+                                 .enter();
+                var id = d3.select('svg').attr('id');
+
+                price=all[transection].date
+                g=paths._groups
+                firstTime=g[0][0].__data__.date
+                price.each(function() { if(firstTime-this.date > 5*60*1000) pathData.push(this.__data__); });
+              }
               </script>
+              
         </div>
       </div>
       <!-- Example DataTables Card-->

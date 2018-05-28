@@ -9,7 +9,6 @@ admin.autodiscover()
 urlpatterns = [  
     url(r'^admin/', include(admin.site.urls)),  
     url(r'^BTC/$', BTC),
-    url(r'^trading/$', Trading),
     url(r'^index/', Index),
     url(r'^users/signin/',SignIn), 
     url(r'^users/forgot/',ForgotPassword), 

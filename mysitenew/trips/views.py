@@ -50,7 +50,7 @@ def Trading(request):
 
     #e = CryptopiaBTC()
     CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
-    dif=GetDifference()
+    #dif=GetDifference()
     return render(request, 'trading.html', {
         #'current_time': str(datetime.now()), 
         'BittrexBTCTable' : BittrexList, 
