@@ -63,7 +63,7 @@ def Trading(request):
 def ChangeDateGetObjects(table):
     rows = table.objects.all()
     for row in rows:
-        row.created_at=row.created_at.strftime('20%y-%m-%dT%H:%M:%S%Z')
+        row.created_at=row.created_at.strftime('20%y-%m-%d %H:%M:%S')
     return rows
 
 def index1(request):

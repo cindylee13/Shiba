@@ -22,7 +22,7 @@ class BittrexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BittrexBTCTable'
+		return self.created_at
 
 def CrawlBittrexBTC():
 	quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC"
@@ -47,7 +47,7 @@ class CexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'CexBTCTable'
+		return self.created_at
 
 def CrawlCexBTC():
 	quote_page = "https://cex.io/api/ticker/BTC/USD"
@@ -71,7 +71,7 @@ class BinanceBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BinanceBTCTable'
+		return self.created_at
 
 def CrawlBinanceBTC():
 	quote_page = "https://api.binance.com/api/v1/ticker/24hr?symbol=BTCUSDT"
@@ -95,7 +95,7 @@ class BitfinexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BitfinexBTCTable'
+		return self.created_at
 
 def CrawlBitfinexBTC():
 	quote_page = "https://api.bitfinex.com/v1/pubticker/BTCUSD"
@@ -119,7 +119,7 @@ class CryptopiaBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'CryptopiaBTCTable'
+		return self.created_at
 
 def CrawlCryptopiaBTC():
 	quote_page = "https://www.cryptopia.co.nz/api/GetMarket/BTC_USDT"

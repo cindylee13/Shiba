@@ -5,6 +5,7 @@
 
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+            <script src="https://d3js.org/d3.v4.min.js"></script>  
   <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
   <script>
     $(document).ready(function(){
@@ -249,9 +250,269 @@
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-area-chart"></i> Area Chart</div>
+          <i class="fa fa-area-chart"> Area Chart </i>
+          <button type="button" class="btn btn-dark" value="Binance" onclick="getDate(this.value)">Binance</button>
+          <button type="button" class="btn btn-dark" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
+          <button type="button" class="btn btn-dark" value="Cex" onclick="getDate(this.value)">Cex</button>
+          <button type="button" class="btn btn-dark" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
+          <button type="button" class="btn btn-dark" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
+          <button type="button" class="btn btn-dark" value="Plus" onclick="Plus()">Plus</button>
+          <button type="button" class="btn btn-dark" value="Minus" onclick="Minus()">Minus</button>
+
+
+        </div>
         <div class="card-body">
-          <canvas id="myAreaChart" width="100%" height="30"></canvas>
+          <svg id="Bittrex" width="960" height="500"></svg>
+          <script src={% static "bootstrap/moment.min.js" %}></script>
+          <script src={% static "bootstrap/moment-timezone-with-data.js" %}></script>
+          <script>
+              var timezone = "Asia/Taipei";
+              Bittrex=[];
+              Binance=[];
+              Cex=[];
+              Bitfinex=[];
+              Cryptopia=[];
+
+              var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+
+                {% for CoinTable in BittrexBTCTable %}
+                  //temp=FormatData({{CoinTable}})
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Bittrex.push(temp);
+                {% endfor %}
+                {% for CoinTable in BinanceBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Binance.push(temp);
+                {% endfor %}
+                {% for CoinTable in CexBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Cex.push(temp);
+                {% endfor %}
+                {% for CoinTable in BitfinexBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Bitfinex.push(temp);
+                {% endfor %}
+                {% for CoinTable in CryptopiaBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Cryptopia.push(temp);
+                {% endfor %}
+                all={'Cryptopia':Cryptopia,'Bitfinex':Bitfinex,'Cex':Cex,'Binance':Binance,'Bittrex':Bittrex}
+                data=all['Bittrex']
+                console.log(data)
+              function getDate(transectionName)
+              {
+                draw(all[transectionName],transectionName)
+              }
+              var margin = {top: 20, right: 50, bottom: 30, left: 50},
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+              var svg = d3.select("svg").append("svg")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+              bisectDate = d3.bisector(function(d) { return d.date; }).left,
+              formatValue = d3.format(",.2f"),
+              formatCurrency = function(d) { return "$" + formatValue(d); };
+              var x = d3.scaleTime()
+                  .range([0, width]);
+
+              var y = d3.scaleLinear()
+                  .range([height, 0]);
+              var y1 = d3.scaleLinear()
+                  .range([height, 0]);
+
+              var yAxis = d3.axisLeft()
+                  .scale(y)
+              var yAxis1 = d3.axisLeft()
+                  .scale(y1)
+
+              var line = d3.line()
+                  .x(function(d) { return x(d.date); })
+                  .y(function(d) { return y(d.closeBid); });
+
+              var lineAsk = d3.line()
+                  .x(function(d) { return x(d.date); })
+                  .y(function(d) { return y1(d.closeAsk); });
+
+                data.sort(function(a, b) {
+                  return a.date - b.date;
+                });
+              console.log(data)
+              //draw(data,true)
+                x.domain([data[0].date, data[data.length - 1].date]);
+                y.domain(d3.extent(data, function(d) { return d.closeBid; }));
+                y1.domain(d3.extent(data, function(d) { return d.closeAsk; }));
+
+                svg.append("g")
+                    .attr("class", "xaxis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%H:%M:%S")));
+
+
+                svg.append("g")
+                    .attr("class", "date")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisTop(x)
+                    .tickFormat(d3.timeFormat("%y-%m-%d")));
+
+
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                  .append("text")
+                  .attr("fill", "#000")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Price ($)");
+
+                svg.append("g")       
+                    .attr("class", "y1 axis")  
+                    .attr("transform", "translate(" + width + " ,0)") 
+                    .style("fill", "red")   
+                    .call(y1);
+
+                svg.append("path")
+                    //.data(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "#CC00CC")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("class", "linebid")
+                    .attr("first",data[0].date)
+                    .attr("d", line(data));
+
+                svg.append("path")
+                    //.data(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("class", "lineask")
+                    .attr("first",data[0].date)
+                    .attr("d", lineAsk(data));
+                    
+                var focus = svg.append("g")
+                    .attr("class", "focus")
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .style("display", "none");
+                focus.append("circle")
+                    .attr("r", 1);
+
+                focus.append("text")
+                    .attr("x", 9)
+                    .attr("dy", ".1em");
+
+                svg.append("rect")
+                    .attr("class", "overlay")
+                    .attr("fill", "none")
+                    .attr("pointer-events", "all")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .on("mouseover", function() { focus.style("display", null); })
+                    .on("mouseout", function() { focus.style("display", "none"); })
+                    .on("mousemove", mousemove);
+
+                function mousemove() {
+                  var x0 = x.invert(d3.mouse(this)[0]),
+                      i = bisectDate(data, x0, 1),
+                      d0 = data[i - 1],
+                      d1 = data[i],
+                      d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+                  focus.attr("transform", "translate(" + x(d.date) + "," + y(d.closeBid) + ")");
+                  focus.select("text").text('('+d.date+','+formatCurrency(d.closeBid)+','+formatCurrency(d.closeAsk)+')');
+              }
+              function draw(data,transection,firstTime)
+              {
+                  svg = d3.select("svg");//.transition();
+                  console.log(data)
+                  x.domain([data[0].date, data[data.length - 1].date]);
+                  y.domain(d3.extent(data, function(d) { return d.closeBid; }));
+                  y1.domain(d3.extent(data, function(d) { return d.closeAsk; }));
+                  var line = d3.line()
+                      .x(function(d) { return x(d.date); })
+                      .y(function(d) { return y(d.closeBid); });
+                  var lineAsk = d3.line()
+                      .x(function(d) { return x(d.date); })
+                      .y(function(d) { return y1(d.closeAsk); });
+                  svg.attr("id",transection);
+                  svg.select('.xaxis').call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%H:%M:%S")));
+                  svg.select('.date').call(d3.axisTop(x)
+                    .tickFormat(d3.timeFormat("%y-%m-%d")));
+                  svg.select(".linebid").transition()   // change the line
+                     //.duration(750)
+                     .attr("d", line(data))
+                     .attr("first",firstTime);
+                  svg.data(data);
+                  svg.select(".lineask").transition()   // change the line
+                     //.duration(750)
+                     .attr("d", lineAsk(data))
+                     .attr("first",firstTime);
+                  svg.select(".x.axis").transition() // change the x axis
+                      //.duration(750)
+                      .call(x);
+                  svg.select(".y.axis").transition() // change the y axis
+                      //.duration(750)
+                      .call(y);
+                  svg.select(".y1.axis").transition() // change the y axis
+                      //.duration(750)
+                      .call(y1);  
+
+                  //svg.duration(4000).transition();                                     
+
+              }
+
+              function Minus()
+              {
+                svg = d3.select("svg");
+                var paths = svg.select('.lineask').attr("first");
+                var id = d3.select('svg').attr('id');
+                var pathData = [];
+                timedelta=5*60*1000
+
+                firstTime=new Date(paths)
+                console.log("!!!"+firstTime)
+                console.log("~~~"+new Date(firstTime.getTime()+timedelta))
+
+                data=all[id]
+                data.map(Obj => {
+                  if(Obj.date-firstTime >= timedelta)
+                    pathData.push(Obj);
+                  });
+
+                draw(pathData,id,new Date(firstTime.getTime()+timedelta));
+              }
+              function Plus()
+              {
+                var paths = svg.select('.lineask').attr("first");
+                var id = d3.select('svg').attr('id');
+                timedelta=5*60*1000
+                data=all[id];
+                g=paths._groups
+                firstTime=new Date(paths)
+                var pathData = [];
+                data.map(Obj => {
+                  if(firstTime - Obj.date <= timedelta)
+                    pathData.push(Obj);
+                  });
+                draw(pathData,id,new Date(firstTime.getTime()-timedelta));              
+              }
+              
+              </script>
+              
         </div>
       </div>
       <!-- Example DataTables Card-->

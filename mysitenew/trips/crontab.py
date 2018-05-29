@@ -8,5 +8,5 @@ def RunForSecond():
 		#BitfinexBTC()
 		BinanceBTC()
 		CexBTC()
-		GetDifference()
+		#GetDifference()
 		time.sleep(10)
