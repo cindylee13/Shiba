@@ -3,6 +3,146 @@
 <html lang="en">
 
 <head>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
+  <script>
+    $(document).ready(function(){
+      //  SetData();
+        var socket = io.connect('http://127.0.0.1:4000');
+        console.log(socket)
+        socket.on('connect', function(){
+          console.log("connect");
+        //  SetData();
+        });
+        var options =
+        {
+          year: "numeric", month: "short",
+          day: "numeric", hour: "2-digit", minute: "2-digit"
+        };
+
+          socket.on('message', function(message)
+          {
+            console.log('send message');
+            console.log(message);
+            var megObjs = JSON.parse(message);
+            //console.log(message);
+            var outputMeg=[]
+            /*megObjs.map(megObj => {
+              myDate=new Date(megObj.fields.created_at) //change date type
+              megObj.fields.created_at= myDate.toLocaleTimeString("en-us", options);
+              outputMeg.push(megObj.fields) //push all obj to list
+            });*/
+            //megObj=megObjs[megObjs.length-1]
+            //myDate=new Date(megObj.fields.created_at) //change date type
+            //megObjs.products.map(megObj=>{
+              megObjs.created_at= new Date(megObjs.created_at)
+              outputMeg.push(megObjs)
+            //})
+            //console.log(outputMeg)
+            //outputMeg.push(megObj.fields)
+
+
+            var dt = dynamicTable.config( 'dataTable',
+                ['transection','bid', 'ask','created_at'],
+                ['transection','bid', 'ask','time'], //set to null for field names
+                'There are no items to list...');
+            //outputMeg.push(outputMeg)
+            //console.log(typeof(megObjs))
+            dt.load(outputMeg);
+          });
+        });
+    ///////////////////////dynamic table////////////////////////
+          var dynamicTable = (function() {
+          var _tableId, _table,
+          _fields, _headers,
+          _defaultText;
+          function UpdateTable(transectionId)
+          {
+            a=document.getElementById('Cex')
+            console.log(a)
+          }
+          function AddRow(item,names)
+          {
+            table = document.getElementById("dataTable");
+            var row = table.insertRow(table.length);
+            row.id=item['transection'];
+            var i=0;
+            names=names.reverse()
+            $.each(names, function(index, name) {
+              var cell1 = row.insertCell(i);
+              cell1.innerHTML = item[name+''];
+            });
+          }
+          function Update(item,names)
+          {
+            table = document.getElementById(item['transection']);
+            var i=0
+            //names=names.reverse()
+            $.each(names, function(index, name) {
+              table.cells[i].innerHTML=item[name+'']
+              console.log(table.cells[i])
+              i++
+            });
+            //table.innerHTML
+          }
+          function _buildRowColumns(names, item) {
+            var row=''
+            if(item)
+            {
+              if(document.getElementById(item['transection'])==null)
+                AddRow(item,names)
+              else
+                Update(item,names)
+              return ''
+            }
+            else
+            {
+              row='<tr>'
+              $.each(names, function(index, name) {
+              var c = item ? item[name+''] : name;
+              row += '<td>' + c + '</td>';
+              });
+              row += '</tr>';
+            }
+            return row;
+          }
+
+
+          return {
+            //* Configres the dynamic table.
+            config: function(tableId, fields, headers, defaultText) {
+              _tableId = tableId;
+              _table = $(document.getElementById(_tableId))//$('#' + tableId);
+              _fields = fields || null;
+              _headers = headers || null;
+              _defaultText = defaultText || 'No items to list...';
+              //_setHeaders();
+              return this;
+                    },
+            /** Loads the specified data to the table body. */
+            load: function(data, append) {
+              var i=0;
+                //transectionId=data[0]['transection']
+                //console.log(data.length)
+                if (data && data.length > 0) {
+                  var rows = '';
+                  $.each(data, function(index, item) {
+                    rows += _buildRowColumns(_fields, item);
+                  });
+
+                  var mthd = append ? 'append' : 'html';
+                  if(rows!='')
+                    _table.children('tbody')[mthd](rows);
+                  }
+                return this;
+          },
+              /** Clears the table body. */
+        };
+        }());
+
+/////////////////////////////////////////////////////////////////
+  </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,7 +160,7 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/index">RICHER</a>
+    <h3 class="navbar-brand">RICHER</h3>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -98,7 +238,6 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <h1>{{username}}</h1>
             <i class="fa fa-fw fa-sign-out"></i>Sign out</a>
         </li>
       </ul>
@@ -109,9 +248,273 @@
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-area-chart"></i> Area Chart</div>
+            <i class="fa fa-area-chart"></i> Area Chart
+          </div>
         <div class="card-body">
-          <canvas id="myAreaChart" width="100%" height="30"></canvas>
+          <div class = "row">
+            <div class = "col-4">
+              <button type="button" class="btn btn-white" value="Plus" onclick="Plus()">+</button>
+              <button type="button" class="btn btn-white" value="Minus" onclick="Minus()">-</button>
+            </div>
+            <div class = "col-8">
+              <button type="button" class="btn btn-secondary" value="Binance" onclick="getDate(this.value)">Binance</button>
+              <button type="button" class="btn btn-secondary" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
+              <button type="button" class="btn btn-secondary" value="Cex" onclick="getDate(this.value)">Cex</button>
+              <button type="button" class="btn btn-secondary" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
+              <button type="button" class="btn btn-secondary" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
+            </div>
+          </div>
+          <svg id="Bittrex" width="960" height="500"></svg>
+          <script src={% static "bootstrap/moment.min.js" %}></script>
+          <script src={% static "bootstrap/moment-timezone-with-data.js" %}></script>
+          <script>
+              var timezone = "Asia/Taipei";
+              Bittrex=[];
+              Binance=[];
+              Cex=[];
+              Bitfinex=[];
+              Cryptopia=[];
+
+              var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+
+                {% for CoinTable in BittrexBTCTable %}
+                  //temp=FormatData({{CoinTable}})
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Bittrex.push(temp);
+                {% endfor %}
+                {% for CoinTable in BinanceBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Binance.push(temp);
+                {% endfor %}
+                {% for CoinTable in CexBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Cex.push(temp);
+                {% endfor %}
+                {% for CoinTable in BitfinexBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Bitfinex.push(temp);
+                {% endfor %}
+                {% for CoinTable in CryptopiaBTCTable %}
+                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  Cryptopia.push(temp);
+                {% endfor %}
+                all={'Cryptopia':Cryptopia,'Bitfinex':Bitfinex,'Cex':Cex,'Binance':Binance,'Bittrex':Bittrex}
+                data=all['Bittrex']
+                console.log(data)
+              function getDate(transectionName)
+              {
+                draw(all[transectionName],transectionName)
+              }
+              var margin = {top: 20, right: 50, bottom: 30, left: 50},
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+              var svg = d3.select("svg").append("svg")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+              bisectDate = d3.bisector(function(d) { return d.date; }).left,
+              formatValue = d3.format(",.2f"),
+              formatCurrency = function(d) { return "$" + formatValue(d); };
+              var x = d3.scaleTime()
+                  .range([0, width]);
+
+              var y = d3.scaleLinear()
+                  .range([height, 0]);
+              var y1 = d3.scaleLinear()
+                  .range([height, 0]);
+
+              var yAxis = d3.axisLeft()
+                  .scale(y)
+              var yAxis1 = d3.axisLeft()
+                  .scale(y1)
+
+              var line = d3.line()
+                  .x(function(d) { return x(d.date); })
+                  .y(function(d) { return y(d.closeBid); });
+
+              var lineAsk = d3.line()
+                  .x(function(d) { return x(d.date); })
+                  .y(function(d) { return y1(d.closeAsk); });
+
+                data.sort(function(a, b) {
+                  return a.date - b.date;
+                });
+              console.log(data)
+              //draw(data,true)
+                x.domain([data[0].date, data[data.length - 1].date]);
+                y.domain(d3.extent(data, function(d) { return d.closeBid; }));
+                y1.domain(d3.extent(data, function(d) { return d.closeAsk; }));
+
+                svg.append("g")
+                    .attr("class", "xaxis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%H:%M:%S")));
+
+
+                svg.append("g")
+                    .attr("class", "date")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisTop(x)
+                    .tickFormat(d3.timeFormat("%y-%m-%d")));
+
+
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                  .append("text")
+                  .attr("fill", "#000")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Price ($)");
+
+                svg.append("g")
+                    .attr("class", "y1 axis")
+                    .attr("transform", "translate(" + width + " ,0)")
+                    .style("fill", "red")
+                    .call(y1);
+
+                svg.append("path")
+                    //.data(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "#CC00CC")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("class", "linebid")
+                    .attr("first",data[0].date)
+                    .attr("d", line(data));
+
+                svg.append("path")
+                    //.data(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("class", "lineask")
+                    .attr("first",data[0].date)
+                    .attr("d", lineAsk(data));
+
+                var focus = svg.append("g")
+                    .attr("class", "focus")
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .style("display", "none");
+                focus.append("circle")
+                    .attr("r", 1);
+
+                focus.append("text")
+                    .attr("x", 9)
+                    .attr("dy", ".1em");
+
+                svg.append("rect")
+                    .attr("class", "overlay")
+                    .attr("fill", "none")
+                    .attr("pointer-events", "all")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .on("mouseover", function() { focus.style("display", null); })
+                    .on("mouseout", function() { focus.style("display", "none"); })
+                    .on("mousemove", mousemove);
+
+                function mousemove() {
+                  var x0 = x.invert(d3.mouse(this)[0]),
+                      i = bisectDate(data, x0, 1),
+                      d0 = data[i - 1],
+                      d1 = data[i],
+                      d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+                  focus.attr("transform", "translate(" + x(d.date) + "," + y(d.closeBid) + ")");
+                  focus.select("text").text('('+d.date+','+formatCurrency(d.closeBid)+','+formatCurrency(d.closeAsk)+')');
+              }
+              function draw(data,transection,firstTime)
+              {
+                  svg = d3.select("svg");//.transition();
+                  console.log(data)
+                  x.domain([data[0].date, data[data.length - 1].date]);
+                  y.domain(d3.extent(data, function(d) { return d.closeBid; }));
+                  y1.domain(d3.extent(data, function(d) { return d.closeAsk; }));
+                  var line = d3.line()
+                      .x(function(d) { return x(d.date); })
+                      .y(function(d) { return y(d.closeBid); });
+                  var lineAsk = d3.line()
+                      .x(function(d) { return x(d.date); })
+                      .y(function(d) { return y1(d.closeAsk); });
+                  svg.attr("id",transection);
+                  svg.select('.xaxis').call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%H:%M:%S")));
+                  svg.select('.date').call(d3.axisTop(x)
+                    .tickFormat(d3.timeFormat("%y-%m-%d")));
+                  svg.select(".linebid").transition()   // change the line
+                     //.duration(750)
+                     .attr("d", line(data))
+                     .attr("first",firstTime);
+                  svg.data(data);
+                  svg.select(".lineask").transition()   // change the line
+                     //.duration(750)
+                     .attr("d", lineAsk(data))
+                     .attr("first",firstTime);
+                  svg.select(".x.axis").transition() // change the x axis
+                      //.duration(750)
+                      .call(x);
+                  svg.select(".y.axis").transition() // change the y axis
+                      //.duration(750)
+                      .call(y);
+                  svg.select(".y1.axis").transition() // change the y axis
+                      //.duration(750)
+                      .call(y1);
+
+                  //svg.duration(4000).transition();
+
+              }
+
+              function Minus()
+              {
+                svg = d3.select("svg");
+                var paths = svg.select('.lineask').attr("first");
+                var id = d3.select('svg').attr('id');
+                var pathData = [];
+                timedelta=5*60*1000
+
+                firstTime=new Date(paths)
+                console.log("!!!"+firstTime)
+                console.log("~~~"+new Date(firstTime.getTime()+timedelta))
+
+                data=all[id]
+                data.map(Obj => {
+                  if(Obj.date-firstTime >= timedelta)
+                    pathData.push(Obj);
+                  });
+
+                draw(pathData,id,new Date(firstTime.getTime()+timedelta));
+              }
+              function Plus()
+              {
+                var paths = svg.select('.lineask').attr("first");
+                var id = d3.select('svg').attr('id');
+                timedelta=5*60*1000
+                data=all[id];
+                g=paths._groups
+                firstTime=new Date(paths)
+                var pathData = [];
+                data.map(Obj => {
+                  if(firstTime - Obj.date <= timedelta)
+                    pathData.push(Obj);
+                  });
+                draw(pathData,id,new Date(firstTime.getTime()-timedelta));
+              }
+
+              </script>
+
         </div>
       </div>
       <!-- Example DataTables Card-->
@@ -125,41 +528,59 @@
                 <th>Name</th>
                 <th>Bid</th>
                 <th>Ask</th>
-                <th>Variation</th>
                 <th>Time</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Apple</td>
-                <td>100</td>
-                <td>100</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-
+              <tr id='Binance'>
+                <td>Binance</td>
+                {% for Binance in BinanceBTCTable %}
+                {% if forloop.last %}
+                  <td>{{Binance.bid}}</td>
+                  <td>{{Binance.ask}}</td>
+                  <td>{{Binance.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Orange</td>
-                <td>100</td>
-                <td>100</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-
+              <tr id='Bittrex'>
+                <td>Bittrex</td>
+                {% for Bittrex in BittrexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bittrex.bid}}</td>
+                <td>{{Bittrex.ask}}</td>
+                <td>{{Bittrex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Banana</td>
-                <td>100</td>
-                <td>100</td>
-                <td>66</td>
-                <td>2009/01/12</td>
-
+              <tr id='Cex'>
+                <td>Cex</td>
+                {% for Cex in CexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cex.bid}}</td>
+                <td>{{Cex.ask}}</td>
+                <td>{{Cex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Papaya</td>
-                <td>100</td>
-                <td>100</td>
-                <td>22</td>
-                <td>2012/03/29</td>
+              <tr id='Bitfinex'>
+                <td>Bitfinex</td>
+                {% for Bitfinex in BitfinexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bitfinex.bid}}</td>
+                <td>{{Bitfinex.ask}}</td>
+                <td>{{Bitfinex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Cryptopia'>
+                <td>Cryptopia</td>
+                {% for Cryptopia in CryptopiaBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cryptopia.bid}}</td>
+                <td>{{Cryptopia.ask}}</td>
+                <td>{{Cryptopia.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
             </tbody>
           </table>
@@ -199,7 +620,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="/users/signout/">Sign Out</a>
+            <a class="btn btn-secondary" href="/users/signout/">Sign Out</a>
           </div>
         </div>
       </div>

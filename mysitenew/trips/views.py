@@ -5,26 +5,25 @@ from datetime import datetime
 from .models import BittrexBTCTable, BittrexBTC 
 from .models import CexBTCTable, CexBTC
 from .models import BinanceBTCTable, BinanceBTC
-from .models import BitfinexBTCTable, BitfinexBTC 
+from .models import BitfinexBTCTable, BitfinexBTC
 from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
 
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
 
 def BTC(request):
     #a = BittrexBTC()    //move to crontab
-    BittrexList = BittrexBTCTable.objects.all()
-
+    BittrexList = ChangeDateGetObjects(BittrexBTCTable)
+    #BittrexList = BittrexBTCTable.objects.all()
     #b = CexBTC()
-    CexList = CexBTCTable.objects.all()
-
+    CexList = ChangeDateGetObjects(CexBTCTable)
     #c = BinanceBTC()
-    BinanceList = BinanceBTCTable.objects.all()
+    BinanceList = ChangeDateGetObjects(BinanceBTCTable)
 
     #d = BitfinexBTC()
-    BitfinexList = BitfinexBTCTable.objects.all()
+    BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
 
     #e = CryptopiaBTC()
-    CryptopiaList = CryptopiaBTCTable.objects.all()
+    CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     dif=GetDifference()
     return render(request, 'BTC.html', {
         'current_time': str(datetime.now()), 
@@ -36,7 +35,36 @@ def BTC(request):
         'dif':dif,
         'transection':transection
     })
+def Trading(request):
+    a = BittrexBTC()    #move to crontab
+    print a
+    BittrexList = ChangeDateGetObjects(BittrexBTCTable)
+    #BittrexList = BittrexBTCTable.objects.all()
+    #b = CexBTC()
+    CexList = ChangeDateGetObjects(CexBTCTable)
+    #c = BinanceBTC()
+    BinanceList = ChangeDateGetObjects(BinanceBTCTable)
 
+    #d = BitfinexBTC()
+    BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
+
+    #e = CryptopiaBTC()
+    CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
+    #dif=GetDifference()
+    return render(request, 'trading.html', {
+        #'current_time': str(datetime.now()), 
+        'BittrexBTCTable' : BittrexList, 
+        'CexBTCTable' : CexList,
+        'BinanceBTCTable' : BinanceList,
+        'BitfinexBTCTable' : BitfinexList,
+        'CryptopiaBTCTable' : CryptopiaList,
+    })
+
+def ChangeDateGetObjects(table):
+    rows = table.objects.all()
+    for row in rows:
+        row.created_at=row.created_at.strftime('20%y-%m-%d %H:%M:%S')
+    return rows
 
 def index1(request):
     #ans={}

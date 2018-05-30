@@ -1,6 +1,7 @@
   <!DCTYPE html>
   <html>
-
+{% load tz %}
+{{ value|localtime }}
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>I come from template!!</title>
@@ -12,6 +13,36 @@
     em {
       color: LightSeaGreen;
     }
+    body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
   <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
@@ -36,7 +67,6 @@
             //console.log(message);
             var megObjs = JSON.parse(message);
             var outputMeg=[]
-            //var dic=[{"trips.cryptopiaBTCTable":[],"trips.bitfinexbtctable":[],"trips.binancebtctable":[],"trips.cexbtctable":[],"trips.bittrexbtctable":[]}];
             megObjs.map(megObj => {
               myDate=new Date(megObj.fields.created_at) //change date type
               megObj.fields.created_at= myDate.toLocaleTimeString("en-us", options);
@@ -45,11 +75,9 @@
             console.log(megObjs[0].model)
             var dt = dynamicTable.config( megObjs[0].model, 
                 ['bid', 'ask', 'last','created_at'], 
-                ['bid', 'ask', 'last','time'], //set to null for field names 
+                ['Name', 'Bid', 'Ask','Time'], //set to null for field names 
                 'There are no items to list...');
             dt.load(outputMeg);
-            //console.log(outputMeg);
-            //AddData();
           });
         });
     ///////////////////////dynamic table////////////////////////
@@ -129,6 +157,98 @@
       <em>{{ current_time }}</em>
       <em>{{ change_time }}</em>
     </div>
+     <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script>
+        data=[];
+        //data={date:[],close:[]};
+        var margin = {top: 20, right: 50, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+//var parseTime = d3.timeParse("%d-%b-%y");
+    var parseDate = d3.timeParse("%H:%M:%L");
+    var   bisectDate = d3.bisector(function(d) { return d.date; }).left,
+        formatValue = d3.format(",.2f"),
+        formatCurrency = function(d) { return "$" + formatValue(d); };
+        {% for CoinTable in BittrexBTCTable %}
+          temp={date:new Date("{{CoinTable.created_at}}"),close:Number({{CoinTable.bid}})}
+          data.push(temp);
+        {% endfor %}
+    console.log(data);
+    var x = d3.scaleTime()
+        .range([0, width]);
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+
+    var xAxis = d3.axisBottom()
+        .scale(x)
+
+    var yAxis = d3.axisLeft()
+        .scale(y)
+    var line = d3.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.close); });
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+      x.domain([data[0].date, data[data.length - 1].date]);
+      y.domain(d3.extent(data, function(d) { return d.close; }));
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Price ($)");
+
+      svg.append("path")
+          .datum(data)
+          .attr("class", "line")
+          .attr("d", line);
+
+      var focus = svg.append("g")
+          .attr("class", "focus")
+          .style("display", "none");
+
+      focus.append("circle")
+          .attr("r", 4.5);
+
+      focus.append("text")
+          .attr("x", 9)
+          .attr("dy", ".35em");
+
+      svg.append("rect")
+          .attr("class", "overlay")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", function() { focus.style("display", null); })
+          .on("mouseout", function() { focus.style("display", "none"); })
+          .on("mousemove", mousemove);
+
+      function mousemove() {
+        var x0 = x.invert(d3.mouse(this)[0]),
+            i = bisectDate(data, x0, 1),
+            d0 = data[i - 1],
+            d1 = data[i],
+            d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+        focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
+        focus.select("text").text(formatCurrency(d.close)+","+d.date);
+      }
+      </script>
+
     <div class="row">
       <div class="table-responsive">
         <table id="trips.bittrexbtctable" class="table table-bordered table-dark">
@@ -291,6 +411,7 @@
       </table>
     </div>    
   </div>
+  
 </body>
 
 </html>

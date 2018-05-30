@@ -481,6 +481,23 @@ h4 {
     font-weight: 500;
     letter-spacing: 0px;
     text-transform: uppercase;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+}
+h6 {
+    position: absolute;
+    bottom: 10.8px;
+    right: 120px;
+    color: #ffffff;
+}
+
+h2,h5,h4{
+  margin-bottom: 2rem;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
 }
 
 form.login input[type="text"]
@@ -500,14 +517,50 @@ form.login input[type="text"]
     outline: 0;
     border-radius: 15px;
 }
+
+form.login input[type="password"]
+{
+    width: 150%;
+    margin: 0;
+    padding: 10px 10px;
+    background: 0;
+    border: 1px solid #000000;
+    outline: 0;
+    font-style: Open Sans;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: #000000;
+    outline: 0;
+    border-radius: 15px;
+}
 .btn-primary{
   background-color: rgba(0,0,0,0.5) !important;
   color: #fff;
+  margin-top: -100px;
+  margin-left: 350px;
 }
 .btn {
     font-weight: 600;
     border: none;
     border-radius: 100px;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    margin:2px;
 }
+.btn-white{
+    font-weight: 600;
+    border: none;
+    border-radius: 10px !important;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+label{
+  display:none;
+}
+h3{
+  margin-left: 5px;
+}
+.col-8 {
+    text-align: right !important;
+  }

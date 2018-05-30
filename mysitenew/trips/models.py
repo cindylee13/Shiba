@@ -7,6 +7,7 @@ import pandas as pd
 import json
 import requests
 import redis
+import time
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
 from django.core import serializers
@@ -21,7 +22,7 @@ class BittrexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BittrexBTCTable'
+		return self.created_at
 
 def CrawlBittrexBTC():
 	quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC"
@@ -33,7 +34,7 @@ def CrawlBittrexBTC():
 def BittrexBTC():
 	from trips.models import BittrexBTCTable
 	data = CrawlBittrexBTC()
-	a=UpdateOrCreate(BittrexBTCTable,data['Bid'],data['Ask'],data['Last'])
+	a=UpdateOrCreate('Bittrex',BittrexBTCTable,data['Bid'],data['Ask'],data['Last'])
 	return a
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
 
@@ -46,7 +47,7 @@ class CexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'CexBTCTable'
+		return self.created_at
 
 def CrawlCexBTC():
 	quote_page = "https://cex.io/api/ticker/BTC/USD"
@@ -57,7 +58,7 @@ def CrawlCexBTC():
 def CexBTC():
 	from trips.models import CexBTCTable
 	data = CrawlCexBTC()
-	a=UpdateOrCreate(CexBTCTable,data['bid'],data['ask'],data['last'])
+	a=UpdateOrCreate('Cex',CexBTCTable,data['bid'],data['ask'],data['last'])
 	return a
 #Cex----------------------------------------Cex-----------------------------------------Cex-----------2
 
@@ -70,7 +71,7 @@ class BinanceBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BinanceBTCTable'
+		return self.created_at
 
 def CrawlBinanceBTC():
 	quote_page = "https://api.binance.com/api/v1/ticker/24hr?symbol=BTCUSDT"
@@ -81,7 +82,7 @@ def CrawlBinanceBTC():
 def BinanceBTC():
 	from trips.models import BinanceBTCTable
 	data = CrawlBinanceBTC()
-	a=UpdateOrCreate(BinanceBTCTable,data['bidPrice'],data['askPrice'],data['lastPrice'])
+	a=UpdateOrCreate('Binance',BinanceBTCTable,data['bidPrice'],data['askPrice'],data['lastPrice'])
 	return a
 #Binance-----------------------------------Binance--------------------------------------Binance-------3
 
@@ -94,7 +95,7 @@ class BitfinexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'BitfinexBTCTable'
+		return self.created_at
 
 def CrawlBitfinexBTC():
 	quote_page = "https://api.bitfinex.com/v1/pubticker/BTCUSD"
@@ -105,7 +106,7 @@ def CrawlBitfinexBTC():
 def BitfinexBTC():
 	from trips.models import BitfinexBTCTable
 	data = CrawlBitfinexBTC()
-	a=UpdateOrCreate(BitfinexBTCTable,data['bid'],data['ask'],data['last_price'])
+	a=UpdateOrCreate('Bitfinex',BitfinexBTCTable,data['bid'],data['ask'],data['last_price'])
 	return a
 #Bitfinex----------------------------------Bitfinex-------------------------------------Bitfinex------4
 
@@ -118,7 +119,7 @@ class CryptopiaBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return 'CryptopiaBTCTable'
+		return self.created_at
 
 def CrawlCryptopiaBTC():
 	quote_page = "https://www.cryptopia.co.nz/api/GetMarket/BTC_USDT"
@@ -130,26 +131,43 @@ def CrawlCryptopiaBTC():
 def CryptopiaBTC():
 	from trips.models import CryptopiaBTCTable
 	data = CrawlCryptopiaBTC()
-	a=UpdateOrCreate(CryptopiaBTCTable,data['BidPrice'],data['AskPrice'],data['LastPrice'])
+	a=UpdateOrCreate('Cryptopia',CryptopiaBTCTable,data['BidPrice'],data['AskPrice'],data['LastPrice'])
 	return a
 #Cryptopia----------------------------------Cryptopia------------------------------------Cryptopia----5
 #if auto_now time>5minute update ,if not create.--------------------------------------
-def UpdateOrCreate(table,bid,ask,last):
-	time_threshold = datetime.now() - timedelta(minutes=5)
+def UpdateOrCreate(transection,table,bid,ask,last):
+	time_threshold = datetime.now() - timedelta(hours=3)
 	try:
 		result = table.objects.filter(created_at__lt=time_threshold)[0]
 	except IndexError:
 		table.objects.create(bid = bid, ask = ask, last= last)
-		coin = serializers.serialize('json', table.objects.all())
-		Update('PriceRealTime',coin)
+		#coin = serializers.serialize('json', table.objects.all())
+		coin={'transection':transection,'bid':bid,'ask':ask,'last':last,'created_at':time.time()}
+		#a = json.dumps(coin)
+		Update('price',coin)
 		return 'empty'
 	result.bid = bid
 	result.ask = ask 
 	result.last= last
 	result.save()
-	coin = serializers.serialize('json', table.objects.all())
-	Update('price',coin)
+	#coin = serializers.serialize('json', table.objects.all())
+	temp=datetime.now()
+	now=temp.strftime('%Y-%m-%d %H:%M:%S')
+	coin={'transection':transection,'bid':bid,'ask':ask,'created_at':now}
+	infor = json.dumps(coin)
+	#a = json.dumps(coin)
+	#print a
+	Update('price',infor)
 	return result.bid
+#difference load in sqilte--------------------------
+class Difference(models.Model):
+	BidTransection = models.CharField(max_length=20)#CharField(max_length=100)
+	AskTransection = models.CharField(max_length=20)#CharField(max_length=100)
+	Bid = models.FloatField(default=0)#CharField(max_length=100)
+	Ask = models.FloatField(default=0)#CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	def __str__(self):
+		return '%s %s %s %s' % ((self.Bid-self.Ask)/self.Ask,self.BidTransection, self.AskTransection , self.created_at)
 #Get the bid and ask difference----------------------------------------------------------
 def GetBidAsk():   #bid-ask
 	bid={}
@@ -186,12 +204,40 @@ def GetDifference():
 			if(i==j):
 				continue
 			ask= asks[transections[j]+'Ask']['ask__avg']
-			difference.update({transections[j]:bid-ask})
+			difference.update({transections[j]:float(bid-ask)})
 		tran.update({transections[i]:difference})
 		difference={}
 		index.append(transections[i])
-		print 'differenct calculating ...'
+		print tran
 	return tran
+def GetPrice(table1,table2):
+	set1=table1.objects.order_by('-id')[0]
+	set2=table2.objects.order_by('-id')[0]
+	return set1.bid,set2.ask
+
+def CheckSave():
+	from trips.models import BittrexBTCTable
+	from trips.models import CexBTCTable
+	from trips.models import BinanceBTCTable
+	from trips.models import BitfinexBTCTable
+	from trips.models import CryptopiaBTCTable
+	bids={}
+	asks={}
+	transections=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,CryptopiaBTCTable]
+	transectionName=['BittrexBTCTable','CexBTCTable','BinanceBTCTable','CryptopiaBTCTable']
+	for i in range (0,len(transections)):
+		bids[transectionName[i]],asks[transectionName[i]]=GetPrice(transections[i],transections[i])
+	for i in range(0,len(transections)):
+		for j in range(0,len(transections)):
+			if(i==j):
+				continue
+			bid,ask=bids[transectionName[i]],asks[transectionName[j]]
+			percent=float((bid-ask)/ask)*100
+			if(percent>0.5):
+				Difference.objects.create(BidTransection = transectionName[i], AskTransection = transectionName[j] , Bid=bid , Ask=ask)
+				print str(transectionName[i]),str(transectionName[j]),bid,ask,percent
+
+	#	Difference.objects.create(BidTransection = bidTransection, AskTransection = askTransection , bid=bid , ask=ask)
 #realtime web-------------------------------------------------------------
 def Update(portname,objectname):
 	r = redis.StrictRedis(host='localhost', port=6379, db=0)

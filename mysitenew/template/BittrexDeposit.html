@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Deposit For Bittrex_Wallet</title>
+  <!-- Bootstrap core CSS-->
+  <link href={% static "bootstrap/vendor/bootstrap/css/bootstrap.min.css" %} rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href={% static "bootstrap/vendor/font-awesome/css/font-awesome.min.css" %} rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href={% static "bootstrap/css/sb-admin.css" %} rel="stylesheet">
+</head>
+
+<body class="bg-dark">
+  <div class="container">
+    <div class="card card-login mx-auto mt-5">
+      <div class="card-header">Deposit For Bittrex_Wallet</div>
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Enter the deposit amount</label>
+            <input class="form-control" id="exampleInputEmail1" type="text" placeholder="Deposit Amount">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Confirm the deposit amount</label>
+            <input class="form-control" id="exampleInputPassword1" type="text" placeholder="Confirmed Deposit Amount">
+          </div>
+            <input type="submit" value="submit" class="btn btn-primary btn-block" />
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+</body>
+
+</html>
