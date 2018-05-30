@@ -547,16 +547,17 @@ form.login input[type="password"]
     border-radius: 100px;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
     letter-spacing: 1px;
+    margin:2px;
 }
-.btn-third{
+.btn-white{
     font-weight: 600;
     border: none;
-    border-radius: 100px;
+    border-radius: 10px !important;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-    letter-spacing: 1px;
-    color: #fff;
-    background-color: #5a6268 !important;
 }
 label{
   display:none;
 }
+.col-8 {
+    text-align: right !important;
+  }

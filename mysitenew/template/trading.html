@@ -248,22 +248,22 @@
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">
-          <div class = "row">
-              <div class = "col-4">
-                <i class="fa fa-area-chart"> Area Chart </i>
-              </div>
-              <div class = "col-8">
-                <button type="button" class="btn btn-secondary" value="Binance" onclick="getDate(this.value)">Binance</button>
-                <button type="button" class="btn btn-secondary" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
-                <button type="button" class="btn btn-secondary" value="Cex" onclick="getDate(this.value)">Cex</button>
-                <button type="button" class="btn btn-secondary" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
-                <button type="button" class="btn btn-secondary" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
-                <button type="button" class="btn btn-secondary" value="Plus" onclick="Plus()">Plus</button>
-                <button type="button" class="btn btn-secondary" value="Minus" onclick="Minus()">Minus</button>
-              </div>
-            </div>
+            <i class="fa fa-area-chart"></i> Area Chart
           </div>
         <div class="card-body">
+          <div class = "row">
+            <div class = "col-4">
+              <button type="button" class="btn btn-white" value="Plus" onclick="Plus()">+</button>
+              <button type="button" class="btn btn-white" value="Minus" onclick="Minus()">-</button>
+            </div>
+            <div class = "col-8">
+              <button type="button" class="btn btn-secondary" value="Binance" onclick="getDate(this.value)">Binance</button>
+              <button type="button" class="btn btn-secondary" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
+              <button type="button" class="btn btn-secondary" value="Cex" onclick="getDate(this.value)">Cex</button>
+              <button type="button" class="btn btn-secondary" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
+              <button type="button" class="btn btn-secondary" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
+            </div>
+          </div>
           <svg id="Bittrex" width="960" height="500"></svg>
           <script src={% static "bootstrap/moment.min.js" %}></script>
           <script src={% static "bootstrap/moment-timezone-with-data.js" %}></script>
