@@ -67,7 +67,7 @@ def SignIn(request):
 
 def SignOut(request):
     auth_logout(request)
-    return HttpResponseRedirect('/users/signin/')
+    return HttpResponseRedirect('/index')
 
 def ForgotPassword(request):
     error = []
