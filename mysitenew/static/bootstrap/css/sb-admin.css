@@ -546,7 +546,7 @@ form.login input[type="password"]
     border: none;
     border-radius: 100px;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     margin:2px;
 }
 .btn-white{
@@ -557,6 +557,9 @@ form.login input[type="password"]
 }
 label{
   display:none;
+}
+h3{
+  margin-left: 5px;
 }
 .col-8 {
     text-align: right !important;

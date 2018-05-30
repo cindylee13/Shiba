@@ -160,7 +160,7 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/index">RICHER</a>
+    <h3 class="navbar-brand">RICHER</h3>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -528,41 +528,59 @@
                 <th>Name</th>
                 <th>Bid</th>
                 <th>Ask</th>
-                <th>Variation</th>
                 <th>Time</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Apple</td>
-                <td>100</td>
-                <td>100</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-
+              <tr id='Binance'>
+                <td>Binance</td>
+                {% for Binance in BinanceBTCTable %}
+                {% if forloop.last %}
+                  <td>{{Binance.bid}}</td>
+                  <td>{{Binance.ask}}</td>
+                  <td>{{Binance.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Orange</td>
-                <td>100</td>
-                <td>100</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-
+              <tr id='Bittrex'>
+                <td>Bittrex</td>
+                {% for Bittrex in BittrexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bittrex.bid}}</td>
+                <td>{{Bittrex.ask}}</td>
+                <td>{{Bittrex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Banana</td>
-                <td>100</td>
-                <td>100</td>
-                <td>66</td>
-                <td>2009/01/12</td>
-
+              <tr id='Cex'>
+                <td>Cex</td>
+                {% for Cex in CexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cex.bid}}</td>
+                <td>{{Cex.ask}}</td>
+                <td>{{Cex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
-              <tr>
-                <td>Papaya</td>
-                <td>100</td>
-                <td>100</td>
-                <td>22</td>
-                <td>2012/03/29</td>
+              <tr id='Bitfinex'>
+                <td>Bitfinex</td>
+                {% for Bitfinex in BitfinexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bitfinex.bid}}</td>
+                <td>{{Bitfinex.ask}}</td>
+                <td>{{Bitfinex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Cryptopia'>
+                <td>Cryptopia</td>
+                {% for Cryptopia in CryptopiaBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cryptopia.bid}}</td>
+                <td>{{Cryptopia.ask}}</td>
+                <td>{{Cryptopia.created_at}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
             </tbody>
           </table>
