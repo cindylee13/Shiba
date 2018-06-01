@@ -26,9 +26,11 @@ class ChangepwdForm(forms.Form):
 
 class TakeMoneyForm(forms.Form):  
     takemoney = forms.FloatField()  
+    takemoney2 = forms.FloatField()  
 
 class StoredMoneyForm(forms.Form):
     storedmoney = forms.FloatField()
+    storedmoney2 = forms.FloatField()
 
 class ForgotPasswordForm(forms.Form):  
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'email'})) 

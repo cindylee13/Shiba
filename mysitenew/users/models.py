@@ -7,7 +7,9 @@ from django.contrib.auth.models import AbstractUser
 import smtplib
 
 class User(AbstractUser): 
-    money = models.FloatField(default=0.0)
+    Cexmoney = models.FloatField(default=0.0)
+    Bittrexmoney = models.FloatField(default=0.0)
+    Binancemoney = models.FloatField(default=0.0)
     userID = models.IntegerField(primary_key=True)
     class Meta(AbstractUser.Meta): 
         pass
@@ -61,22 +63,50 @@ def CreateNewFrom(request,newPassword):
     newUser.save()
 # function-----------------------------------------
 
-# walletfunction-----------------------------------------
+# Cexwalletfunction-----------------------------------------
 def FilterUser(userID):
     return User.objects.filter(userID=userID)[0]
 
-def DepositWalletMoney(userID,amount):#storedmoney
+def CexDepositWalletMoney(userID,amount):#storedmoney
     user = User.objects.select_for_update().filter(userID=userID)[0]
-    user.money = user.money + amount
+    user.Cexmoney = user.Cexmoney + amount
     user.save()
-    return user.money
+    return user.Cexmoney
 
-def WithdrawWalletMoney(userID,amount):#takemoney
+def CexWithdrawWalletMoney(userID,amount):#takemoney
     user = User.objects.select_for_update().filter(userID=userID)[0]
-    user.money = user.money - amount
+    user.Cexmoney = user.Cexmoney - amount
     user.save()
-    return user.money
-# walletfunction-----------------------------------------
+    return user.Cexmoney
+# Cexwalletfunction-----------------------------------------
+
+# Bittrexwalletfunction-----------------------------------------
+def BittrexDepositWalletMoney(userID,amount):#storedmoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Bittrexmoney = user.Bittrexmoney + amount
+    user.save()
+    return user.Bittrexmoney
+
+def BittrexWithdrawWalletMoney(userID,amount):#takemoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Bittrexmoney = user.Bittrexmoney - amount
+    user.save()
+    return user.Bittrexmoney
+# Bittrexwalletfunction-----------------------------------------
+
+# Binancewalletfunction-----------------------------------------
+def BinanceDepositWalletMoney(userID,amount):#storedmoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Binancemoney = user.Binancemoney + amount
+    user.save()
+    return user.Binancemoney
+
+def BinanceWithdrawWalletMoney(userID,amount):#takemoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Binancemoney = user.Binancemoney - amount
+    user.save()
+    return user.Binancemoney
+# Binancewalletfunction-----------------------------------------
 
 import string
 import random

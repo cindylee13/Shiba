@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin  
 from .views import Index
 from users.views import Trading, ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney, Order, Withdraw, Deposit
+from users.views import CexWithdraw, BittrexWithdraw, BinanceWithdraw, CexDeposit, BittrexDeposit, BinanceDeposit, CexWallet, BittrexWallet, BinanceWallet
 from trips.views import BTC,Trading
 #from users.views import ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
 admin.autodiscover()  
@@ -23,7 +24,17 @@ urlpatterns = [
     url(r'^users/error/', Error), 
     url(r'^users/trading/', Trading), 
     url(r'^users/order/', Order), 
+    url(r'^users/withdraw/CexWithdraw/', CexWithdraw),  
+    url(r'^users/withdraw/BittrexWithdraw/', BittrexWithdraw),  
+    url(r'^users/withdraw/BinanceWithdraw/', BinanceWithdraw), 
+    url(r'^users/deposit/CexDeposit/', CexDeposit),  
+    url(r'^users/deposit/BittrexDeposit/', BittrexDeposit),  
+    url(r'^users/deposit/BinanceDeposit/', BinanceDeposit), 
     url(r'^users/withdraw/', Withdraw), 
     url(r'^users/deposit/', Deposit), 
+    url(r'^users/CexWallet/', CexWallet), 
+    url(r'^users/BittrexWallet/', BittrexWallet),
+    url(r'^users/BinanceWallet/', BinanceWallet),
     
+
 ]
