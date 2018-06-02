@@ -3,10 +3,12 @@ from django.shortcuts import render_to_response, render
 from users.form import SignUpForm, SignInForm, ChangepwdForm ,StoredMoneyForm , TakeMoneyForm, ForgotPasswordForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import GetUserID, GetUserKey, LoginValidate, User, FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom
+from .models import GetUserID, GetUserKey, LoginValidate, User
+from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
+#RICHER登入前-------------------------------------------------------------------------------------------
 def SignUp(request):
     error = [] # 創建可以顯示error的陣列
     if request.method == 'POST':
@@ -53,9 +55,7 @@ def SignIn(request):
             username = data['username']
             password = data['password'] # 確認密碼有沒有對
             if LoginValidate(request, username, password):
-                # print GetUserKey(GetUserID(request))
                 return HttpResponseRedirect('/users/trading/')
-                # return render(request,'trading.html', {'username': username})
             else:
                 error.append('Please input the correct password')
         else:
@@ -77,9 +77,7 @@ def ForgotPassword(request):
             data = form.cleaned_data
             email = data['email']
             if CheckUserEmail(email):
-                
                 ResetUserPassword(email)
-                
                 return HttpResponseRedirect('/users/signin/')
             else:
                 error.append('Please input the correct email')
@@ -93,7 +91,6 @@ def ForgotPassword(request):
 def ChangePassword(request):
     if not request.user.is_authenticated():  # prevent anonymous Sign in
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) # 判斷使用者有沒有登出過
-        # return HttpResponseRedirect('/users/signin/')
     error = []
     if request.method== 'POST':
         form = ChangepwdForm(request.POST)
@@ -116,259 +113,188 @@ def ChangePassword(request):
     else:
         form = ChangepwdForm()
     return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username})
+#RICHER登入前-------------------------------------------------------------------------------------------
 
-
-def Error(request):
-    return render_to_response('error.html')
-
-def MyProfile(request):
-    user = FilterUser(GetUserID(request))
-    return render(request, 'myProfile.html', {'username' : user.username,'mail' : user.email})
-
-def MyWallet(request):
-    user = FilterUser(GetUserID(request))
-    return render(request, 'mywallet.html', {'username' : user.username,'money' : user.money})
-
-def TakeWalletMoney(request):   
-    error=[]
-    if request.method == 'POST':  
-        form = TakeMoneyForm(request.POST)  
-        if form.is_valid():  
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            takemoney = data['takemoney'] #  將外面的資料丟到takemoney
-            takemoney2 = data['takemoney2']
-            if takemoney == takemoney2:
-                user = FilterUser(userID)
-                #  判斷我的錢包和我拿的錢有無小於零
-                if (user.money-takemoney) < 0: 
-                    error.append('Please input the same password')
-                WithdrawWalletMoney(userID,takemoney)
-                return HttpResponseRedirect('/users/myWallet')
-            else:
-                error.append('Please input the same number')
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = TakeMoneyForm() 
-    return render(request,'takeWalletMoney.html',{'form':form,'error':error})
-
-def StoredWalletMoney(request):   
-    error = []
-    if request.method == 'POST':  
-        form = StoredMoneyForm(request.POST)  
-        if form.is_valid():
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            storedmoney = data['storedmoney']  
-            storedmoney2 = data['storedmoney2']  
-            if storedmoney == storedmoney2 :
-                user = FilterUser(userID)
-                DepositWalletMoney(userID,storedmoney)
-                return HttpResponseRedirect('/users/myWallet')
-            else:
-               error.append('Please input the same number')  
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = StoredMoneyForm() 
-    return render(request,'storedWalletMoney.html',{'form':form,'error':error})
-
-def Trading(request):   #尚未登入看不到葉面  要顯示錯誤
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+#RICHER登入後-------------------------------------------------------------------------------------------
+def SelectPage(request, pageName):
+    if not request.user.is_authenticated():  # prevent anonymous Sign in，尚未登入看不到頁面，要顯示錯誤
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'trading.html', {'username': request.user.username})
+    elif('Trading' == pageName):
+        return render(request,'trading.html', {'username': request.user.username})
+    elif('Order' == pageName):
+        return render(request,'order.html', {'username': request.user.username})
+    elif('Withdraw' == pageName):
+        return render(request,'withdraw.html', {'username': request.user.username})
+    elif('Deposit' == pageName):
+        return render(request,'deposit.html', {'username': request.user.username})
+    else:
+        return HttpResponseRedirect('/users/signin/') # 防呆
 
-def Order(request):   #尚未登入看不到葉面  要顯示錯誤
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
-        return HttpResponseRedirect('/users/signin/')
-    return render(request,'order.html', {'username': request.user.username})
+def Trading(request):
+    return SelectPage(request, 'Trading')
+
+def Order(request):
+    return SelectPage(request, 'Order')
+
+def Withdraw(request):
+    return SelectPage(request, 'Withdraw')
+
+def Deposit(request):
+    return SelectPage(request, 'Deposit')
 
 #Withdraw------------------------------------------------------------------------------
-def Withdraw(request):   #尚未登入看不到葉面  要顯示錯誤
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-    # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+def SelectWithdrawWalletSubtakeMoney(request, withdrawName, isTrueFalse, user):
+    if isTrueFalse == False:
+        return 'You wallet have '+ str(user.Cexmoney) +' USD'
+    if isTrueFalse == True:
+        if('CexWithdraw' == withdrawName):
+            return HttpResponseRedirect('/users/CexWallet/')
+        elif('BittrexWithdraw' == withdrawName):
+            return HttpResponseRedirect('/users/BittrexWallet/')
+        elif('BinanceWithdraw' == withdrawName):
+            return HttpResponseRedirect('/users/BinanceWallet/')
+def IsSelectWithdrawWalletSubtakeMoney(request, withdrawName, user, userID, takemoney):
+    if('CexWithdraw' == withdrawName):
+        if IsWalletSubtakeMoney(user.Cexmoney, takemoney): 
+            return False
+        else:
+            CexWithdrawWalletMoney(userID,takemoney)
+            return True
+    elif('BittrexWithdraw' == withdrawName):
+        if IsWalletSubtakeMoney(user.Bittrexmoney, takemoney): 
+            return False
+        else:
+            BittrexWithdrawWalletMoney(userID,takemoney)
+            return True
+    elif('BinanceWithdraw' == withdrawName):
+        if IsWalletSubtakeMoney(user.Binancemoney, takemoney): 
+            return False
+        else:
+            BinanceWithdrawWalletMoney(userID,takemoney)
+            return True
+
+def selectWithdrawHtml(request, withdrawName, form, error):
+    if('CexWithdraw' == withdrawName):
+        return render(request,'CexWithdraw.html', {'form':form,'error':error})
+    elif('BittrexWithdraw' == withdrawName):
+        return render(request,'BittrexWithdraw.html', {'form':form,'error':error})
+    elif('BinanceWithdraw' == withdrawName):
+        return render(request,'BinanceWithdraw.html', {'form':form,'error':error})
+    else:
+        return HttpResponseRedirect('/users/signin/') # 防呆
+
+def selectWithdraw(request, withdrawName):
+    if not request.user.is_authenticated():  # prevent anonymous Sign in，尚未登入看不到頁面，要顯示錯誤
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'withdraw.html', {'username': request.user.username})
+    error=[]
+    if request.method == 'POST':  
+        form = TakeMoneyForm(request.POST)  
+        if form.is_valid():  
+            data = form.cleaned_data 
+            userID = GetUserID(request)
+            takemoney = data['takemoney'] #  將外面的資料丟到takemoney
+            takemoney2 = data['takemoney2']
+            if takemoney == takemoney2:
+                user = FilterUser(userID)
+                if IsSelectWithdrawWalletSubtakeMoney(request, withdrawName, user, userID, takemoney)==True:
+                    return SelectWithdrawWalletSubtakeMoney(request, withdrawName, True, user)
+                elif IsSelectWithdrawWalletSubtakeMoney(request, withdrawName, user, userID, takemoney)==False:
+                    error.append(str(SelectWithdrawWalletSubtakeMoney(request, withdrawName, False, user)))
+            else:
+                error.append('Please input the same number')
+        else:
+            error.append('Please input the correct number')
+    else :
+        form = TakeMoneyForm()
+    return selectWithdrawHtml(request, withdrawName, form, error)
 
 def CexWithdraw(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error=[]
-    if request.method == 'POST':  
-        form = TakeMoneyForm(request.POST)  
-        if form.is_valid():  
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            takemoney = data['takemoney'] #  將外面的資料丟到takemoney
-            takemoney2 = data['takemoney2']
-            if takemoney == takemoney2:
-                user = FilterUser(userID)
-                #  判斷我的錢包和我拿的錢有無小於零
-                if (user.Cexmoney-takemoney) < 0: 
-                    error.append('You wallet have '+ str(user.Cexmoney) +' USD')
-                else:
-                    CexWithdrawWalletMoney(userID,takemoney)
-                    return HttpResponseRedirect('/users/CexWallet/')
-            else:
-                error.append('Please input the same number')
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = TakeMoneyForm() 
-    return render(request,'CexWithdraw.html',{'form':form,'error':error})
+    return selectWithdraw(request, 'CexWithdraw')
     
 def BittrexWithdraw(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error=[]
-    if request.method == 'POST':  
-        form = TakeMoneyForm(request.POST)  
-        if form.is_valid():  
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            takemoney = data['takemoney'] #  將外面的資料丟到takemoney
-            takemoney2 = data['takemoney2']
-            if takemoney == takemoney2:
-                user = FilterUser(userID)
-                #  判斷我的錢包和我拿的錢有無小於零
-                if (user.Bittrexmoney-takemoney) < 0: 
-                    error.append('You wallet have '+ str(user.Bittrexmoney) +' USD')
-                else:
-                    BittrexWithdrawWalletMoney(userID,takemoney)
-                    return HttpResponseRedirect('/users/BittrexWallet/')
-            else:
-                error.append('Please input the same number')
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = TakeMoneyForm() 
-    return render(request,'BittrexWithdraw.html',{'form':form,'error':error})
+    return selectWithdraw(request, 'BittrexWithdraw')
 
 def BinanceWithdraw(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error=[]
-    if request.method == 'POST':  
-        form = TakeMoneyForm(request.POST)  
-        if form.is_valid():  
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            takemoney = data['takemoney'] #  將外面的資料丟到takemoney
-            takemoney2 = data['takemoney2']
-            if takemoney == takemoney2:
-                user = FilterUser(userID)
-                #  判斷我的錢包和我拿的錢有無小於零
-                if (user.Binancemoney-takemoney) < 0: 
-                    error.append('You wallet have '+ str(user.Binancemoney) +' USD')
-                else:
-                    BinanceWithdrawWalletMoney(userID,takemoney)
-                    return HttpResponseRedirect('/users/BinanceWallet/')
-            else:
-                error.append('Please input the same number')
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = TakeMoneyForm() 
-    return render(request,'BinanceWithdraw.html',{'form':form,'error':error})
+    return selectWithdraw(request, 'BinanceWithdraw')
 
 #Withdraw-----------------------------------------------------------------------------
 
 #Deposit------------------------------------------------------------------------------
+def selectDepositStore(request, DepositName, userID, storedmoney):
+    user = FilterUser(userID)
+    if('CexDeposit' == DepositName):
+        CexDepositWalletMoney(userID,storedmoney)
+        return HttpResponseRedirect('/users/CexWallet/')
+    elif('BittrexDeposit' == DepositName):
+        BittrexDepositWalletMoney(userID,storedmoney)
+        return HttpResponseRedirect('/users/BittrexWallet/')
+    elif('BinanceDeposit' == DepositName):
+        BinanceDepositWalletMoney(userID,storedmoney)
+        return HttpResponseRedirect('/users/BinanceWallet/')
 
-def Deposit(request):   #尚未登入看不到葉面  要顯示錯誤
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-    # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) 
+def selectDepositHtml(request, DepositName, form, error):
+    if('CexDeposit' == DepositName):
+        return render(request,'CexDeposit.html', {'form':form,'error':error})
+    elif('BittrexDeposit' == DepositName):
+        return render(request,'BittrexDeposit.html', {'form':form,'error':error})
+    elif('BinanceDeposit' == DepositName):
+        return render(request,'BinanceDeposit.html', {'form':form,'error':error})
+    else:
+        return HttpResponseRedirect('/users/signin/') # 防呆
+
+def selectDeposit(request, DepositName):
+    if not request.user.is_authenticated():  # prevent anonymous Sign in，尚未登入看不到頁面，要顯示錯誤
         return HttpResponseRedirect('/users/signin/')
-    return render(request,'deposit.html', {'username': request.user.username})
+    error = []
+    if request.method == 'POST':  
+        form = StoredMoneyForm(request.POST)  
+        if form.is_valid():
+            data = form.cleaned_data 
+            userID = GetUserID(request)
+            storedmoney = data['storedmoney']  
+            storedmoney2 = data['storedmoney2']  
+            if storedmoney == storedmoney2 :
+                return selectDepositStore(request, DepositName, userID, storedmoney)
+            else:
+                error.append('Please input the same number')  
+        else:
+            error.append('Please input the correct number')
+    else :
+        form = StoredMoneyForm() 
+    return selectDepositHtml(request, DepositName, form, error)
 
 def CexDeposit(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error = []
-    if request.method == 'POST':  
-        form = StoredMoneyForm(request.POST)  
-        if form.is_valid():
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            storedmoney = data['storedmoney']  
-            storedmoney2 = data['storedmoney2']  
-            if storedmoney == storedmoney2 :
-                user = FilterUser(userID)
-                CexDepositWalletMoney(userID,storedmoney)
-                return HttpResponseRedirect('/users/CexWallet/')
-            else:
-               error.append('Please input the same number')  
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = StoredMoneyForm() 
-    return render(request,'CexDeposit.html', {'error': error, 'form': form})
+    return selectDeposit(request, 'CexDeposit')
     
 def BittrexDeposit(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error = []
-    if request.method == 'POST':  
-        form = StoredMoneyForm(request.POST)  
-        if form.is_valid():
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            storedmoney = data['storedmoney']  
-            storedmoney2 = data['storedmoney2']  
-            if storedmoney == storedmoney2 :
-                user = FilterUser(userID)
-                BittrexDepositWalletMoney(userID,storedmoney)
-                return HttpResponseRedirect('/users/BittrexWallet/')
-            else:
-               error.append('Please input the same number')  
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = StoredMoneyForm() 
-    return render(request,'BittrexDeposit.html', {'error': error, 'form': form})
+    return selectDeposit(request, 'BittrexDeposit')
 
 def BinanceDeposit(request):
-    if not request.user.is_authenticated():  # prevent anonymous Sign in
-        return HttpResponseRedirect('/users/signin/')
-    error = []
-    if request.method == 'POST':  
-        form = StoredMoneyForm(request.POST)  
-        if form.is_valid():
-            data = form.cleaned_data 
-            userID = GetUserID(request)
-            storedmoney = data['storedmoney']  
-            storedmoney2 = data['storedmoney2']  
-            if storedmoney == storedmoney2 :
-                user = FilterUser(userID)
-                BinanceDepositWalletMoney(userID,storedmoney)
-                return HttpResponseRedirect('/users/BinanceWallet/')
-            else:
-               error.append('Please input the same number')  
-        else:
-            error.append('Please input the correct number')
-    else :
-        form = StoredMoneyForm() 
-    return render(request,'BinanceDeposit.html', {'error': error, 'form': form})
+    return selectDeposit(request, 'BinanceDeposit')
 
 #Deposit------------------------------------------------------------------------------
 
 #Wallet------------------------------------------------------------------------------
-def CexWallet(request):
+def SelectWallet(request, walletName):
     user = FilterUser(GetUserID(request))
-    return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney})
+    if('CexWallet' == walletName):
+        return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney, 'BTC' : user.CexBTC})
+    elif('BittrexWallet' == walletName):
+        return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney, 'BTC' : user.BittrexBTC})
+    elif('BinanceWallet' == walletName):
+        return render(request, 'Binance_Wallet.html', {'username' : user.username,'money' : user.Binancemoney, 'BTC' : user.BinanceBTC})
+def CexWallet(request):
+    return SelectWallet(request, 'CexWallet')
 
 def BittrexWallet(request):
-    user = FilterUser(GetUserID(request))
-    return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney})
+    return SelectWallet(request, 'BittrexWallet')
 
 def BinanceWallet(request):
-    user = FilterUser(GetUserID(request))
-    return render(request, 'Binance_Wallet.html', {'username' : user.username,'money' : user.Binancemoney})
+    return SelectWallet(request, 'BinanceWallet')
 #Wallet------------------------------------------------------------------------------
-    
 
+def Error(request):
+    return render_to_response('error.html')
 
+#RICHER登入後-------------------------------------------------------------------------------------------
         
