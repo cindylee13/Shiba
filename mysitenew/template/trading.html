@@ -16,13 +16,13 @@
           console.log("connect");
         //  SetData();
         });
-        var options = 
+        var options =
         {
           year: "numeric", month: "short",
           day: "numeric", hour: "2-digit", minute: "2-digit"
         };
 
-          socket.on('message', function(message) 
+          socket.on('message', function(message)
           {
             console.log('send message');
             console.log(message);
@@ -42,11 +42,11 @@
             //})
             //console.log(outputMeg)
             //outputMeg.push(megObj.fields)
-            
 
-            var dt = dynamicTable.config( 'dataTable', 
-                ['transection','bid', 'ask','created_at'], 
-                ['transection','bid', 'ask','time'], //set to null for field names 
+
+            var dt = dynamicTable.config( 'dataTable',
+                ['transection','bid', 'ask','created_at'],
+                ['transection','bid', 'ask','time'], //set to null for field names
                 'There are no items to list...');
             //outputMeg.push(outputMeg)
             //console.log(typeof(megObjs))
@@ -55,8 +55,8 @@
         });
     ///////////////////////dynamic table////////////////////////
           var dynamicTable = (function() {
-          var _tableId, _table, 
-          _fields, _headers, 
+          var _tableId, _table,
+          _fields, _headers,
           _defaultText;
           function UpdateTable(transectionId)
           {
@@ -108,10 +108,10 @@
             }
             return row;
           }
-        
+
 
           return {
-            //* Configres the dynamic table. 
+            //* Configres the dynamic table.
             config: function(tableId, fields, headers, defaultText) {
               _tableId = tableId;
               _table = $(document.getElementById(_tableId))//$('#' + tableId);
@@ -141,7 +141,7 @@
               /** Clears the table body. */
         };
         }());
-     
+
 /////////////////////////////////////////////////////////////////
   </script>
   <meta charset="utf-8">
@@ -199,13 +199,13 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="#">Cex_Wallet</a>
+              <a href="Cex_Wallet.html">Cex_Wallet</a>
             </li>
             <li>
-              <a href="#">Bittrex_Wallet</a>
+              <a href="Bittrex_Wallet.html">Bittrex_Wallet</a>
             </li>
             <li>
-              <a href="#">Binance_Wallet</a>
+              <a href="Binance_Wallet.html">Binance_Wallet</a>
             </li>
             <li>
               <a href="#">hahaha_Wallet</a>
@@ -560,7 +560,7 @@
                   <td>{{Cex.created_at}}</td>
                   {% endif %}
                   {% endfor %}
-                </tr>  
+                </tr>
                 <tr id='Bitfinex'>
                   <td>Bitfinex</td>
                   {% for Bitfinex in BitfinexBTCTable %}
@@ -569,18 +569,18 @@
                   <td>{{Bitfinex.ask}}</td>
                   <td>{{Bitfinex.created_at}}</td>
                   {% endif %}
-                  {% endfor %}                
-                </tr> 
+                  {% endfor %}
+                </tr>
                 <tr id='Cryptopia'>
                   <td>Cryptopia</td>
                   {% for Cryptopia in CryptopiaBTCTable %}
-                  {% if forloop.last %}                  
+                  {% if forloop.last %}
                   <td>{{Cryptopia.bid}}</td>
                   <td>{{Cryptopia.ask}}</td>
                   <td>{{Cryptopia.created_at}}</td>
                   {% endif %}
-                  {% endfor %}                
-                </tr>               
+                  {% endfor %}
+                </tr>
               </tbody>
             </table>
         </div>
