@@ -22,7 +22,8 @@ class BittrexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return self.created_at
+		#return "%s" % self.datetime
+		return "%s" % self.id  , "%s" % self.created_at
 
 def CrawlBittrexBTC():
 	quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC"
@@ -47,7 +48,8 @@ class CexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return self.created_at
+		return "%s" % self.id#  , "%s" % self.created_at
+		#return self.created_at
 
 def CrawlCexBTC():
 	quote_page = "https://cex.io/api/ticker/BTC/USD"
@@ -242,6 +244,9 @@ def CheckSave():
 def Update(portname,objectname):
 	r = redis.StrictRedis(host='localhost', port=6379, db=0)
 	r.publish(portname, objectname)
+
+
+
 '''
 def crawal():
 	#url = 'https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC'

@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
 from .models import BittrexBTCTable, BittrexBTC 
+from .transection import main
 from .models import CexBTCTable, CexBTC
 from .models import BinanceBTCTable, BinanceBTC
 from .models import BitfinexBTCTable, BitfinexBTC
@@ -25,6 +25,8 @@ def BTC(request):
     #e = CryptopiaBTC()
     CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     dif=GetDifference()
+
+
     return render(request, 'BTC.html', {
         'current_time': str(datetime.now()), 
         'BittrexBTCTable' : BittrexList, 
@@ -33,11 +35,10 @@ def BTC(request):
         'BitfinexBTCTable' : BitfinexList,
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
-        'transection':transection
     })
 def Trading(request):
-    a = BittrexBTC()    #move to crontab
-    print a
+    #a = BittrexBTC()    #move to crontab
+    #print a
     BittrexList = ChangeDateGetObjects(BittrexBTCTable)
     #BittrexList = BittrexBTCTable.objects.all()
     #b = CexBTC()
@@ -53,11 +54,11 @@ def Trading(request):
     #dif=GetDifference()
     return render(request, 'trading.html', {
         #'current_time': str(datetime.now()), 
-        'BittrexBTCTable' : BittrexList, 
-        'CexBTCTable' : CexList,
+        'BittrexBTCTable' : BittrexList[0:500], 
+        'CexBTCTable' : CexList[0:500],
         'BinanceBTCTable' : BinanceList,
         'BitfinexBTCTable' : BitfinexList,
-        'CryptopiaBTCTable' : CryptopiaList,
+        'CryptopiaBTCTable' : CryptopiaList
     })
 
 def ChangeDateGetObjects(table):
@@ -65,6 +66,11 @@ def ChangeDateGetObjects(table):
     for row in rows:
         row.created_at=row.created_at.strftime('20%y-%m-%d %H:%M:%S')
     return rows
+def userInfo(request):
+    if request.method == "POST":
+        a=request.POST.get("transectiondate",None)
+        aa,bb = main(a)
+    return render(request,"trading.html",{"user":aa,"user1":bb})
 
 def index1(request):
     #ans={}

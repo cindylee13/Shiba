@@ -5,7 +5,7 @@
 
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
-            <script src="https://d3js.org/d3.v4.min.js"></script>  
+            <script src="https://d3js.org/d3.v4.min.js"></script>   
   <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
   <script>
     $(document).ready(function(){
@@ -275,7 +275,6 @@
               var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
 
                 {% for CoinTable in BittrexBTCTable %}
-                  //temp=FormatData({{CoinTable}})
                   var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
                   temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Bittrex.push(temp);
@@ -302,10 +301,13 @@
                 {% endfor %}
                 all={'Cryptopia':Cryptopia,'Bitfinex':Bitfinex,'Cex':Cex,'Binance':Binance,'Bittrex':Bittrex}
                 data=all['Bittrex']
-                console.log(data)
+                //console.log(data)
+                //console.log("****************")
+                console.log(all);
               function getDate(transectionName)
               {
-                draw(all[transectionName],transectionName)
+                firsttime=all[transectionName][0].date
+                draw(all[transectionName],transectionName,firsttime)
               }
               var margin = {top: 20, right: 50, bottom: 30, left: 50},
                 width = 960 - margin.left - margin.right,
@@ -315,7 +317,7 @@
                   .attr("height", height + margin.top + margin.bottom)
                   .append("g")
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-              var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
+              //var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
               bisectDate = d3.bisector(function(d) { return d.date; }).left,
               formatValue = d3.format(",.2f"),
               formatCurrency = function(d) { return "$" + formatValue(d); };
@@ -390,7 +392,7 @@
                     .attr("class", "linebid")
                     .attr("first",data[0].date)
                     .attr("d", line(data));
-
+//console.log("======="+all['Bittrex'][0].date)
                 svg.append("path")
                     //.data(data)
                     .attr("fill", "none")
@@ -476,12 +478,12 @@
 
               function Minus()
               {
-                svg = d3.select("svg");
-                var paths = svg.select('.lineask').attr("first");
+                var svg = d3.select("svg");
+                var paths = svg.selectAll('.lineask').attr("first");
                 var id = d3.select('svg').attr('id');
                 var pathData = [];
                 timedelta=5*60*1000
-
+                console.log("=========="+paths)
                 firstTime=new Date(paths)
                 console.log("!!!"+firstTime)
                 console.log("~~~"+new Date(firstTime.getTime()+timedelta))
@@ -585,7 +587,12 @@
       </div>
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-dollar"></i> Trade</div>
+          <i class="fa fa-dollar"></i> Trade {{user}} {{user1}}
+          <form action="/userInfo" method="post">
+            <input type="date" name="transectiondate" value="2018-05-16" min="2018-05-16" max="2018-05-30">
+            <input type="submit" name="submit">
+          </form>
+        </div>
         <div class="card-body">
 
         </div>
