@@ -58,7 +58,7 @@ def Trading(request):
         'CexBTCTable' : CexList[0:500],
         'BinanceBTCTable' : BinanceList,
         'BitfinexBTCTable' : BitfinexList,
-        'CryptopiaBTCTable' : CryptopiaList
+        'CryptopiaBTCTable' : CryptopiaList,
     })
 
 def ChangeDateGetObjects(table):
@@ -75,5 +75,6 @@ def userInfo(request):
 def index1(request):
     #ans={}
     #ans['head']='hello sunny!'
+    uu=GetUserID()
     a = index1()
     return render(request,'BTC.html',{'ans':a})
