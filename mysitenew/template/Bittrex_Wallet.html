@@ -17,32 +17,32 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="trading.html">RICHER</a>
+    <a class="navbar-brand" href="/users/trading/">RICHER</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="trading.html">
+          <a class="nav-link" href="/users/trading/">
             <i class="fa fa-fw fa-dashboard"></i>
             <span class="nav-link-text">Trading</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
-          <a class="nav-link" href="order.html">
+          <a class="nav-link" href="/users/order/">
             <i class="fa fa-fw fa-area-chart"></i>
             <span class="nav-link-text">Orders</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="withdraw.html">
+          <a class="nav-link" href="/users/withdraw/">
             <i class="fa fa-fw fa-dollar"></i>
             <span class="nav-link-text">Withdraw</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="deposit.html">
+          <a class="nav-link" href="/users/deposit/">
             <i class="fa fa-fw fa-bitcoin"></i>
             <span class="nav-link-text">Deposit</span>
           </a>
@@ -54,13 +54,13 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="Cex_Wallet.html">Cex_Wallet</a>
+              <a href="/users/CexWallet/">Cex_Wallet</a>
             </li>
             <li>
-              <a href="Bittrex_Wallet.html">Bittrex_Wallet</a>
+              <a href="/users/BittrexWallet/">Bittrex_Wallet</a>
             </li>
             <li>
-              <a href="Binance_Wallet.html">Binance_Wallet</a>
+              <a href="/users/BinanceWallet/">Binance_Wallet</a>
             </li>
             <li>
               <a href="#">hahaha_Wallet</a>
@@ -77,7 +77,7 @@
               <a href="#">Status</a>
             </li>
             <li>
-              <a href="changePassword.html">ChangePassword</a>
+              <a href="/users/changePassword/">ChangePassword</a>
             </li>
           </ul>
         </li>
@@ -108,7 +108,7 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="index.html">Trading</a>
+          <a href="/users/trading/">Trading</a>
         </li>
         <li class="breadcrumb-item active">Wallet</li>
         <li class="breadcrumb-item active">Bittrex_Wallet</li>
@@ -117,14 +117,14 @@
         <div class="tab-pane" id="cex_wallet">
           <h5>Bitcoin Balance</h5>
           <div class="row">
-            <div class= "col-sm-3"><h2>1.4291</h2> </div>
+            <div class= "col-sm-3"><h2>{{BTC}}</h2> </div>
             <div class= "col-sm-9"><h4>BTC</h4></div>
           </div>
 
           <hr></hr>
         <h5>USD Balance</h5>
           <div class="row">
-            <div class= "col-sm-3"><h2>$15932</h2> </div>
+            <div class= "col-sm-3"><h2>${{money}}</h2> </div>
             <div class= "col-sm-9"><h4>USD</h4></div>
           </div>
         </div>
@@ -162,12 +162,12 @@
       </div>
     </div>
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src={% static "bootstrap/vendor/jquery/jquery.min.js"%}></script>
+    <script src={% static "bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"%}></script>
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src={% static "bootstrap/vendor/jquery-easing/jquery.easing.min.js"%}></script>
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin.min.js"></script>
+    <script src={% static "bootstrap/vendor/js/sb-admin.min.js"%}></script>
   </div>
 </body>
 

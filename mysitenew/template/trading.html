@@ -1,11 +1,10 @@
-
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
-            <script src="https://d3js.org/d3.v4.min.js"></script>   
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
   <script>
     $(document).ready(function(){
@@ -161,7 +160,7 @@
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/index">RICHER</a>
+    <h3 class="navbar-brand">RICHER</h3>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -199,13 +198,13 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="Cex_Wallet.html">Cex_Wallet</a>
+              <a href="/users/CexWallet/">Cex_Wallet</a>
             </li>
             <li>
-              <a href="Bittrex_Wallet.html">Bittrex_Wallet</a>
+              <a href="/users/BittrexWallet/">Bittrex_Wallet</a>
             </li>
             <li>
-              <a href="Binance_Wallet.html">Binance_Wallet</a>
+              <a href="/users/BinanceWallet/">Binance_Wallet</a>
             </li>
             <li>
               <a href="#">hahaha_Wallet</a>
@@ -249,18 +248,22 @@
       <!-- Area Chart Example-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-area-chart"> Area Chart </i>
-          <button type="button" class="btn btn-dark" value="Binance" onclick="getDate(this.value)">Binance</button>
-          <button type="button" class="btn btn-dark" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
-          <button type="button" class="btn btn-dark" value="Cex" onclick="getDate(this.value)">Cex</button>
-          <button type="button" class="btn btn-dark" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
-          <button type="button" class="btn btn-dark" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
-          <button type="button" class="btn btn-dark" value="Plus" onclick="Plus()">Plus</button>
-          <button type="button" class="btn btn-dark" value="Minus" onclick="Minus()">Minus</button>
-
-
-        </div>
+            <i class="fa fa-area-chart"></i> Area Chart
+          </div>
         <div class="card-body">
+          <div class = "row">
+            <div class = "col-4">
+              <button type="button" class="btn btn-white" value="Plus" onclick="Plus()">+</button>
+              <button type="button" class="btn btn-white" value="Minus" onclick="Minus()">-</button>
+            </div>
+            <div class = "col-8">
+              <button type="button" class="btn btn-secondary" value="Binance" onclick="getDate(this.value)">Binance</button>
+              <button type="button" class="btn btn-secondary" value="Bittrex" onclick="getDate(this.value)">Bittrex</button>
+              <button type="button" class="btn btn-secondary" value="Cex" onclick="getDate(this.value)">Cex</button>
+              <button type="button" class="btn btn-secondary" value="Bitfinex" onclick="getDate(this.value)">Bitfinex</button>
+              <button type="button" class="btn btn-secondary" value="Cryptopia" onclick="getDate(this.value)">Cryptopia</button>
+            </div>
+          </div>
           <svg id="Bittrex" width="960" height="500"></svg>
           <script src={% static "bootstrap/moment.min.js" %}></script>
           <script src={% static "bootstrap/moment-timezone-with-data.js" %}></script>
@@ -376,10 +379,10 @@
                     .style("text-anchor", "end")
                     .text("Price ($)");
 
-                svg.append("g")       
-                    .attr("class", "y1 axis")  
-                    .attr("transform", "translate(" + width + " ,0)") 
-                    .style("fill", "red")   
+                svg.append("g")
+                    .attr("class", "y1 axis")
+                    .attr("transform", "translate(" + width + " ,0)")
+                    .style("fill", "red")
                     .call(y1);
 
                 svg.append("path")
@@ -403,7 +406,7 @@
                     .attr("class", "lineask")
                     .attr("first",data[0].date)
                     .attr("d", lineAsk(data));
-                    
+
                 var focus = svg.append("g")
                     .attr("class", "focus")
                     .attr("fill", "none")
@@ -470,9 +473,9 @@
                       .call(y);
                   svg.select(".y1.axis").transition() // change the y axis
                       //.duration(750)
-                      .call(y1);  
+                      .call(y1);
 
-                  //svg.duration(4000).transition();                                     
+                  //svg.duration(4000).transition();
 
               }
 
@@ -509,11 +512,11 @@
                   if(firstTime - Obj.date <= timedelta)
                     pathData.push(Obj);
                   });
-                draw(pathData,id,new Date(firstTime.getTime()-timedelta));              
+                draw(pathData,id,new Date(firstTime.getTime()-timedelta));
               }
-              
+
               </script>
-              
+
         </div>
       </div>
       <!-- Example DataTables Card-->
@@ -521,68 +524,68 @@
         <div class="card-header">
           <i class="fa fa-table"></i> Data Table</div>
         <div class="card-body">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Bid</th>
-                  <th>Ask</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr id='Binance'>
-                  <td>Binance</td>
-                  {% for Binance in BinanceBTCTable %}
-                  {% if forloop.last %}
-                    <td>{{Binance.bid}}</td>
-                    <td>{{Binance.ask}}</td>
-                    <td>{{Binance.created_at}}</td>
-                  {% endif %}
-                  {% endfor %}
-                </tr>
-                <tr id='Bittrex'>
-                  <td>Bittrex</td>
-                  {% for Bittrex in BittrexBTCTable %}
-                  {% if forloop.last %}
-                  <td>{{Bittrex.bid}}</td>
-                  <td>{{Bittrex.ask}}</td>
-                  <td>{{Bittrex.created_at}}</td>
-                  {% endif %}
-                  {% endfor %}
-                </tr>
-                <tr id='Cex'>
-                  <td>Cex</td>
-                  {% for Cex in CexBTCTable %}
-                  {% if forloop.last %}
-                  <td>{{Cex.bid}}</td>
-                  <td>{{Cex.ask}}</td>
-                  <td>{{Cex.created_at}}</td>
-                  {% endif %}
-                  {% endfor %}
-                </tr>
-                <tr id='Bitfinex'>
-                  <td>Bitfinex</td>
-                  {% for Bitfinex in BitfinexBTCTable %}
-                  {% if forloop.last %}
-                  <td>{{Bitfinex.bid}}</td>
-                  <td>{{Bitfinex.ask}}</td>
-                  <td>{{Bitfinex.created_at}}</td>
-                  {% endif %}
-                  {% endfor %}
-                </tr>
-                <tr id='Cryptopia'>
-                  <td>Cryptopia</td>
-                  {% for Cryptopia in CryptopiaBTCTable %}
-                  {% if forloop.last %}
-                  <td>{{Cryptopia.bid}}</td>
-                  <td>{{Cryptopia.ask}}</td>
-                  <td>{{Cryptopia.created_at}}</td>
-                  {% endif %}
-                  {% endfor %}
-                </tr>
-              </tbody>
-            </table>
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id='Binance'>
+                <td>Binance</td>
+                {% for Binance in BinanceBTCTable %}
+                {% if forloop.last %}
+                  <td>{{Binance.bid}}</td>
+                  <td>{{Binance.ask}}</td>
+                  <td>{{Binance.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Bittrex'>
+                <td>Bittrex</td>
+                {% for Bittrex in BittrexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bittrex.bid}}</td>
+                <td>{{Bittrex.ask}}</td>
+                <td>{{Bittrex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Cex'>
+                <td>Cex</td>
+                {% for Cex in CexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cex.bid}}</td>
+                <td>{{Cex.ask}}</td>
+                <td>{{Cex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Bitfinex'>
+                <td>Bitfinex</td>
+                {% for Bitfinex in BitfinexBTCTable %}
+                {% if forloop.last %}
+                <td>{{Bitfinex.bid}}</td>
+                <td>{{Bitfinex.ask}}</td>
+                <td>{{Bitfinex.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              <tr id='Cryptopia'>
+                <td>Cryptopia</td>
+                {% for Cryptopia in CryptopiaBTCTable %}
+                {% if forloop.last %}
+                <td>{{Cryptopia.bid}}</td>
+                <td>{{Cryptopia.ask}}</td>
+                <td>{{Cryptopia.created_at}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="card mb-3">
@@ -624,7 +627,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="/users/signout/">Sign Out</a>
+            <a class="btn btn-secondary" href="/users/signout/">Sign Out</a>
           </div>
         </div>
       </div>
