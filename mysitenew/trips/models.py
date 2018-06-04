@@ -11,6 +11,7 @@ import time
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
 from django.core import serializers
+from users.models import User
 #transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable
 
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
@@ -23,7 +24,7 @@ class BittrexBTCTable(models.Model):
 		ordering = ['created_at']
 	def __str__(self):
 		#return "%s" % self.datetime
-		return "%s" % self.id  , "%s" % self.created_at
+		return "%s" % self.created_at#  , "%s" % self.created_at
 
 def CrawlBittrexBTC():
 	quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC"
@@ -48,7 +49,7 @@ class CexBTCTable(models.Model):
 	class Meta:
 		ordering = ['created_at']
 	def __str__(self):
-		return "%s" % self.id#  , "%s" % self.created_at
+		return "%s" % self.created_at#  , "%s" % self.created_at
 		#return self.created_at
 
 def CrawlCexBTC():
@@ -136,6 +137,27 @@ def CryptopiaBTC():
 	a=UpdateOrCreate('Cryptopia',CryptopiaBTCTable,data['BidPrice'],data['AskPrice'],data['LastPrice'])
 	return a
 #Cryptopia----------------------------------Cryptopia------------------------------------Cryptopia----5
+#Purse--------------------------------------
+class Purse(models.Model):
+    Bittrexmoney = models.FloatField(default=0.0)
+    Binancemoney = models.FloatField(default=0.0)
+    CexBTC = models.FloatField(default=0.0)
+    BittrexBTC = models.FloatField(default=0.0)
+    BinanceBTC = models.FloatField(default=0.0)
+    Cexmoney = models.FloatField(default=0.0)
+    userID = models.ForeignKey(User)
+#purse--------------------------------------
+#TransectionRecord--------------------------
+class TransectionRecord(models.Model):
+    userID = models.ForeignKey(User)
+    Fee = models.FloatField(default=0.0)
+    BidTransection = models.CharField(max_length=100)
+    AskTransection = models.CharField(max_length=100)
+    Bid = models.FloatField(default=0.0)
+    Ask = models.FloatField(default=0.0)
+    created_at = models.DateTimeField(auto_now=True)
+
+#TransectionRecord--------------------------
 #if auto_now time>5minute update ,if not create.--------------------------------------
 def UpdateOrCreate(transection,table,bid,ask,last):
 	time_threshold = datetime.now() - timedelta(hours=3)

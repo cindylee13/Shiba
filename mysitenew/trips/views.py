@@ -70,7 +70,7 @@ def userInfo(request):
     if request.method == "POST":
         a=request.POST.get("transectiondate",None)
         aa,bb = main(a)
-    return render(request,"trading.html",{"user":aa,"user1":bb})
+    return render(request,"trading.html",{"a":aa,"b":bb})
 
 def index1(request):
     #ans={}
