@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
 from .models import BittrexBTCTable, BittrexBTC 
-from .transection import main
+from .transection import main,test
 from .models import CexBTCTable, CexBTC
 from .models import BinanceBTCTable, BinanceBTC
 from .models import BitfinexBTCTable, BitfinexBTC
@@ -80,6 +80,7 @@ def userInfo(request):
     if request.method == "POST":
         a=request.POST.get("transectiondate",None)
         aa,bb = main(a)
+
     return render(request,"trading.html",{"a":aa,"b":bb})
 
 def index1(request):

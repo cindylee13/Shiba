@@ -2,11 +2,8 @@
 from django.db import models
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
-from datetime import datetime, timedelta
 import time
-from datetime import datetime, timedelta
 from .models import CexBTCTable, CexBTC,BittrexBTCTable,Purse,TransectionRecord
-#from users.models import GetUserID,User
 import time
 import requests
 def GetAvg(infor):
@@ -14,7 +11,6 @@ def GetAvg(infor):
    try:
       Avg=sum(infor)/len(infor)
    except ZeroDivisionError:
-      #print "zero!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       Avg=0
    return Avg
 def GetProfitLine(mean,var):#(var,mean)
@@ -179,7 +175,8 @@ def InsertTransectionRecord(userId,fee,bidTransection,askTransection,bid,ask,fla
 		result = TransectionRecord.objects.filter(userID_id = 1,(F('Bid')-F('Ask'))__gt=avg)#,created_at__lt=time_threshold)[0]
 	except IndexError:
 		"""
-
+def test():
+	return "abc"
 def ChangeTransection(userId,avg):
 	result = TransectionRecord.objects.filter(userID_id = 1,Bid__gte=avg+F('Ask'),flag=0)[0]#,created_at__lt=time_threshold)[0]
 	result.flag=2
@@ -243,6 +240,7 @@ def DoWin(bittrex,cex,earnall,loseall,profit):
 		InsertTransectionRecord(1,fee,'cex','bittrex',cex['bid'],bittrex['ask'],0)
 		return True
 	return False
+
 def DoLose(bittrex,cex,earnAvg):
 	purse=GetPurse()
 	a,b=GetLoseLine(earnAvg)
@@ -255,57 +253,3 @@ def DoLose(bittrex,cex,earnAvg):
 		InsertTransectionRecord(1,fee,'bittrex','cex',bittrex['bid'],cex['ask'],1)
 		return True
 	return False
-	#	tempearn=profit
-	#return tempearn#####save transection record
-	#return bitcex,bitbitt,pursecex, pursebitt,tempearn
-		#if(do):
-	#if(IsHighOutlier())
-
-
-	"""for d in cexSell[minnum:maxnum]:
-    testcexProfit.append(d[1]-d[2])
-    testqo6.append(d[3]-d[4])
-    earnnotdo.append(d[1]-d[2])
-    ################cex sell bittrex buy######################
-    if(IsHighOutlier(d[1]-d[2],earnnotdo) and d[1]-d[2]>0 and (tempearn +5)<d[1]-d[2]):
-        a,b=GetProfitLine(GetAvg(qo6),variance2(qo6))
-        ratio=Found(a,b,d[1]-d[2])
-        fee=ratio*pursebitt*0.01
-        do,bitcex,bitbitt,pursecex,pursebitt=Earn(fee,pursebitt,pursecex,bitbitt,bitcex,d)
-        if(do):
-            print "-"*100
-            tempearn=d[1]-d[2]
-            earn+=d[1]-d[2]
-            num+=1
-            earnlist.append(d[1]-d[2])
-            print d[5],"cex sell=",d[1],"bitt buy=",d[2],"bitt sell=",d[3],"cex buy=",d[4],'temp=',tempearn,'profit=',d[1]-d[2]
-            print bitcex+bitbitt,pursecex+pursebitt,'---',bitcex,bitbitt,pursecex,pursebitt
-            print "-"*100
-    if(not(IsHighOutlier(d[1]-d[2],earnnotdo))):
-        tempearn=0
-    
-    if((GetMean(num,earn))*0.9>abs(d[3]-d[4]) and d[3]-d[4] > templose + 5):
-        a,b=GetLoseLine(GetMean(num,earn))
-        fee=Found(a,b,abs(d[3]-d[4]))*(pursecex-(pursecex+pursebitt)/2)*0.01
-        do,bitcex,bitbitt,pursecex,pursebitt=Lose(fee,pursebitt,pursecex,bitbitt,bitcex,d)
-        if(do):
-            print "*"*50
-            earn-=(GetMean(num,earn))
-            templose=d[3]-d[4]
-            num-=1
-            print d[5],"cex sell=",d[1],"bitt buy=",d[2],"bitt sell=",d[3],"cex buy=",d[4],"lose=",d[3]-d[4]
-            print bitcex+bitbitt,pursecex+pursebitt,'---',bitcex,bitbitt,pursecex,pursebitt
-            print "*"*50
-        ##################################################
-    if(not (GetMean(num,earn)-(2*variance2(earnlist))) > abs(d[3]-d[4])):
-        templose=-200
-    i+=1
-    qo6.append(d[3]-d[4])
-    if(len(qo6)>1000):
-        del qo6[0]
-    if(len(earnlist)>1000):
-        del earnlist[0]
-    if(len(earnnotdo)>1000):
-        del earnnotdo[0]
-    dates.append(d[5])
-"""
