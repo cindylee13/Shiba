@@ -13,6 +13,10 @@ from django.db.models import F, Sum, FloatField, Avg
 from django.core import serializers
 from users.models import User
 #transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable
+def TestButton():
+	temp=datetime.now()
+	now=temp.strftime('%Y-%m-%d %H:%M:%S')
+	TransectionRecord.objects.create(userID_id = 2, Fee = 1, BidTransection= 'bbb',AskTransection='askTransection',Bid=1,Ask=1,created_at=now,flag=1)
 
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
 class BittrexBTCTable(models.Model):
@@ -156,6 +160,7 @@ class TransectionRecord(models.Model):
     Bid = models.FloatField(default=0.0)
     Ask = models.FloatField(default=0.0)
     created_at = models.DateTimeField(auto_now=True)
+    flag=models.CharField(max_length=1,default='0')
 
 #TransectionRecord--------------------------
 #if auto_now time>5minute update ,if not create.--------------------------------------

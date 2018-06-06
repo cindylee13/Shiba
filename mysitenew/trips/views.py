@@ -7,7 +7,7 @@ from .models import CexBTCTable, CexBTC
 from .models import BinanceBTCTable, BinanceBTC
 from .models import BitfinexBTCTable, BitfinexBTC
 from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
-
+from pyspark import SQLContext,SparkConf,SparkContext
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
 
 def BTC(request):
@@ -36,6 +36,16 @@ def BTC(request):
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
     })
+def TestSpark(request):
+    sc = SparkContext("local", "first app")
+    spark=SparkSession.builder.master("local").appName("first app").config("spark.some.config.option","some-value").getOrCreate()
+    logFile = "file:///Users/sunny/Desktop/CheckIn.csv"
+    logData = sc.textFile(logFile)
+    Data=logData.map(lambda a:a.split(','))
+    people = Data.map(lambda p: (p[0], regex(str(p[1])) ,p[2],p[3],p[4].strip()))
+    return render(request,"error.html",{"a":people})
+
+
 def Trading(request):
     #a = BittrexBTC()    #move to crontab
     #print a

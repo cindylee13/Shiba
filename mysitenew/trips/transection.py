@@ -30,7 +30,7 @@ def GetProfitLine(mean,var):#(var,mean)
 def GetLoseLine(earnMean):#(var,mean):
    """a=100/(mean+2*var-0.3)
    b=-(0.3*a) (mean+2*var,0)
-   (earnMean,10)      (1,100)
+   (earnMean,0)      (1,100)
    """
    #print "~~~",earnMean
    a=90/(1-earnMean)
@@ -46,7 +46,8 @@ def ChangeToBit(fee,transectionFee):
    return float(fee)/float(transectionFee)
 def Sell(transection,number,bid):#sell,bitpurse,purse,number):# fee=ratio*puse
 	purse=GetPurse()
-	if(purse[transection+"BTC"]<number or purse[transection+"money"]<number*bid):
+	print purse[transection+"BTC"],'number'
+	if(purse[transection+"BTC"]<number):
 		return False
 	UpdatePurse(transection+"BTC",purse[transection+"BTC"]-number)
 	UpdatePurse(transection+"money",purse[transection+"money"]+number*bid)
@@ -57,7 +58,7 @@ def Sell(transection,number,bid):#sell,bitpurse,purse,number):# fee=ratio*puse
 	#return bitpurse,purse
 def Buy(transection,number,ask):
 	purse=GetPurse()
-	if(purse[transection+"BTC"]<number or purse[transection+"money"]<number*ask):
+	if(purse[transection+"money"]<number*ask):
 		return False
 	UpdatePurse(transection+"BTC",purse[transection+"BTC"]+number)
 	UpdatePurse(transection+"money",purse[transection+"money"]-number*ask)
@@ -65,22 +66,23 @@ def Buy(transection,number,ask):
    #bitpurse+=number
    #purse-=number*buy
    #return bitpurse,purse
-def Earn(buyTransection,sellTransection,fee,bid,ask):
+def Transection(buyTransection,sellTransection,fee,bid,ask):
    #cexPurse,bittrexPurse,CexBTC,BittrexBTC=GetPurse()
 	number=ChangeToBit(fee,ask)
    #if(CexBTC>number and bittrexPurse>number*ask and fee>1):
-	if(Sell('Cex',number,bid) and fee >1):
-		a=Buy('Bittrex',number,ask)
-		return 1
-	return 0
-def Lose(fee,pursebitt,pursecex,bitbitt,bitcex,price):
-   number=ChangeToBit(fee,price[4])
+	if(Sell(sellTransection,number,bid) and fee >1):
+		a=Buy(buyTransection,number,ask)
+		return a
+	return False
+"""def Lose(buyTransection,sellTransection,fee,bid,ask):#fee,pursebitt,pursecex,bitbitt,bitcex,price):
+   number=ChangeToBit(fee,ask)
+number=ChangeToBit(fee,price[4])
    flag=False
    if(bitbitt>number and pursecex>number*price[4] and fee>1):
       bitbitt,pursebitt=Sell(price[3],bitbitt,pursebitt,number)
       bitcex,pursecex=Buy(price[4],bitcex,pursecex,number)
       flag=True
-   return flag,bitcex,bitbitt,pursecex,pursebitt
+   return flag,bitcex,bitbitt,pursecex,pursebitt"""
 
 def variance2(l):
    try: 
@@ -98,6 +100,12 @@ def IsHighOutlier(point,all):
    if(point>100 and avg+3*var<point and avg!=0 and var!=0): #May12-*5
       return True
    return False
+def IsLowOutlier(point,all):
+   avg=GetAvg(all)
+   var=variance2(all)
+   if(avg + 3*var < point and avg!=0 and var!=0): #May12-*5
+      return True
+   return False
 def GetMean(num,all):
     Avg=0
     try:
@@ -108,6 +116,7 @@ def GetMean(num,all):
     return Avg
 def main(date):
 	tempearn=0
+	templose=-200
 	a=[]
 	####get first id by date 
 	firstId=CexBTCTable.objects.filter(created_at__icontains = date)[0].id
@@ -132,13 +141,29 @@ def main(date):
 		earnall.append(earn)
 		loseall.append(lose)
 		if(IsHighOutlier(earn,earnall) and tempearn + 5 < earn and earn > 0):
-			if(Win(b,c,earnall,loseall,earn)):
+			if(DoWin(b,c,earnall,loseall,earn)):
 				tempearn=earn
-				a.append(earn)
 				#InsertTransectionRecord(1,)
 		if(not IsHighOutlier(earn,earnall)):
 			tempearn=0
-		print i,"#",earn,"~~~",'avg=',GetAvg(earnall),'var=',variance2(earnall),'all=',GetAvg(earnall)+2*variance2(earnall),'aaa=',IsHighOutlier(earn,earnall)
+		print GetEarn()
+		profitAvg=GetEarn()
+		#if(len(profitAvg)==0)
+		#	Avg=ProfitAvg
+		#print "~~~~~~",profitAvg
+		#print profitAvg,lose
+		#print 'threadhold=',profitAvg*0.9,'num=',lose,'date=',profitAvg*0.9>abs(lose),'all=',lose > templose + 5,'lose=',lose,templose
+		if(IsLowOutlier(lose,loseall) and profitAvg*0.75>abs(lose) and lose > templose + 5):
+			if(DoLose(b,c,profitAvg)):
+				print "do!"
+				templose=lose
+				a.append(lose)
+				ChangeTransection(1,profitAvg)
+			#print "do!"
+		if(profitAvg*0.75<=abs(lose)):
+			templose=-200
+		#print GetEarn()['ProfitAvg']
+		#print i,"#",earn,"~~~",'avg=',GetAvg(earnall),'var=',variance2(earnall),'all=',GetAvg(earnall)+2*variance2(earnall),'aaa=',IsHighOutlier(earn,earnall)
 		if(len(earnall)>1000):
 			del earnall[0]
 		if(len(loseall)>1000):
@@ -146,35 +171,34 @@ def main(date):
 		i+=1
 		#a.append(earn)
 	return a, ""
-def InsertTransectionRecord(userId,fee,bidTransection,askTransection,bid,ask):
+def InsertTransectionRecord(userId,fee,bidTransection,askTransection,bid,ask,flag):
 	temp=datetime.now()
 	now=temp.strftime('%Y-%m-%d %H:%M:%S')
-	TransectionRecord.objects.create(userID_id = 1, Fee = fee, BidTransection= bidTransection,AskTransection=askTransection,Bid=bid,Ask=ask,created_at=now)
-	"""
-	time_threshold = datetime.now() - timedelta(hours=3)
-	try:
-		result = table.objects.filter(created_at__lt=time_threshold)[0]
+	TransectionRecord.objects.create(userID_id = 1, Fee = fee, BidTransection= bidTransection,AskTransection=askTransection,Bid=bid,Ask=ask,created_at=now,flag=flag)
+	"""try:
+		result = TransectionRecord.objects.filter(userID_id = 1,(F('Bid')-F('Ask'))__gt=avg)#,created_at__lt=time_threshold)[0]
 	except IndexError:
-		table.objects.create(bid = bid, ask = ask, last= last)
-		#coin = serializers.serialize('json', table.objects.all())
-		coin={'transection':transection,'bid':bid,'ask':ask,'last':last,'created_at':time.time()}
-		#a = json.dumps(coin)
-		Update('price',coin)
-		return 'empty'
-	result.bid = bid
-	result.ask = ask 
-	result.last= last
+		"""
+
+def ChangeTransection(userId,avg):
+	result = TransectionRecord.objects.filter(userID_id = 1,Bid__gte=avg+F('Ask'),flag=0)[0]#,created_at__lt=time_threshold)[0]
+	result.flag=2
 	result.save()
-	#coin = serializers.serialize('json', table.objects.all())
-	temp=datetime.now()
-	now=temp.strftime('%Y-%m-%d %H:%M:%S')
-	coin={'transection':transection,'bid':bid,'ask':ask,'created_at':now}
-	infor = json.dumps(coin)
-	#a = json.dumps(coin)
-	#print a
-	Update('price',infor)
-	"""
-	#return result.bid
+def GetEarn():
+	records=TransectionRecord.objects.filter(userID=1,flag=0).aggregate(ProfitAvg=Avg('Bid')-Avg('Ask'))
+	#except:
+	#	return 0
+	if(records['ProfitAvg']==None):
+		return 0
+	else:
+		return records['ProfitAvg']
+	#if (get):
+	#	return 0
+	"""for record in records:
+		amount=record.Bid-record.Ask
+		if(amount>0):
+			earn.append(amount)"""
+	#return records
 def UpdatePurse(purse,amount):
 	#kw = {field_name:purse}
 	f=Purse.objects.get(userID=1)#.update(**kw=amount)#.format(purse)
@@ -207,16 +231,28 @@ def GetRecord(cex,bittrex):
 	return earnall,loseall
 #def GetFee():
 
-def Win(bittrex,cex,earnall,loseall,profit):
+def DoWin(bittrex,cex,earnall,loseall,profit):
 	#cexPurse,bittrexPurse,cexBTCPurse,bittrexBTCPurse = User.objects.filter(userID=1).values('Cexmoney','Bittrexmoney','CexBTC','BittrexBTC')[0]
 	purse=GetPurse()
 	a,b=GetProfitLine(GetAvg(loseall),variance2(loseall))
 	ratio=Found(a,b,profit)
 	fee=ratio*purse['Bittrexmoney']*0.01#Earn(buyTransection,sellTransection,fee,bid,ask)
-	do = Earn('Bittrex','Cex',fee,cex['bid'],bittrex['ask'])
+	do = Transection('Bittrex','Cex',fee,cex['bid'],bittrex['ask'])
 	if(do):
 		print "do!",fee,ratio,cex['bid'],bittrex['ask']
-		InsertTransectionRecord(1,fee,'cex','bittrex',cex['bid'],bittrex['ask'])
+		InsertTransectionRecord(1,fee,'cex','bittrex',cex['bid'],bittrex['ask'],0)
+		return True
+	return False
+def DoLose(bittrex,cex,earnAvg):
+	purse=GetPurse()
+	a,b=GetLoseLine(earnAvg)
+	fee=Found(a,b,abs(cex['ask']-bittrex['bid']))*(purse['Cexmoney']-(purse['Cexmoney']+purse['Bittrexmoney'])/2)*0.01
+	print "fee=",fee
+	do=Transection('Cex','Bittrex',fee,bittrex['bid'],cex['ask'])
+	#print "do=",do
+	if(do):
+		#print "do!",fee,ratio,cex['bid'],bittrex['ask']
+		InsertTransectionRecord(1,fee,'bittrex','cex',bittrex['bid'],cex['ask'],1)
 		return True
 	return False
 	#	tempearn=profit
