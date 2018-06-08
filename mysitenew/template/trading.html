@@ -275,32 +275,25 @@
               Cex=[];
               Bitfinex=[];
               Cryptopia=[];
-
               var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
-
                 {% for CoinTable in BittrexBTCTable %}
-                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Bittrex.push(temp);
                 {% endfor %}
                 {% for CoinTable in BinanceBTCTable %}
-                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Binance.push(temp);
                 {% endfor %}
                 {% for CoinTable in CexBTCTable %}
-                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Cex.push(temp);
                 {% endfor %}
                 {% for CoinTable in BitfinexBTCTable %}
-                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Bitfinex.push(temp);
                 {% endfor %}
                 {% for CoinTable in CryptopiaBTCTable %}
-                  var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-                  temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Cryptopia.push(temp);
                 {% endfor %}
                 all={'Cryptopia':Cryptopia,'Bitfinex':Bitfinex,'Cex':Cex,'Binance':Binance,'Bittrex':Bittrex}

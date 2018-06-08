@@ -171,7 +171,7 @@ def UpdateOrCreate(transection,table,bid,ask,last):
 	except IndexError:
 		table.objects.create(bid = bid, ask = ask, last= last)
 		#coin = serializers.serialize('json', table.objects.all())
-		coin={'transection':transection,'bid':bid,'ask':ask,'last':last,'created_at':time.time()}
+		coin={'transection':transection,'bid':bid,'ask':ask,'last':last}
 		#a = json.dumps(coin)
 		Update('price',coin)
 		return 'empty'
@@ -180,9 +180,7 @@ def UpdateOrCreate(transection,table,bid,ask,last):
 	result.last= last
 	result.save()
 	#coin = serializers.serialize('json', table.objects.all())
-	temp=datetime.now()
-	now=temp.strftime('%Y-%m-%d %H:%M:%S')
-	coin={'transection':transection,'bid':bid,'ask':ask,'created_at':now}
+	coin={'transection':transection,'bid':bid,'ask':ask}
 	infor = json.dumps(coin)
 	#a = json.dumps(coin)
 	#print a

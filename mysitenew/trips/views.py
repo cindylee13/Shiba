@@ -8,6 +8,7 @@ from .models import BinanceBTCTable, BinanceBTC,TransectionRecord
 from .models import BitfinexBTCTable, BitfinexBTC
 from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
 from pyspark import SQLContext,SparkConf,SparkContext
+from django.core import serializers
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
 
 def BTC(request):
@@ -49,18 +50,23 @@ def TestSpark(request):
 def Trading(request):
     #a = BittrexBTC()    #move to crontab
     #print a
-    BittrexList = ChangeDateGetObjects(BittrexBTCTable)
-    #BittrexList = BittrexBTCTable.objects.all()
-    b = CexBTC()
-    CexList = ChangeDateGetObjects(CexBTCTable)
-    c = BinanceBTC()
-    BinanceList = ChangeDateGetObjects(BinanceBTCTable)
+    #BittrexList = ChangeDateGetObjects(BittrexBTCTable)
+    BittrexList = BittrexBTCTable.objects.all()
+    CexList = CexBTCTable.objects.all()
+    BinanceList = BinanceBTCTable.objects.all()
+    BitfinexList = BitfinexBTCTable.objects.all()
+    CryptopiaList = CryptopiaBTCTable.objects.all()
+    #BittrexList = json.dumps(BittrexList)
+    #b = CexBTC()
+    #CexList = ChangeDateGetObjects(CexBTCTable)
+    #c = BinanceBTC()
+    #BinanceList = ChangeDateGetObjects(BinanceBTCTable)
 
-    d = BitfinexBTC()
-    BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
+    #d = BitfinexBTC()
+    #BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
 
-    e = CryptopiaBTC()
-    CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
+    #e = CryptopiaBTC()
+    #CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     records=TransectionRecord.objects.all()
     #dif=GetDifference()
     return render(request, 'trading.html', {
@@ -71,12 +77,6 @@ def Trading(request):
         'BitfinexBTCTable' : BitfinexList,
         'CryptopiaBTCTable' : CryptopiaList,
     })
-
-def ChangeDateGetObjects(table):
-    rows = table.objects.all()
-    for row in rows[0:500]:
-        row.created_at=row.created_at.strftime('20%y-%m-%d %H:%M:%S')
-    return rows
 def userInfo(request):
     if request.method == "POST":
         firstdate=request.POST.get("firstDate",None)
