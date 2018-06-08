@@ -110,19 +110,19 @@ def GetMean(num,all):
       #print "zero!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       Avg=0
     return Avg
-def main(date):
+def main(firstDate,lastDate):
 	tempearn=0
 	templose=-200
 	a=[]
 	####get first id by date 
-	firstId=CexBTCTable.objects.filter(created_at__icontains = date)[0].id
+	firstId=CexBTCTable.objects.filter(created_at__icontains = firstDate)[0].id
 	####get last id by date 
-	lastId=CexBTCTable.objects.filter(created_at__icontains = date).order_by('-id')[0].id
+	lastId=CexBTCTable.objects.filter(created_at__icontains = lastDate).order_by('-id')[0].id
 	####get last 1000 information
 	cexlast = CexBTCTable.objects.filter(id__range=(firstId-1000, firstId-1)).values('bid', 'ask')#.annotate(ask='ask').annotate(time='created_at')
 	bittrexlast = BittrexBTCTable.objects.filter(id__range=(firstId-1000, firstId-1)).values('bid', 'ask')#.annotate(ask='ask').annotate(time='created_at')
 	####get information by date
-	cex = CexBTCTable.objects.filter(id__range=(firstId, lastId)).values('bid', 'ask')#.annotate(ask='ask').annotate(time='created_at')
+	cex = CexBTCTable.objects.filter(id__range=(firstId, lastId)).values('bid', 'ask','created_at')#.annotate(ask='ask').annotate(time='created_at')
 	bittrex = BittrexBTCTable.objects.filter(id__range=(firstId, lastId)).values('bid', 'ask')[0::]#.annotate(ask='ask').annotate(time='created_at')
 	#add transection fee
 	cex,bittrex=AddTransectionFee(cex,bittrex)
@@ -137,12 +137,12 @@ def main(date):
 		earnall.append(earn)
 		loseall.append(lose)
 		if(IsHighOutlier(earn,earnall) and tempearn + 5 < earn and earn > 0):
-			if(DoWin(b,c,earnall,loseall,earn)):
+			if(DoWin(b,c,earnall,loseall,earn,c['created_at'])):
 				tempearn=earn
 				#InsertTransectionRecord(1,)
 		if(not IsHighOutlier(earn,earnall)):
 			tempearn=0
-		print GetEarn()
+		#print GetEarn()
 		profitAvg=GetEarn()
 		#if(len(profitAvg)==0)
 		#	Avg=ProfitAvg
@@ -150,7 +150,7 @@ def main(date):
 		#print profitAvg,lose
 		#print 'threadhold=',profitAvg*0.9,'num=',lose,'date=',profitAvg*0.9>abs(lose),'all=',lose > templose + 5,'lose=',lose,templose
 		if(IsLowOutlier(lose,loseall) and profitAvg*0.75>abs(lose) and lose > templose + 5):
-			if(DoLose(b,c,profitAvg)):
+			if(DoLose(b,c,profitAvg,c['created_at'])):
 				print "do!"
 				templose=lose
 				a.append(lose)
@@ -166,10 +166,11 @@ def main(date):
 			del loseall[0]
 		i+=1
 		#a.append(earn)
-	return a, ""
-def InsertTransectionRecord(userId,fee,bidTransection,askTransection,bid,ask,flag):
-	temp=datetime.now()
-	now=temp.strftime('%Y-%m-%d %H:%M:%S')
+	return a, lastId
+def InsertTransectionRecord(userId,fee,bidTransection,askTransection,bid,ask,flag,time1):
+	#temp=datetime.now()
+	now=time1.strftime('%Y-%m-%d %H:%M:%S')
+	print time1,"~~~",now
 	TransectionRecord.objects.create(userID_id = 1, Fee = fee, BidTransection= bidTransection,AskTransection=askTransection,Bid=bid,Ask=ask,created_at=now,flag=flag)
 	"""try:
 		result = TransectionRecord.objects.filter(userID_id = 1,(F('Bid')-F('Ask'))__gt=avg)#,created_at__lt=time_threshold)[0]
@@ -228,7 +229,7 @@ def GetRecord(cex,bittrex):
 	return earnall,loseall
 #def GetFee():
 
-def DoWin(bittrex,cex,earnall,loseall,profit):
+def DoWin(bittrex,cex,earnall,loseall,profit,time):
 	#cexPurse,bittrexPurse,cexBTCPurse,bittrexBTCPurse = User.objects.filter(userID=1).values('Cexmoney','Bittrexmoney','CexBTC','BittrexBTC')[0]
 	purse=GetPurse()
 	a,b=GetProfitLine(GetAvg(loseall),variance2(loseall))
@@ -237,11 +238,11 @@ def DoWin(bittrex,cex,earnall,loseall,profit):
 	do = Transection('Bittrex','Cex',fee,cex['bid'],bittrex['ask'])
 	if(do):
 		print "do!",fee,ratio,cex['bid'],bittrex['ask']
-		InsertTransectionRecord(1,fee,'cex','bittrex',cex['bid'],bittrex['ask'],0)
+		InsertTransectionRecord(1,fee,'cex','bittrex',cex['bid'],bittrex['ask'],0,time)
 		return True
 	return False
 
-def DoLose(bittrex,cex,earnAvg):
+def DoLose(bittrex,cex,earnAvg,time):
 	purse=GetPurse()
 	a,b=GetLoseLine(earnAvg)
 	fee=Found(a,b,abs(cex['ask']-bittrex['bid']))*(purse['Cexmoney']-(purse['Cexmoney']+purse['Bittrexmoney'])/2)*0.01
@@ -250,6 +251,6 @@ def DoLose(bittrex,cex,earnAvg):
 	#print "do=",do
 	if(do):
 		#print "do!",fee,ratio,cex['bid'],bittrex['ask']
-		InsertTransectionRecord(1,fee,'bittrex','cex',bittrex['bid'],cex['ask'],1)
+		InsertTransectionRecord(1,fee,'bittrex','cex',bittrex['bid'],cex['ask'],1,time)
 		return True
 	return False

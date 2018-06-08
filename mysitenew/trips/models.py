@@ -159,7 +159,7 @@ class TransectionRecord(models.Model):
     AskTransection = models.CharField(max_length=100)
     Bid = models.FloatField(default=0.0)
     Ask = models.FloatField(default=0.0)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField()
     flag=models.CharField(max_length=1,default='0')
 
 #TransectionRecord--------------------------

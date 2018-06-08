@@ -588,38 +588,26 @@
             </tbody>
           </table>
         </div>
-              <script>
-            $(document).ready(function(){
-              console.log("do docu");  
-              $('#trading').submit(function(){
-                console.log("do submit");     
-                 $.ajax({   
-                  type:"POST",
-                  url: "/userInfo",
-                  cache:false,
-                  success: function(result, statues, xml){  
-                          alert(result); 
-                          console.log("success");                                        //成功时弹出view传回来的结果  
-                      },  
-                  error: function(){  
-                          alert("false"); 
-                          console.log("lose");      
-                      }  
-                    })
-                })
-            })
-          </script>
       </div>
       <div class="card mb-3">
         <div class="card-header">
           <i class="fa fa-dollar"></i> Trade {{a}} {{b}}
           <form action="/userInfo" method="post" id="trading">
-            <input type="date" name="transectiondate" value="2018-05-16" min="2018-05-16" max="2018-05-30">
-            <input type="submit" id="submit">
+            <input type="date" name="firstDate" value="2018-05-16" min="2018-05-16" max="2018-05-31">
+            <input type="date" name="lastDate" value="2018-05-16" min="2018-05-16" max="2018-05-31">
+            <input type="submit" value="submit" id="submit">
           </form>
         </div>
         <div class="card-body">
-
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>BidTransection</th>
+                <th>AskTransection</th>
+                <th>Fee</th>
+              </tr>
+            </thead>
+          </table>
         </div>
       </div>
     </div>

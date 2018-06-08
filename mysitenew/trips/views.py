@@ -4,7 +4,7 @@ from datetime import datetime
 from .models import BittrexBTCTable, BittrexBTC 
 from .transection import main,test
 from .models import CexBTCTable, CexBTC
-from .models import BinanceBTCTable, BinanceBTC
+from .models import BinanceBTCTable, BinanceBTC,TransectionRecord
 from .models import BitfinexBTCTable, BitfinexBTC
 from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
 from pyspark import SQLContext,SparkConf,SparkContext
@@ -61,6 +61,7 @@ def Trading(request):
 
     e = CryptopiaBTC()
     CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
+    records=TransectionRecord.objects.all()
     #dif=GetDifference()
     return render(request, 'trading.html', {
         #'current_time': str(datetime.now()), 
@@ -73,13 +74,14 @@ def Trading(request):
 
 def ChangeDateGetObjects(table):
     rows = table.objects.all()
-    for row in rows:
+    for row in rows[0:500]:
         row.created_at=row.created_at.strftime('20%y-%m-%d %H:%M:%S')
     return rows
 def userInfo(request):
     if request.method == "POST":
-        a=request.POST.get("transectiondate",None)
-        aa,bb = main(a)
+        firstdate=request.POST.get("firstDate",None)
+        lastdate=request.POST.get("lastDate",None)
+        aa,bb = main(firstdate,lastdate)
 
     return render(request,"trading.html",{"a":aa,"b":bb})
 
