@@ -492,6 +492,7 @@ h6 {
     color: #ffffff;
 }
 
+
 h2,h5,h4{
   margin-bottom: 2rem;
   font-family: inherit;
@@ -538,8 +539,8 @@ form.login input[type="password"]
 .btn-primary{
   background-color: rgba(0,0,0,0.5) !important;
   color: #fff;
-  margin-top: -100px;
-  margin-left: 350px;
+  margin-top: -100px !important;
+  margin-left: 350px !important;
 }
 .btn {
     font-weight: 600;
@@ -558,8 +559,17 @@ form.login input[type="password"]
 label{
   display:none;
 }
-h3{
-  margin-left: 5px;
+h3.trading{
+  font-weight: 400;
+  margin-bottom: .5rem;
+  font-family: inherit;
+  line-height: 1.2;
+  color: #fff;
+  display: inline-block;
+  padding-top: .3125rem;
+  padding-bottom: .3125rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
 }
 .col-8 {
     text-align: right !important;

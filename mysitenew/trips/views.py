@@ -51,15 +51,15 @@ def Trading(request):
     #print a
     BittrexList = ChangeDateGetObjects(BittrexBTCTable)
     #BittrexList = BittrexBTCTable.objects.all()
-    #b = CexBTC()
+    b = CexBTC()
     CexList = ChangeDateGetObjects(CexBTCTable)
-    #c = BinanceBTC()
+    c = BinanceBTC()
     BinanceList = ChangeDateGetObjects(BinanceBTCTable)
 
-    #d = BitfinexBTC()
+    d = BitfinexBTC()
     BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
 
-    #e = CryptopiaBTC()
+    e = CryptopiaBTC()
     CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     #dif=GetDifference()
     return render(request, 'trading.html', {
