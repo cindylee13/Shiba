@@ -110,14 +110,14 @@ def GetMean(num,all):
       #print "zero!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       Avg=0
     return Avg
-def main(date):
+def main(firstdate,lastdate):
 	tempearn=0
 	templose=-200
 	a=[]
 	####get first id by date 
 	firstId=CexBTCTable.objects.filter(created_at__icontains = date)[0].id
 	####get last id by date 
-	lastId=CexBTCTable.objects.filter(created_at__icontains = date).order_by('-id')[0].id
+	lastId=CexBTCTable.objects.filter(created_at__icontains = lastdate).order_by('-id')[0].id
 	####get last 1000 information
 	cexlast = CexBTCTable.objects.filter(id__range=(firstId-1000, firstId-1)).values('bid', 'ask')#.annotate(ask='ask').annotate(time='created_at')
 	bittrexlast = BittrexBTCTable.objects.filter(id__range=(firstId-1000, firstId-1)).values('bid', 'ask')#.annotate(ask='ask').annotate(time='created_at')

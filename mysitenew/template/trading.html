@@ -281,6 +281,7 @@
                 {% for CoinTable in BittrexBTCTable %}
                   var localDate = moment.utc("{{CoinTable.created_at}}").tz(timezone).format('YYYY-MM-DD HH:mm:ss');
                   temp={'date':parseTime(localDate),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  console.log("####"+localDate)
                   Bittrex.push(temp);
                 {% endfor %}
                 {% for CoinTable in BinanceBTCTable %}
@@ -614,7 +615,8 @@
         <div class="card-header">
           <i class="fa fa-dollar"></i> Trade {{a}} {{b}}
           <form action="/userInfo" method="post" id="trading">
-            <input type="date" name="transectiondate" value="2018-05-16" min="2018-05-16" max="2018-05-30">
+            <input type="date" name="firstdate" value="2018-05-16" min="2018-05-16" max="2018-05-31">
+            <input type="date" name="lastdate" value="2018-05-16" min="2018-05-16" max="2018-05-31">
             <input type="submit" id="submit">
           </form>
         </div>

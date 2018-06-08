@@ -78,8 +78,9 @@ def ChangeDateGetObjects(table):
     return rows
 def userInfo(request):
     if request.method == "POST":
-        a=request.POST.get("transectiondate",None)
-        aa,bb = main(a)
+        first=request.POST.get("firstdate",None)
+        last=request.POST.get("lastdate",None)
+        aa,bb = main(first,last)
 
     return render(request,"trading.html",{"a":aa,"b":bb})
 
