@@ -165,26 +165,22 @@ class TransectionRecord(models.Model):
 #TransectionRecord--------------------------
 #if auto_now time>5minute update ,if not create.--------------------------------------
 def UpdateOrCreate(transection,table,bid,ask,last):
-	time_threshold = datetime.now() - timedelta(hours=3)
+	"""time_threshold = datetime.now() - timedelta(hours=3)
 	try:
 		result = table.objects.filter(created_at__lt=time_threshold)[0]
-	except IndexError:
-		table.objects.create(bid = bid, ask = ask, last= last)
-		#coin = serializers.serialize('json', table.objects.all())
-		coin={'transection':transection,'bid':bid,'ask':ask,'last':last}
-		#a = json.dumps(coin)
-		Update('price',coin)
-		return 'empty'
-	result.bid = bid
+	except IndexError:"""
+	result = table.objects.create(bid = bid, ask = ask, last= last)
+	coin={'transection':transection,'bid':int(bid),'ask':int(ask) ,'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
+	infor = json.dumps(coin)
+	Update('price',infor)
+	#return 'empty'
+	"""result.bid = bid
 	result.ask = ask 
 	result.last= last
-	result.save()
-	#coin = serializers.serialize('json', table.objects.all())
-	coin={'transection':transection,'bid':bid,'ask':ask}
-	infor = json.dumps(coin)
-	#a = json.dumps(coin)
-	#print a
-	Update('price',infor)
+	result.save()"""
+	#coin={'transection':transection,'bid':int(bid),'ask':int(ask),'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
+	#infor = json.dumps(coin)
+	#Update('price',infor)
 	return result.bid
 #difference load in sqilte--------------------------
 class Difference(models.Model):
