@@ -11,12 +11,11 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),  
     url(r'^BTC/$', BTC),
     url(r'^index/', Index),
+     url(r'^users/changepassword/',ChangePassword),
     url(r'^users/signin/',SignIn), 
     url(r'^users/forgot/',ForgotPassword), 
     url(r'^users/signup/', SignUp),  
     url(r'^users/signout/', SignOut), 
-    # url(r'^users/changepassword/(?P<username>\w+)/$',ChangePassword),
-    url(r'^users/changepassword/',ChangePassword),
     url(r'^users/error/', Error), 
     url(r'^users/trading/', Trading), 
     url(r'^users/order/', Order), 
@@ -31,6 +30,7 @@ urlpatterns = [
     url(r'^users/CexWallet/', CexWallet), 
     url(r'^users/BittrexWallet/', BittrexWallet),
     url(r'^users/BinanceWallet/', BinanceWallet),
+   
     
 
 ]

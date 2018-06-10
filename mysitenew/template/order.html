@@ -98,9 +98,18 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#" >Total Amount : {{Total}}<span class="caret"></span></a>
+          <ul class="dropdown-menu" style="width:250px">
+            <li>CexWallet Money : {{CexMoney}} USD</li>
+            <li>BittrexWallet Money : {{BittrexMoney}} USD</li>
+            <li>BinanceWallet Money : {{BinanceMoney}} USD</li>
+          </ul>
+        </li>
         <h6>Hi {{username}} !</h6>
+
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            
             <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
         </li>
 
@@ -112,7 +121,7 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/index/">Trading</a>
+          <a href="/users/trading/">Trading</a>
         </li>
         <li class="breadcrumb-item active">Orders</li>
       </ol>

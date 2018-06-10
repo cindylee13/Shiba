@@ -44,10 +44,8 @@ def Trading(request):
     CexList = ChangeDateGetObjects(CexBTCTable)
     #c = BinanceBTC()
     BinanceList = ChangeDateGetObjects(BinanceBTCTable)
-
     #d = BitfinexBTC()
     BitfinexList = ChangeDateGetObjects(BitfinexBTCTable)
-
     #e = CryptopiaBTC()
     CryptopiaList = ChangeDateGetObjects(CryptopiaBTCTable)
     #dif=GetDifference()
@@ -58,6 +56,12 @@ def Trading(request):
         'BinanceBTCTable' : BinanceList,
         'BitfinexBTCTable' : BitfinexList,
         'CryptopiaBTCTable' : CryptopiaList,
+        #-----------------------------
+        'username' : request.user.username, 
+        'CexMoney' : request.user.Cexmoney, 
+        'BittrexMoney' : request.user.Bittrexmoney, 
+        'BinanceMoney' : request.user.Binancemoney, 
+        'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney
     })
 
 def ChangeDateGetObjects(table):
