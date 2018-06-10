@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms  
+
 class SignUpForm(forms.Form):  
     username = forms.CharField(max_length=15,label='username', 
                 widget=forms.TextInput(attrs={'placeholder': 'Enter Your Username'})) 
@@ -13,7 +14,7 @@ class SignUpForm(forms.Form):
         return p1==p2  
 
 class SignInForm(forms.Form):  
-    username = forms.CharField(max_length=15,label='username', 
+    username = forms.CharField(max_length=15, 
                 widget=forms.TextInput(attrs={'placeholder': 'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': "Password"}))
 
@@ -25,10 +26,12 @@ class ChangepwdForm(forms.Form):
         return p1==p2  
 
 class TakeMoneyForm(forms.Form):  
-    takemoney = forms.FloatField()  
+    takemoney = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'Withdraw Amount','class':'form-control'})) 
+    takemoney2 = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'Confirm The Amount','class':'form-control'})) 
 
 class StoredMoneyForm(forms.Form):
-    storedmoney = forms.FloatField()
+    storedmoney = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'Deposit Amount','class':'form-control'})) 
+    storedmoney2 = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'Confirm The Amount','class':'form-control'})) 
 
 class ForgotPasswordForm(forms.Form):  
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'email'})) 

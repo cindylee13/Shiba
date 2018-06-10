@@ -19,26 +19,33 @@
   <div class="container">
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Deposit For Cex_Wallet</div>
+      <div class = "card-body">
+        <h5 class="wallet">Enter the amount that you want to deposit. </h5>
+      </div>
       <div class="card-body">
-        <form>
+
+        {% for item in error %}
+        <p style="color:red;">{{item}}</p>
+        {% endfor %}
+        <form action="" method="post">
           <div class="form-group">
-            <label for="exampleInputEmail1">Enter the deposit amount</label>
-            <input class="form-control" id="exampleInputEmail1" type="text" placeholder="Deposit Amount">
+
+            <table>
+                {{ form.as_table }}
+            </table>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Confirm the deposit amount</label>
-            <input class="form-control" id="exampleInputPassword1" type="text" placeholder="Confirmed Deposit Amount">
+            <input type="submit" value="submit" class="btn btn-block">
           </div>
-            <input type="submit" value="submit" class="btn btn-primary btn-block" />
         </form>
       </div>
     </div>
   </div>
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src={% static "bootstrap/vendor/jquery/jquery.min.js"%}></script>
+  <script src={% static "bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"%}></script>
   <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src={% static "bootstrap/vendor/jquery-easing/jquery.easing.min.js"%}></script>
 </body>
 
 </html>
