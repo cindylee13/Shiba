@@ -6,7 +6,6 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.models import AbstractUser 
 import smtplib
 
-<<<<<<< HEAD
 class User(AbstractUser): 
     Cexmoney = models.FloatField(default=0.0)
     Bittrexmoney = models.FloatField(default=0.0)
@@ -20,10 +19,6 @@ class User(AbstractUser):
 		return self.userID
  
 # GET----------------------------------------------
-=======
-
-#RICHER登入前function-------------------------------------------------------------------------------------------
->>>>>>> 2c2cd3d3c3e622867a47f18e79ec99b201f38ee2
 # 取得我的使用者的ID
 def GetUserID(request):
     userID = None
@@ -34,7 +29,10 @@ def GetUserID(request):
 #拿取獨一無二的使用者Session地址
 def GetUserKey(userID):
     return Session.objects.all()[userID]
+# GET----------------------------------------------
 
+# function-----------------------------------------
+# 判斷我的帳號使否有登入成功
 def LoginValidate(request,username,password):  
     rtvalue = False  
     user = authenticate(username=username,password=password)  
@@ -44,33 +42,11 @@ def LoginValidate(request,username,password):
             return True  
     return rtvalue  
 
-class User(AbstractUser): 
-    Cexmoney = models.FloatField(default=0.0)
-    Bittrexmoney = models.FloatField(default=0.0)
-    Binancemoney = models.FloatField(default=0.0)
-    CexBTC = models.FloatField(default=0.0)
-    BittrexBTC = models.FloatField(default=0.0)
-    BinanceBTC = models.FloatField(default=0.0)
-    userID = models.IntegerField(primary_key=True)
-    class Meta(AbstractUser.Meta): 
-        pass
-    def __str__(self):
-		return self.userID
-
-
-#RICHER登入前function-------------------------------------------------------------------------------------------
-
-#RICHER登入後function-------------------------------------------------------------------------------------------
-# 判斷我的帳號使否有登入成功
-def FilterUser(userID):
-    return User.objects.filter(userID=userID)[0]
-
 # 判斷註冊時使用者有無重複 
 def IsUserPassword(username):
     if(User.objects.all().filter(username=username)):
         return True
     return False
-
 # 判斷註冊時email有無重複
 def IsUserEmail(email):
     if(User.objects.all().filter(email=email)):
@@ -87,14 +63,12 @@ def CreateNewFrom(request,newPassword):
     newUser = User.objects.get(username__exact=request.user.username)
     newUser.set_password(newPassword) # 重新設定使用者密碼
     newUser.save()
-
-# 判斷錢包-拿錢是否有小於0
-def IsWalletSubtakeMoney(money, takemoney):
-    if (money - takemoney) < 0:
-        return True
-    return False 
+# function-----------------------------------------
 
 # Cexwalletfunction-----------------------------------------
+def FilterUser(userID):
+    return User.objects.filter(userID=userID)[0]
+
 def CexDepositWalletMoney(userID,amount):#storedmoney
     user = User.objects.select_for_update().filter(userID=userID)[0]
     user.Cexmoney = user.Cexmoney + amount
@@ -135,8 +109,6 @@ def BinanceWithdrawWalletMoney(userID,amount):#takemoney
     user.save()
     return user.Binancemoney
 # Binancewalletfunction-----------------------------------------
-#RICHER登入後function-------------------------------------------------------------------------------------------
- 
 
 import string
 import random
