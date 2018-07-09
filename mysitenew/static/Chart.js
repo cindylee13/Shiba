@@ -8,7 +8,6 @@
                 firstTime=new Date(paths)
                 data=all[id]
                 $.each(data, function(index, value) {
-                  console.log(value.date)
                     if(value.date-firstTime >= timedelta)
                       pathData.push(value);
                 }); 
@@ -24,7 +23,6 @@
                 g=paths._groups
                 firstTime=new Date(paths)
                 var pathData = [];
-                console.log("data"+data)
                 data.map(Obj => {
                   if(firstTime - Obj.date <= timedelta)
                     pathData.push(Obj);

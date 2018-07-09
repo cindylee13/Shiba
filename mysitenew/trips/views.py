@@ -56,6 +56,7 @@ def Trading(request):
     BinanceList = BinanceBTCTable.objects.all()
     BitfinexList = BitfinexBTCTable.objects.all()
     CryptopiaList = CryptopiaBTCTable.objects.all()
+    #TransectionRecord=TransectionRecord.objects.all()
     #BittrexList = json.dumps(BittrexList)
     #b = CexBTC()
     #CexList = ChangeDateGetObjects(CexBTCTable)
@@ -76,6 +77,7 @@ def Trading(request):
         'BinanceBTCTable' : BinanceList,
         'BitfinexBTCTable' : BitfinexList,
         'CryptopiaBTCTable' : CryptopiaList,
+        'Transection' : records
     })
 def userInfo(request):
     if request.method == "POST":
