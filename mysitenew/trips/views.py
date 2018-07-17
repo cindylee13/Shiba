@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
-from .models import BittrexBTCTable, BittrexBTC 
+from .models import BittrexBTCTable
 from .transection import main,test
-from .models import CexBTCTable, CexBTC
-from .models import BinanceBTCTable, BinanceBTC,TransectionRecord
-from .models import BitfinexBTCTable, BitfinexBTC
-from .models import CryptopiaBTCTable, CryptopiaBTC,GetDifference
+from .models import CexBTCTable
+from .models import BinanceBTCTable,TransectionRecord
+from .models import BitfinexBTCTable
+from .models import CryptopiaBTCTable,GetDifference
 from pyspark import SQLContext,SparkConf,SparkContext
 from django.core import serializers
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]

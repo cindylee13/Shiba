@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^users/CexWallet/', CexWallet), 
     url(r'^users/BittrexWallet/', BittrexWallet),
     url(r'^users/BinanceWallet/', BinanceWallet),
+    url(r'^bot/', include('bot.urls')),
     
 
 ]
