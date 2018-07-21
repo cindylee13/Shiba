@@ -94,8 +94,26 @@ class TransectionRecord(models.Model):
     Ask = models.FloatField(default=0.0)
     created_at = models.DateTimeField()
     flag=models.CharField(max_length=1,default='0')
-
 #TransectionRecord--------------------------
+#Apple
+class Apple(models.Model):
+	userID = models.ForeignKey(User)
+	transectionA = models.CharField(max_length = 64)
+	transectionB = models.CharField(max_length = 64)
+	cointype = models.CharField(max_length = 64)
+	def __str__(self):
+		return self.userID
+#BiBi
+class BiBi(models.Model):
+	userID = models.ForeignKey(User)
+	transectionA = models.CharField(max_length = 64)
+	transectionB = models.CharField(max_length = 64)
+	cointypeA = models.CharField(max_length = 64)
+	cointypeB = models.CharField(max_length = 64)
+	def __str__(self):
+		return self.userID
+
+#BiBi
 #difference load in sqilte--------------------------
 class Difference(models.Model):
 	BidTransection = models.CharField(max_length=20)#CharField(max_length=100)
