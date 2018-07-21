@@ -3,7 +3,7 @@ from django.db import models
 from datetime import datetime, timedelta
 from django.db.models import F, Sum, FloatField, Avg
 import time
-from .models import CexBTCTable, CexBTC,BittrexBTCTable,Purse,TransectionRecord
+from .models import CexBTCTable,BittrexBTCTable,Purse,TransectionRecord
 import time
 import requests
 def GetAvg(infor):
