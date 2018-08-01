@@ -37,7 +37,7 @@ CORS_ALLOW_CREDENTIALS= True
 
 ALLOWED_HOSTS = ['*']
 SECRET_KEY='=tx*p*-uxtv4wt7wk(jq26k*b=vh3rwvwc%6+)3x3d1ycop_p!'
-LINE_CHANNEL_ACCESS_TOKEN = "RslI2bVqAZpuagawWX/trCi3Kbccahs99nKAtA5uQin1QUlhTEssDJq0R0p17vYf91OoJHcDxMJZKc6AanZYap+Ad0ESpT2rlhQMK/NUohIbuuzJfEd1MJxLE1ScdZETGTarWc9Zs6De8YCKcJGQmgdB04t89/1O/w1cDnyilFU="
+LINE_CHANNEL_ACCESS_TOKEN = "tEJKMfRDoukDIO+DwfFkGkoYLifwYUSLcuxCWiQ99CNx9uwoCSdSVKH7PIgVS42191OoJHcDxMJZKc6AanZYap+Ad0ESpT2rlhQMK/NUohKuSgKXAwJH8VOWMJ2rHWJppUszRmo9cDfgMMKoE8ODZQdB04t89/1O/w1cDnyilFU="
 LINE_CHANNEL_SECRET = "c1ac023d93a0f539fe1f8e50afed5125"
 
 AUTH_USER_MODEL = 'users.User'
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_crontab',
     'bot',
+    'transection',
 ]
 
 MIDDLEWARE = [
