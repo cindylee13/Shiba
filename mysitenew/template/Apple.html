@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Project Website</title>
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styledrop.css">
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="/users/trading/">RICHER</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+          <a class="nav-link" href="/users/trading/">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">Trading</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMyPage" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-money"></i>
+            <span class="nav-link-text">Order</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseMyPage">
+            <li>
+              <a href="#">Apple Theory</a>
+            </li>
+            <li>
+              <a href="#">BiBi Theory</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="/users/withdraw/">
+            <i class="fa fa-fw fa-dollar"></i>
+            <span class="nav-link-text">Withdraw</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="/users/deposit/">
+            <i class="fa fa-fw fa-bitcoin"></i>
+            <span class="nav-link-text">Deposit</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-calculator"></i>
+            <span class="nav-link-text">Wallet</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseComponents">
+            <li>
+              <a href="/users/CexWallet/">Cex_Wallet</a>
+            </li>
+            <li>
+              <a href="/users/BittrexWallet/">Bittrex_Wallet</a>
+            </li>
+            <li>
+              <a href="/users/BinanceWallet/">Binance_Wallet</a>
+            </li>
+            <li>
+              <a href="/users/BitfinexWallet">Bitfinex_Wallet</a>
+            </li>
+            <li>
+              <a href="/users/CryptopiaWallet">Cryptopia_Wallet</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMyPage" data-parent="#exampleAccordion">
+            <i class="fa fa-fw fa-calculator"></i>
+            <span class="nav-link-text">MyPage</span>
+          </a>
+          <ul class="sidenav-second-level collapse" id="collapseMyPage">
+            <li>
+              <a href="#">Status</a>
+            </li>
+            <li>
+              <a href="/users/changepassword/">ChangePassword</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="#">
+            <i class="fa fa-fw fa-table"></i>
+            <span class="nav-link-text">Contact</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <i class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </i>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+              <h6>Hi {{username}} !</h6>
+            <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a class = "trading1" href="#">Trading</a>
+        </li>
+        <li class="breadcrumb-item active">Order</li>
+      </ol>
+
+      <h1 class="apple">Apple Theory <i class="fa fa-apple"></i></h1>
+        <hr>
+        <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+              <div class="drop">
+                <div class="option active placeholder" data-value="placeholder">
+                  Choose Your Transaction
+                </div>
+                <div class="option" data-value="wow">
+                  Cex
+                </div>
+                <div class="option" data-value="drop">
+                  Bittrex
+                </div>
+                <div class="option" data-value="select">
+                  Binance
+                </div>
+                <div class="option" data-value="custom">
+                  Bitfinex
+                </div>
+                <div class="option" data-value="animation">
+                  Cryptopia
+                </div>
+              </div>
+          </div>
+          <div class="col-sm-4">
+              <div class="drop1">
+                <div class="option active placeholder" data-value="placeholder">
+                  Choose Your Transaction
+                </div>
+                <div class="option" data-value="wow">
+                  Cex
+                </div>
+                <div class="option" data-value="drop">
+                  Bittrex
+                </div>
+                <div class="option" data-value="select">
+                  Binance
+                </div>
+                <div class="option" data-value="custom">
+                  Bitfinex
+                </div>
+                <div class="option" data-value="animation">
+                  Cryptopia
+                </div>
+              </div>
+          </div>
+          <div class="col-sm-4">
+              <input type="submit" value="STARTING EARNING!" class="btn-apple btn-block" />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class"row">
+          <div class="col-md-12">
+            <p>In economics and finance, arbitrage (/ˈɑːrbɪtrɑːʒ/, UK also /-trɪdʒ/) is the practice of taking advantage of a price difference
+               between two or more markets: striking a combination of matching deals that capitalize upon the imbalance, the profit being the
+               difference between the market prices. When used by academics, an arbitrage is a (imagined, hypothetical, thought experiment) transaction
+               that involves no negative cash flow at any probabilistic or temporal state and a positive cash flow in at least one state; in simple
+               terms, it is the possibility of a risk-free profit after transaction costs. For example, an arbitrage opportunity is present when there
+                  is the opportunity to instantaneously buy something for a low price and sell it for a higher price.</p>
+          </div>
+        </div>
+      </div>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+
+
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © RICHER 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Sign Out" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/users/signout/">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="js/index.js"></script>
+    <script src="js/index1.js"></script>
+    <script src="js/index2.js"></script>
+    <script src="js/index3.js"></script>
+    <script src="js/index4.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  </div>
+</body>
+
+</html>
