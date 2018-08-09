@@ -9,18 +9,8 @@ def CrawlBittrexBTCUSDT(session):
         data = response.json()['result']
         # print session.params
         return data['Bid'],data['Ask'],data['Last']
-def CrawlBittrexTUSDBTC(session):
-        quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=BTC-TUSD"
-        response = session.get(quote_page)
-        data = response.json()['result']
-        return data['Bid'],data['Ask'],data['Last']#data
 def CrawlBittrexETHBTC(session):
         quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=BTC-ETH"
-        response = session.get(quote_page)
-        data = response.json()['result']
-        return data['Bid'],data['Ask'],data['Last']#data
-def CrawlBittrexTUSDETH(session):
-        quote_page = "https://bittrex.com/api/v1.1/public/getticker?market=ETH-TUSD"
         response = session.get(quote_page)
         data = response.json()['result']
         return data['Bid'],data['Ask'],data['Last']#data
@@ -102,9 +92,7 @@ while(1):
         nowtime=localtime.strftime('%Y-%m-%d %H:%M:%S')
         #bittrexcrawel
         BittrexBTCUSDTBid,BittrexBTCUSDTAsk,BittrexBTCUSDTLast = CrawlBittrexBTCUSDT(sessionBittrex)
-        BittrexTUSDBTCBid,BittrexTUSDBTCAsk,BittrexTUSDBTCLast = CrawlBittrexTUSDBTC(sessionBittrex)
         BittrexETHBTCBid,BittrexETHBTCAsk,BittrexETHBTCLast = CrawlBittrexETHBTC(sessionBittrex)
-        BittrexTUSDETHBid,BittrexTUSDETHAsk,BittrexTUSDETHLast = CrawlBittrexTUSDETH(sessionBittrex)
         BittrexETHUSDTBid,BittrexETHUSDTAsk,BittrexETHUSDTLast = CrawlBittrexETHUSDT(sessionBittrex)
         #cexcrawel
         CexBTCUSDBid,CexBTCUSDAsk,CexBTCUSDLast = CrawlCexBTCUSD(sessionCex)
@@ -121,12 +109,8 @@ while(1):
         #SQLbittrex
         sql = '''INSERT INTO Bittrex_BTC_USDT (ask,bid,last,created_at) VALUES (?,?,?,?)'''
         cursor.execute(sql,(BittrexBTCUSDTAsk,BittrexBTCUSDTBid,BittrexBTCUSDTLast,nowtime))
-        sql = '''INSERT INTO Bittrex_TUSD_BTC (ask,bid,last,created_at) VALUES (?,?,?,?)'''
-        cursor.execute(sql,(BittrexTUSDBTCAsk,BittrexTUSDBTCBid,BittrexTUSDBTCLast,nowtime))
         sql = '''INSERT INTO Bittrex_ETH_BTC (ask,bid,last,created_at) VALUES (?,?,?,?)'''
         cursor.execute(sql,(BittrexETHBTCAsk,BittrexETHBTCBid,BittrexETHBTCLast,nowtime))
-        sql = '''INSERT INTO Bittrex_TUSD_ETH (ask,bid,last,created_at) VALUES (?,?,?,?)'''
-        cursor.execute(sql,(BittrexTUSDETHAsk,BittrexTUSDETHBid,BittrexTUSDETHLast,nowtime))
         sql = '''INSERT INTO Bittrex_ETH_USDT (ask,bid,last,created_at) VALUES (?,?,?,?)'''
         cursor.execute(sql,(BittrexETHUSDTAsk,BittrexETHUSDTBid,BittrexETHUSDTLast,nowtime))
         #SQLcex
@@ -167,21 +151,7 @@ CREATE TABLE Bittrex_BTC_USDT(
    last float,
    created_at datetime Not Null
 );
-CREATE TABLE Bittrex_TUSD_BTC(
-   id integer primary key autoincrement,
-   bid float,
-   ask float,
-   last float,
-   created_at datetime Not Null
-);
 CREATE TABLE Bittrex_ETH_BTC(
-   id integer primary key autoincrement,
-   bid float,
-   ask float,
-   last float,
-   created_at datetime Not Null
-);
-CREATE TABLE Bittrex_TUSD_ETH(
    id integer primary key autoincrement,
    bid float,
    ask float,
