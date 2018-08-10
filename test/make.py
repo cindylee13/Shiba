@@ -35,7 +35,7 @@ for i in mstlist:
             num = np.inf
         else:
             coin = makecoinsort(i["coin"],j["coin"])
-            num = loaddict[coin][j["exchange"]]["Bid"]-loaddict[coin][i["exchange"]]["Ask"]
+            num = loaddict[coin][j["exchange"]]["Ask"]-loaddict[coin][i["exchange"]]["Bid"]
         mstnp.append(num)
 mst = np.array(mstnp)
 mst.shape = (12,12)
