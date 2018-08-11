@@ -44,10 +44,14 @@ def CrawlCexETHBTC(session):
         data = response.json()
         return data['bid'],data['ask'],data['last']#data
 def Update(transection,bid,ask,created_at):
-        coin={'transection':transection,'bid':int(bid),'ask':int(ask) ,'created_at':created_at}
+        coin={'transection':transection,'bid':float(bid),'ask':float(ask) ,'created_at':created_at}
         infor = json.dumps(coin)
         SendToWeb('price',infor)
         return infor
+def changejson(transection,bid,ask,created_at):
+    coin={'transection':transection,'bid':float(bid),'ask':float(ask) ,'created_at':created_at}
+    infor = json.dumps(coin)
+    return infor
 def SendToWeb(portname,objectname):
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
         r.publish(portname, objectname)
@@ -71,33 +75,65 @@ def UpdateOrCreate(transection,table,bid,ask,last):
   return result.bid
 def RunAlg():
         SaveDirectory = os.getcwd()
-        path = os.path.join(SaveDirectory,"transection","alg1.py")
-        os.system('python ' + path)
+        alg1 = os.path.join(SaveDirectory,"transection","alg1.py")
+        alg2 = os.path.join(SaveDirectory,"transection","alg2.py")
+        os.system('python ' + alg1)
+        #os.system('python ' + alg2)
 def Crawel():
         print "crawel"
+#2
         t = threading.Timer(10,Crawel)
         t.start()
-        infor={"cex":{},"bittrex":{}}
+
+        infor={"BTCUSD":{'Bittrex':{},'Cex':{}},"ETHBTC":{'Bittrex':{},'Cex':{}},"ETHUSD":{'Bittrex':{},'Cex':{}}}
         session = requests.Session()
         sessionCex = requests.Session()
         conn = sqlite3.connect("db.sqlite3")
         cursor = conn.cursor()
         localtime=datetime.now()#time.asctime(time.localtime(time.time()))
         nowtime=localtime.strftime('%Y-%m-%d %H:%M:%S')
+        
         BittrexBTCUSDTBid,BittrexBTCUSDTAsk,BittrexBTCUSDTLast = CrawlBittrexBTCUSDT(session)
-        infor['bittrex'] = json.loads(Update('Bittrex',BittrexBTCUSDTBid,BittrexBTCUSDTAsk,nowtime))
         CexBTCUSDBid,CexBTCUSDAsk,CexBTCUSDLast = CrawlCexBTCUSD(sessionCex)
-        infor['cex'] = json.loads(Update('Cex',CexBTCUSDBid,CexBTCUSDAsk,nowtime))
+        
+        BittrexETHBTCBid,BittrexETHBTCAsk,BittrexETHBTCLast = CrawlBittrexETHBTC(session)
+        BittrexETHUSDBid,BittrexETHUSDAsk,BittrexETHUSDLast = CrawlBittrexETHUSD(session)
+        
+        CexETHBTCBid,CexETHBTCAsk,CexETHBTCLast = CrawlCexETHBTC(sessionCex)
+        CexETHUSDBid,CexETHUSDAsk,CexETHUSDLast = CrawlCexETHUSD(sessionCex)
+        
+        BTCUSD={'bittrex':{},'cex':{}}
+        ETHBTC={'bittrex':{},'cex':{}}
+        ETHUSD={'bittrex':{},'cex':{}}
+
+        BTCUSD['bittrex'] = json.loads(Update('Bittrex',BittrexBTCUSDTBid,BittrexBTCUSDTAsk,nowtime))
+        ETHBTC['bittrex'] = json.loads(changejson('Bittrex',BittrexETHBTCBid,BittrexETHBTCAsk,nowtime))
+        ETHUSD['bittrex'] = json.loads(changejson('Bittrex',BittrexETHUSDBid,BittrexETHUSDAsk,nowtime))
+        
+        BTCUSD['cex'] = json.loads(Update('Cex',CexBTCUSDBid,CexBTCUSDAsk,nowtime))
+        ETHBTC['cex'] = json.loads(changejson('Cex',CexETHBTCBid,CexETHBTCAsk,nowtime))
+        ETHUSD['cex'] = json.loads(changejson('Cex',CexETHUSDBid,CexETHUSDAsk,nowtime))
+
+        infor['BTCUSD']['Bittrex'] = BTCUSD['bittrex']
+        infor['ETHBTC']['Bittrex'] = ETHBTC['bittrex']
+        infor['ETHUSD']['Bittrex'] = ETHUSD['bittrex']
+
+        infor['BTCUSD']['Cex'] = BTCUSD['cex']
+        infor['ETHBTC']['Cex'] = ETHBTC['cex']
+        infor['ETHUSD']['Cex'] = ETHUSD['cex']
+        #print "***",infor
+
+
         sql = '''INSERT INTO trips_cexbtctable (ask,bid,last,created_at) VALUES (?,?,?,?)'''
         cursor.execute(sql,(CexBTCUSDAsk,CexBTCUSDBid,CexBTCUSDLast,nowtime))
         sql = '''INSERT INTO trips_bittrexbtctable (ask,bid,last,created_at) VALUES (?,?,?,?)'''
         cursor.execute(sql,(BittrexBTCUSDTAsk,BittrexBTCUSDTBid,BittrexBTCUSDTLast,nowtime))
         conn.commit()
-        with open("price.json","w") as f:
-                json.dump(infor,f)
-                print 'crawel',infor
+        
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
         r.set('PriceToAlg',json.dumps(infor),ex=3)
+        
+#1
         alg = threading.Thread(target = RunAlg)
         alg.start()
         
@@ -106,32 +142,5 @@ def main():
         t.start()
 
 
-session = requests.Session()
-sessionCex = requests.Session()
-
-conn = sqlite3.connect("db.sqlite3")
-cursor = conn.cursor()
-i=0
-#while(1):
-        #test()
-"""        infor={"cex":{},"bittrex":{}}
-        localtime=datetime.now()#time.asctime(time.localtime(time.time()))
-        nowtime=localtime.strftime('%Y-%m-%d %H:%M:%S')
-        BittrexBTCUSDTBid,BittrexBTCUSDTAsk,BittrexBTCUSDTLast = CrawlBittrexBTCUSDT(session)
-        infor['bittrex'] = json.loads(Update('Bittrex',BittrexBTCUSDTBid,BittrexBTCUSDTAsk,nowtime))
-        CexBTCUSDBid,CexBTCUSDAsk,CexBTCUSDLast = CrawlCexBTCUSD(sessionCex)
-        infor['cex'] = json.loads(Update('Cex',CexBTCUSDBid,CexBTCUSDAsk,nowtime))
-        sql = '''INSERT INTO trips_cexbtctable (ask,bid,last,created_at) VALUES (?,?,?,?)'''
-        cursor.execute(sql,(CexBTCUSDAsk,CexBTCUSDBid,CexBTCUSDLast,nowtime))
-        sql = '''INSERT INTO trips_bittrexbtctable (ask,bid,last,created_at) VALUES (?,?,?,?)'''
-        cursor.execute(sql,(BittrexBTCUSDTAsk,BittrexBTCUSDTBid,BittrexBTCUSDTLast,nowtime))
-        conn.commit()"""
 t=threading.Timer(10,Crawel)
 t.start()
-        #t = Thread(target=test)
-        #time.sleep(10)
-        #print (datetime.now()-localtime).seconds
-        #t.start()
-"""with open("../price.json","w") as f:
-                json.dump(infor,f)
-                print("OKOK...")"""

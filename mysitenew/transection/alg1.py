@@ -24,9 +24,10 @@ def CrawlCexBTCUSD():
         data = response.json()
         return data['bid'],data['ask'],data['last']
 def GetProfit(data):
-  cexPrice=data['cex']
-  bittrexPrice=data['bittrex']
-  print "!!!",data
+  #print "!!!",data
+  cexPrice=data['BTCUSD']['Cex']
+  bittrexPrice=data['BTCUSD']['Bittrex']
+  print "!!",data['BTCUSD']
   #bittrexbid,bittrexask,bittrexlast = CrawlBittrexBTCUSDT()
   #cexbid,cexask,cexlast = CrawlCexBTCUSD()
   cex = cexPrice['bid']*0.9975  - bittrexPrice['ask']*1.0025
@@ -161,6 +162,7 @@ def GetProfitHistory(cex,bittrex):
 def main():
   d = r.get('PriceToAlg')
   data = json.loads(d)
+  print "dddd:",data
   insertfile="/Users/sunny/Desktop/ShibaProject/mysitenew/db.sqlite3"
   conn = sqlite3.connect(insertfile)
   cursor = conn.cursor()
@@ -177,7 +179,10 @@ def main():
   print profitPositive
   if(IsHighOutlier(profitPositive['Profit'],profitHistory)):
     requests.get('http://127.0.0.1:8000/bot/test/')
-  headers = {'content-type': 'application/json'}
-  a=requests.post('http://127.0.0.1:8000/bot/test/',data=data,headers=headers)
+    print "win"
+  #headers = {'content-type': 'application/json'}
+  print "run!"
+  data = json.dumps(data)
+  a = requests.post('http://127.0.0.1:8000/bot/test/', data = data)#, headers=headers)
   #print "~~",a.text
 main()

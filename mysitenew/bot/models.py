@@ -24,11 +24,12 @@ def CreatePerson(event):
      #user = User.objects.get(userID='3')
      LineBot.objects.create(LineId=event.source.user_id,UserId=user)
      print event.message.text
-def SendMessageByUserId(Id,message):
+def SendMessageByUserId(Id,information):
     #user = User.objects.get(userID='1')
     #user=User.objects.get(username='testbot')
     lineId = LineBot.objects.get(UserId = Id)
-    #print "~~~",lineId
+    #print "~",item
+    #print "~~~",message
     #a=request.GET.get('user', '')
     #message = TextSendMessage(text="123")
     line_bot_api.push_message(lineId.LineId,message)
