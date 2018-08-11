@@ -37,7 +37,8 @@ def test(request):
                     "Ue57fa91c43eaa81668118fc713a7d47f",
                    message
                 )"""
-    a=request.POST#.data
-    print "aaaaa=",a
-    SendMessageByUserId(1,a)
+    if(request.method == 'POST'):
+        a = request.body #.data
+        print "aaaaa=",a
+        SendMessageByUserId(1,a)
     return render(request,"trading.html")
