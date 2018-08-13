@@ -10,6 +10,10 @@ typelist = ["Bid","Ask"]
 
 mstlist =[]
 mstnp = []
+coinnp = []
+exchangenp = []
+exchangetype = ""
+cointype = ""
 for i in exchangeList:
     for j in  coinList:
         coindict = {"exchange":i,"coin":j}
@@ -23,20 +27,31 @@ def makecoinsort(a,b):
 # print mstlist
 for i in mstlist:
     for j in mstlist:
+        cointype = j["coin"]+i["coin"]
+        exchangetype = j["exchange"]+i["exchange"]
         if(i["exchange"]==j["exchange"]):
             num = np.inf
         
         elif(i["coin"]==j["coin"]):
             num = np.inf
         else:
-            if(makecoinsort(i["coin"],j["coin"]) == 0):
-                coin = j["coin"]+i["coin"]
-                num = (1/loaddict[coin][j["exchange"]]["Ask"])-(1/loaddict[coin][i["exchange"]]["Bid"])
-            elif(makecoinsort(i["coin"],j["coin"]) == 1):
+            
+            if(makecoinsort(j["coin"],i["coin"]) == 0):
                 coin = i["coin"]+j["coin"]
+                num = (1/loaddict[coin][j["exchange"]]["Ask"])-(1/loaddict[coin][i["exchange"]]["Bid"])
+            elif(makecoinsort(j["coin"],i["coin"]) == 1):
+                coin = j["coin"]+i["coin"]
                 num = loaddict[coin][j["exchange"]]["Ask"]-loaddict[coin][i["exchange"]]["Bid"]
-
+        coinnp.append(cointype)
         mstnp.append(num)
+        exchangenp.append(exchangetype)
+coinarr = np.array(coinnp)
 mst = np.array(mstnp)
+exchangearr = np.array(exchangenp)
+exchangearr.shape = (12,12)
+coinarr.shape = (12,12)
 mst.shape = (12,12)
+print exchangearr
+print coinarr
 print mst
+print 0.056308-0.056401
