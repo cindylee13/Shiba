@@ -16,14 +16,9 @@ for i in exchangeList:
         mstlist.append(coindict)
 
 def makecoinsort(a,b):
-    if(a == "ETH"):
-        return a+b
-    elif(b == "ETH"):
-        return b+a
-    elif(a == "BTC"):
-        return a+b
-    elif(b == "BTC"):
-        return b+a
+    if((a=="BTC" and b == "ETH") or (a=="USD" and b == "ETH") or (a=="USD" and b == "BTC")):
+        return 0
+    return 1
 
 # print mstlist
 for i in mstlist:
@@ -34,8 +29,13 @@ for i in mstlist:
         elif(i["coin"]==j["coin"]):
             num = np.inf
         else:
-            coin = makecoinsort(i["coin"],j["coin"])
-            num = loaddict[coin][j["exchange"]]["Ask"]-loaddict[coin][i["exchange"]]["Bid"]
+            if(makecoinsort(i["coin"],j["coin"]) == 0):
+                coin = j["coin"]+i["coin"]
+                num = (1/loaddict[coin][j["exchange"]]["Ask"])-(1/loaddict[coin][i["exchange"]]["Bid"])
+            elif(makecoinsort(i["coin"],j["coin"]) == 1):
+                coin = i["coin"]+j["coin"]
+                num = loaddict[coin][j["exchange"]]["Ask"]-loaddict[coin][i["exchange"]]["Bid"]
+
         mstnp.append(num)
 mst = np.array(mstnp)
 mst.shape = (12,12)
