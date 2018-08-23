@@ -3,9 +3,14 @@ import json
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import matplotlib.pyplot as plt
-with open("Json.json","r") as loadfile:
-    loaddict = json.load(loadfile)
-
+import redis
+import csv
+import time
+#with open("Json.json","r") as loadfile:
+#    loaddict = json.load(loadfile)
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
+d = r.get('PriceToAlg')
+loaddict = json.loads(d)
 # print loaddict["BTCUSD"]["Bittrex"]["Bid"]
 coinList = ["BTC","ETH","USD"]
 exchangeList = ["Bittrex","Cex","Bitfinex","Cryptopia"] #cex 每一行的4 5 6 (345) 中的 5(4) 是 cexeth
@@ -33,7 +38,7 @@ def FindCoinType(index,last):
     lastcexchange = last / coinTypeNum
     return coinList[lastcoinType],exchangeList[lastcexchange],coinList[coinType],exchangeList[exchange]
 
-def minimum_spanning_tree(X, copy_X=True):
+def minimum_spanning_tree(visited_vertices,X, copy_X=True):
     """X are edge weights of fully connected graph"""
     #if copy_X:
     #    X = X.copy()
@@ -42,7 +47,6 @@ def minimum_spanning_tree(X, copy_X=True):
     n_vertices = X.shape[0] #n*n return n
     spanning_edges = []
     # initialize with node 0:                                                                                         
-    visited_vertices = [2]#起點
     profit=[200]                                                                                            
     num_visited = 1
     # exclude self connections:
@@ -71,6 +75,7 @@ def minimum_spanning_tree(X, copy_X=True):
         X[new_edge[1], visited_vertices] = -(np.inf)
         num_visited += 1
     return np.vstack(spanning_edges),profit,visited_vertices
+
 for i in mstlist:
     for j in mstlist:
         exchangecointtype = j["exchange"]+j["coin"]+"->"+i["exchange"]+i["coin"]
@@ -100,10 +105,24 @@ mst.shape = (12,12)
 mstt=mst.T
 print exchangecointarr.T
 print mstt
-edge_list,profit,visited_vertices = minimum_spanning_tree(mstt)
-for i,j in zip(edge_list,profit):
-    print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
-print edge_list
+visited_vertices = [2]#起點
+visited_vertices1 = [5]#起點
+visited_vertices2 = [8]#起點
+visited_vertices3 = [11]#起點
+
+visited_vertice_list = [visited_vertices,visited_vertices1,visited_vertices2,visited_vertices3]
+for i in visited_vertice_list:
+    edge_list,profit,visited_vertices = minimum_spanning_tree(i,mstt)
+    for i,j in zip(edge_list,profit):
+        print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
+        #print Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'
+        if (Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'):
+            with open('output.csv', 'a') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([loaddict,profit[visited_vertices.index(i[1])],time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())])
+print loaddict
+#print edge_list
+#print loaddict
 """ 
 for edge in edge_list:
     i, j = edge
