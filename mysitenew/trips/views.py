@@ -7,7 +7,7 @@ from .models import CexBTCTable
 from .models import BinanceBTCTable,TransectionRecord
 from .models import BitfinexBTCTable
 from .models import CryptopiaBTCTable,GetDifference
-from pyspark import SQLContext,SparkConf,SparkContext
+
 from django.core import serializers
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
 
@@ -37,14 +37,6 @@ def BTC(request):
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
     })
-def TestSpark(request):
-    sc = SparkContext("local", "first app")
-    spark=SparkSession.builder.master("local").appName("first app").config("spark.some.config.option","some-value").getOrCreate()
-    logFile = "file:///Users/sunny/Desktop/CheckIn.csv"
-    logData = sc.textFile(logFile)
-    Data=logData.map(lambda a:a.split(','))
-    people = Data.map(lambda p: (p[0], regex(str(p[1])) ,p[2],p[3],p[4].strip()))
-    return render(request,"error.html",{"a":people})
 
 
 def Trading(request):
