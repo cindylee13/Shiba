@@ -13,12 +13,13 @@
   <link href={% static "bootstrap/vendor/font-awesome/css/font-awesome.min.css" %} rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href={% static "bootstrap/css/sb-admin.css" %} rel="stylesheet">
+  <link href={% static "bootstrap/css/styledrop.css" %} rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <h3 class="trading">RICHER</h3>
+    <a class="navbar-brand" href="/users/trading/">RICHER</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -62,10 +63,10 @@
               <a href="/users/BittrexWallet/">Bittrex_Wallet</a>
             </li>
             <li>
-              <a href="/users/BinanceWallet/">Binance_Wallet</a>
+              <a href="/users/BitfinexWallet">Bitfinex_Wallet</a>
             </li>
             <li>
-              <a href="#">hahaha_Wallet</a>
+              <a href="/users/CryptopiaWallet">Cryptopia_Wallet</a>
             </li>
           </ul>
         </li>
@@ -98,12 +99,11 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <h6>Hi {{username}} !</h6>
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+              <h6>Hi {{username}} !</h6>
             <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
         </li>
-
       </ul>
     </div>
   </nav>
@@ -112,11 +112,97 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/index/">Trading</a>
+          <a class = "trading1" href="#">Trading</a>
         </li>
-        <li class="breadcrumb-item active">Orders</li>
+        <li class="breadcrumb-item active">Order</li>
       </ol>
-    </div>
+
+      <h1 class="apple">BiBi Theory <i class="fa fa-dollar"></i></h1>
+        <hr>
+        <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+              <div class="drop2">
+                <div class="option active placeholder" data-value="placeholder">
+                  Choose Your Transaction
+                </div>
+                <div class="option" data-value="wow">
+                  Cex
+                </div>
+                <div class="option" data-value="drop">
+                  Bittrex
+                </div>
+                <div class="option" data-value="select">
+                  Binance
+                </div>
+                <div class="option" data-value="custom">
+                  Bitfinex
+                </div>
+                <div class="option" data-value="animation">
+                  Cryptopia
+                </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="drop3">
+                <div class="option active placeholder" data-value="placeholder">
+                  Choose Your Transaction
+                </div>
+                <div class="option" data-value="wow">
+                  Cex
+                </div>
+                <div class="option" data-value="drop">
+                  Bittrex
+                </div>
+                <div class="option" data-value="custom">
+                  Bitfinex
+                </div>
+                <div class="option" data-value="animation">
+                  Cryptopia
+                </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="drop4">
+                <div class="option active placeholder" data-value="placeholder">
+                  Choose Your Transaction
+                </div>
+                <div class="option" data-value="wow">
+                  Cex
+                </div>
+                <div class="option" data-value="drop">
+                  Bittrex
+                </div>
+                <div class="option" data-value="custom">
+                  Bitfinex
+                </div>
+                <div class="option" data-value="animation">
+                  Cryptopia
+                </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <input type="submit" value="STARTING EARNING!" class="btn-apple btn-block" />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class"row">
+          <div class="col-md-12">
+            <p>In economics and finance, arbitrage (/ˈɑːrbɪtrɑːʒ/, UK also /-trɪdʒ/) is the practice of taking advantage of a price difference
+               between two or more markets: striking a combination of matching deals that capitalize upon the imbalance, the profit being the
+               difference between the market prices. When used by academics, an arbitrage is a (imagined, hypothetical, thought experiment) transaction
+               that involves no negative cash flow at any probabilistic or temporal state and a positive cash flow in at least one state; in simple
+               terms, it is the possibility of a risk-free profit after transaction costs. For example, an arbitrage opportunity is present when there
+                  is the opportunity to instantaneously buy something for a low price and sell it for a higher price.</p>
+          </div>
+        </div>
+      </div>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+
+
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
@@ -143,12 +229,17 @@
           <div class="modal-body">Select "Sign Out" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-secondary" href="/users/signout/">Sign Out</a>
+            <a class="btn btn-primary" href="/users/signout/">Sign Out</a>
           </div>
         </div>
       </div>
     </div>
     <!-- Bootstrap core JavaScript-->
+    <script src={% static "bootstrap/js/index.js"%} ></script>
+    <script src={% static "bootstrap/js/index1.js"%}></script>
+    <script src={% static "bootstrap/js/index2.js"%}></script>
+    <script src={% static "bootstrap/js/index3.js"%}></script>
+    <script src={% static "bootstrap/js/index4.js"%}></script>
     <script src={% static "bootstrap/vendor/jquery/jquery.min.js" %}></script>
     <script src={% static "bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js" %}></script>
     <!-- Core plugin JavaScript-->

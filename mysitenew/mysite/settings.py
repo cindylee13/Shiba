@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'trips',
     'djcelery',
     'corsheaders',
-    'django_crontab',
     'bot',
 ]
 
