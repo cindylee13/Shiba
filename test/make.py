@@ -6,17 +6,18 @@ import matplotlib.pyplot as plt
 import redis
 import csv
 import time
-#with open("Json.json","r") as loadfile:
-#    loaddict = json.load(loadfile)
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
-d = r.get('PriceToAlg')
-loaddict = json.loads(d)
+with open("111.json","r") as loadfile:
+    loaddict = json.load(loadfile)
+#r = redis.StrictRedis(host='localhost', port=6379, db=0)
+#d = r.get('PriceToAlg')
+#print "!!",d,type(d)
+#loaddict = json.loads(d)
 # print loaddict["BTCUSD"]["Bittrex"]["Bid"]
-coinList = ["BTC","ETH","USD"]
+coinList = ["BTC","ETH","USD","BCH","ZEC","BTG"]
 exchangeList = ["Bittrex","Cex","Bitfinex","Cryptopia"] #cex 每一行的4 5 6 (345) 中的 5(4) 是 cexeth
-typelist = ["bid","ask"]
+typelist = ["Bid","Ask"]
 exchangeNum = 4
-coinTypeNum = 3
+coinTypeNum = 6
 mstlist =[]
 mstnp = []
 exchangecointnp = []
@@ -26,11 +27,14 @@ for i in exchangeList:
         coindict = {"exchange":i,"coin":j}
         mstlist.append(coindict)
 def makecoinsort(a,b):
-    if((a=="BTC" and b == "ETH") or (a=="USD" and b == "ETH") or (a=="USD" and b == "BTC")):
-        return 0
-    return 1
+    if((a=="BTC" and b == "ETH") or (a=="USD" and b == "ETH") or (a=="USD" and b == "BTC")\
+        or (a=="USD" and b == "BTG") or (a=="USD" and b == "ZEC") or (a=="USD" and b == "BCH")\
+        or (a=="BTC" and b == "BCH") or (a=="BTC" and b == "ZEC") or (a=="BTC" and b == "BTG")\
+        or (a=="ETH" and b == "BCH") or (a=="ETH" and b == "ZEC") or (a=="ETH" and b == "BTG")):
+        return 1
+    return 0
 def Find(a):
-    return exchangeList[a/3],coinList[a%3]
+    return exchangeList[a/coinTypeNum],coinList[a%coinTypeNum]
 def FindCoinType(index,last):
     coinType = index % coinTypeNum
     exchange = index / coinTypeNum
@@ -57,12 +61,12 @@ def minimum_spanning_tree(visited_vertices,X, copy_X=True):
         # 2d encoding of new_edge from flat, get correct indices
         new_edge = divmod(new_edge, n_vertices)
         a,b,c,d = FindCoinType(new_edge[1],visited_vertices[new_edge[0]])
-        if(not makecoinsort(a,c)):
-            last = 1/loaddict[c+a][b]['bid']
-            nextone = 1/loaddict[c+a][d]['ask']
+        if(makecoinsort(a,c)):
+            last = 1/loaddict[c+a][b]['Bid']
+            nextone = 1/loaddict[c+a][d]['Ask']
         else:
-            last = loaddict[a+c][b]['ask']
-            nextone = loaddict[a+c][d]['bid']
+            last = loaddict[a+c][b]['Ask']
+            nextone = loaddict[a+c][d]['Bid']
         p = profit[new_edge[0]] * nextone
         profit.append(p)
         new_edge = [visited_vertices[new_edge[0]], new_edge[1]]#[0]商(列) [1]餘（行） 
@@ -79,48 +83,52 @@ def minimum_spanning_tree(visited_vertices,X, copy_X=True):
 for i in mstlist:
     for j in mstlist:
         exchangecointtype = j["exchange"]+j["coin"]+"->"+i["exchange"]+i["coin"]
+        print "##############",exchangecointtype
         if(i["exchange"]==j["exchange"]):
             num = -(np.inf)
-        
         elif(i["coin"]==j["coin"]):
-            num = -(np.inf)   
+            num = -(np.inf)
         else:
-            if(makecoinsort(j["coin"],i["coin"]) == 0):
+            if(makecoinsort(j["coin"],i["coin"]) == 1):
                 coin = i["coin"]+j["coin"]
-                num = (1/loaddict[coin][i["exchange"]]["ask"])-(1/loaddict[coin][j["exchange"]]["bid"])
-                if(num<0):
+                if(coin in loaddict.keys()):
+                    if(loaddict[coin][j["exchange"]] and loaddict[coin][i["exchange"]]):
+                        num = (1/loaddict[coin][i["exchange"]]["Ask"]) - (1/loaddict[coin][j["exchange"]]["Bid"])
+                    else:
+                        num = -(np.inf)
+                else:
                     num = -(np.inf)
-            elif(makecoinsort(j["coin"],i["coin"]) == 1):
+            elif(makecoinsort(j["coin"],i["coin"]) == 0):
                 coin = j["coin"]+i["coin"]
-                num = loaddict[coin][i["exchange"]]["bid"]-loaddict[coin][j["exchange"]]["ask"]
-                if(num<0):
-                    num= -(np.inf)
-
+                if(coin in loaddict.keys()):
+                    if(loaddict[coin][j["exchange"]] and loaddict[coin][i["exchange"]]):
+                        num = loaddict[coin][i["exchange"]]["Bid"] - loaddict[coin][j["exchange"]]["Ask"]
+                    else:
+                        num = -(np.inf)
+                else:
+                    num = -(np.inf)
         exchangecointnp.append(exchangecointtype)
-        mstnp.append(num*2000)
+        mstnp.append(num)
 mst = np.array(mstnp)
+print len(mstnp)
 exchangecointarr = np.array(exchangecointnp)
-exchangecointarr.shape = (12,12)
-mst.shape = (12,12)
+exchangecointarr.shape = (24,24)
+mst.shape = (24,24)
 mstt=mst.T
 print exchangecointarr.T
 print mstt
 visited_vertices = [2]#起點
-visited_vertices1 = [5]#起點
-visited_vertices2 = [8]#起點
-visited_vertices3 = [11]#起點
 
-visited_vertice_list = [visited_vertices,visited_vertices1,visited_vertices2,visited_vertices3]
-for i in visited_vertice_list:
-    edge_list,profit,visited_vertices = minimum_spanning_tree(i,mstt)
-    for i,j in zip(edge_list,profit):
-        print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
-        #print Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'
-        if (Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'):
-            with open('output.csv', 'a') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow([loaddict,profit[visited_vertices.index(i[1])],time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())])
-print loaddict
+#visited_vertice_list = [visited_vertices,visited_vertices1,visited_vertices2,visited_vertices3]
+edge_list,profit,visited_vertices = minimum_spanning_tree(visited_vertices,mstt)
+for i,j in zip(edge_list,profit):
+    #print exchangecointnp
+    print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
+    if (Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'):
+        with open('output.csv', 'a') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([loaddict,profit[visited_vertices.index(i[1])],time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())])
+#print loaddict
 #print edge_list
 #print loaddict
 """ 

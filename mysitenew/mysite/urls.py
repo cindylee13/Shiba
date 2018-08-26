@@ -3,13 +3,12 @@ from django.contrib import admin
 from .views import Index
 from users.views import Trading, ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error, Order, Withdraw, Deposit
 from users.views import CexWithdraw, BittrexWithdraw, BinanceWithdraw, CexDeposit, BittrexDeposit, BinanceDeposit, CexWallet, BittrexWallet, BinanceWallet
-from trips.views import BTC,Trading,userInfo,TestSpark
+from trips.views import BTC,Trading,userInfo
 #from users.views import ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
 admin.autodiscover()  
   
 urlpatterns = [  
     url(r'^admin/', include(admin.site.urls)),  
-    url(r'^error/', TestSpark),  
     url(r'^BTC/$', BTC),
     url(r'^index/', Index),
     url(r'^users/signin/',SignIn), 
