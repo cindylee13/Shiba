@@ -1,0 +1,177 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: pfs-bold;
+  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/142996/PFSquareSansPro-Bold.otf");
+}
+body {
+  background: #35414a;
+}
+
+.drop, .drop1{
+  width: 18em;
+  margin: 5em auto;
+  color: #ffffff;
+  text-transform: uppercase;
+  position: relative;
+  -webkit-transition: width 0.5s;
+  transition: width 0.5s;
+  will-change: width;
+  top: -40px;
+}
+.drop2, .drop3, .drop4{
+  width: 17em;
+  margin: 5em auto;
+  color: #ffffff;
+  text-transform: uppercase;
+  position: relative;
+  -webkit-transition: width 0.5s;
+  transition: width 0.5s;
+  will-change: width;
+  top: -40px;
+}
+.drop .option, .drop1 .option, .drop2 .option, .drop3 .option, .drop4 .option{
+  padding: 1em;
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.3);
+}
+.drop .option:not(.active), .drop1 .option:not(.active), .drop2 .option:not(.active), .drop3 .option:not(.active), .drop4 .option:not(.active){
+  display: none;
+  opacity: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.drop.visible, .drop1.visible, .drop2.visible, .drop3.visible, .drop4.visible {
+  -webkit-animation: bounce 1s;
+          animation: bounce 1s;
+  width: 24em;
+}
+.drop.visible:before, .drop.visible:after, .drop1.visible:before, .drop1.visible:after, .drop2.visible:before, .drop2.visible:after, .drop3.visible:before, .drop3.visible:after, .drop4.visible:before, .drop4.visible:after{
+  border-color: #fff;
+}
+.drop.visible:before, .drop1.visible:before, .drop2.visible:before, .drop3.visible:before, .drop4.visible:before{
+  opacity: 0;
+}
+.drop.visible:after, .drop1.visible:after, .drop2.visible:after, .drop3.visible:after, .drop4.visible:after {
+  opacity: 1;
+}
+.drop.visible .option, .drop1.visible .option, .drop2.visible .option, .drop3.visible .option, .drop4.visible .option {
+  color: #fff;
+  display: block;
+}
+.drop.opacity .option, .drop1.opacity .option, .drop2.opacity .option, .drop3.opacity .option, .drop4.opacity .option{
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  opacity: 1;
+}
+.drop.opacity .option:nth-child(0), .drop1.opacity .option:nth-child(0),.drop2.opacity .option:nth-child(0),.drop3.opacity .option:nth-child(0),.drop4.opacity .option:nth-child(0) {
+  -webkit-transition: opacity 0.5s 0s, -webkit-transform 0.5s 0s;
+  transition: opacity 0.5s 0s, -webkit-transform 0.5s 0s;
+  transition: opacity 0.5s 0s, transform 0.5s 0s;
+  transition: opacity 0.5s 0s, transform 0.5s 0s, -webkit-transform 0.5s 0s;
+}
+.drop.opacity .option:nth-child(1), .drop1.opacity .option:nth-child(1),.drop2.opacity .option:nth-child(1),.drop3.opacity .option:nth-child(1),.drop4.opacity .option:nth-child(1) {
+  -webkit-transition: opacity 0.5s 0.1s, -webkit-transform 0.5s 0.1s;
+  transition: opacity 0.5s 0.1s, -webkit-transform 0.5s 0.1s;
+  transition: opacity 0.5s 0.1s, transform 0.5s 0.1s;
+  transition: opacity 0.5s 0.1s, transform 0.5s 0.1s, -webkit-transform 0.5s 0.1s;
+}
+.drop.opacity .option:nth-child(2), .drop1.opacity .option:nth-child(2),.drop2.opacity .option:nth-child(2),.drop3.opacity .option:nth-child(2),.drop4.opacity .option:nth-child(2) {
+  -webkit-transition: opacity 0.5s 0.2s, -webkit-transform 0.5s 0.2s;
+  transition: opacity 0.5s 0.2s, -webkit-transform 0.5s 0.2s;
+  transition: opacity 0.5s 0.2s, transform 0.5s 0.2s;
+  transition: opacity 0.5s 0.2s, transform 0.5s 0.2s, -webkit-transform 0.5s 0.2s;
+}
+.drop.opacity .option:nth-child(3), .drop1.opacity .option:nth-child(3),.drop2.opacity .option:nth-child(3),.drop3.opacity .option:nth-child(3),.drop4.opacity .option:nth-child(3) {
+  -webkit-transition: opacity 0.5s 0.3s, -webkit-transform 0.5s 0.3s;
+  transition: opacity 0.5s 0.3s, -webkit-transform 0.5s 0.3s;
+  transition: opacity 0.5s 0.3s, transform 0.5s 0.3s;
+  transition: opacity 0.5s 0.3s, transform 0.5s 0.3s, -webkit-transform 0.5s 0.3s;
+}
+.drop.opacity .option:nth-child(4), .drop1.opacity .option:nth-child(4),.drop2.opacity .option:nth-child(4),.drop3.opacity .option:nth-child(4),.drop4.opacity .option:nth-child(4) {
+  -webkit-transition: opacity 0.5s 0.4s, -webkit-transform 0.5s 0.4s;
+  transition: opacity 0.5s 0.4s, -webkit-transform 0.5s 0.4s;
+  transition: opacity 0.5s 0.4s, transform 0.5s 0.4s;
+  transition: opacity 0.5s 0.4s, transform 0.5s 0.4s, -webkit-transform 0.5s 0.4s;
+}
+.drop.opacity .option:nth-child(5), .drop1.opacity .option:nth-child(5),.drop2.opacity .option:nth-child(5),.drop3.opacity .option:nth-child(5),.drop4.opacity .option:nth-child(5) {
+  -webkit-transition: opacity 0.5s 0.5s, -webkit-transform 0.5s 0.5s;
+  transition: opacity 0.5s 0.5s, -webkit-transform 0.5s 0.5s;
+  transition: opacity 0.5s 0.5s, transform 0.5s 0.5s;
+  transition: opacity 0.5s 0.5s, transform 0.5s 0.5s, -webkit-transform 0.5s 0.5s;
+}
+.drop.opacity .option:nth-child(6), .drop1.opacity .option:nth-child(6),.drop2.opacity .option:nth-child(6),.drop3.opacity .option:nth-child(6),.drop4.opacity .option:nth-child(6) {
+  -webkit-transition: opacity 0.5s 0.6s, -webkit-transform 0.5s 0.6s;
+  transition: opacity 0.5s 0.6s, -webkit-transform 0.5s 0.6s;
+  transition: opacity 0.5s 0.6s, transform 0.5s 0.6s;
+  transition: opacity 0.5s 0.6s, transform 0.5s 0.6s, -webkit-transform 0.5s 0.6s;
+}
+.drop.opacity .option:nth-child(7), .drop1.opacity .option:nth-child(7), .drop2.opacity .option:nth-child(7),.drop3.opacity .option:nth-child(7),.drop4.opacity .option:nth-child(7) {
+  -webkit-transition: opacity 0.5s 0.7s, -webkit-transform 0.5s 0.7s;
+  transition: opacity 0.5s 0.7s, -webkit-transform 0.5s 0.7s;
+  transition: opacity 0.5s 0.7s, transform 0.5s 0.7s;
+  transition: opacity 0.5s 0.7s, transform 0.5s 0.7s, -webkit-transform 0.5s 0.7s;
+}
+.drop.opacity .option:nth-child(8), .drop1.opacity .option:nth-child(8), .drop2.opacity .option:nth-child(8),.drop3.opacity .option:nth-child(8),.drop4.opacity .option:nth-child(8) {
+  -webkit-transition: opacity 0.5s 0.8s, -webkit-transform 0.5s 0.8s;
+  transition: opacity 0.5s 0.8s, -webkit-transform 0.5s 0.8s;
+  transition: opacity 0.5s 0.8s, transform 0.5s 0.8s;
+  transition: opacity 0.5s 0.8s, transform 0.5s 0.8s, -webkit-transform 0.5s 0.8s;
+}
+.drop.opacity .option:nth-child(9), .drop1.opacity .option:nth-child(9), .drop2.opacity .option:nth-child(9), .drop3.opacity .option:nth-child(9), .drop4.opacity .option:nth-child(9) {
+  -webkit-transition: opacity 0.5s 0.9s, -webkit-transform 0.5s 0.9s;
+  transition: opacity 0.5s 0.9s, -webkit-transform 0.5s 0.9s;
+  transition: opacity 0.5s 0.9s, transform 0.5s 0.9s;
+  transition: opacity 0.5s 0.9s, transform 0.5s 0.9s, -webkit-transform 0.5s 0.9s;
+}
+.drop.withBG .option, .drop1.withBG .option,.drop2.withBG .option,.drop3.withBG .option,.drop4.withBG .option {
+  -webkit-transition: background-color 0.1s;
+  transition: background-color 0.1s;
+}
+.drop.withBG .option:not(.placeholder):hover, .drop1.withBG .option:not(.placeholder):hover,.drop2.withBG .option:not(.placeholder):hover, .drop3.withBG .option:not(.placeholder):hover, .drop4.withBG .option:not(.placeholder):hover {
+  background-color: #fcb83a;
+}
+.drop.withBG .option:not(.placeholder).active, .drop1.withBG .option:not(.placeholder).active, .drop2.withBG .option:not(.placeholder).active, .drop3.withBG .option:not(.placeholder).active, .drop4.withBG .option:not(.placeholder).active {
+  background-color: #fcb83a;
+}
+.drop:after, .drop:before, .drop1:after, .drop1:before, .drop2:after, .drop2:before, .drop3:after, .drop3:before, .drop4:after, .drop4:before {
+  content: "";
+  position: absolute;
+  top: 1.5em;
+  right: 1em;
+  width: 0.75em;
+  height: 0.75em;
+  border: 0.2em solid #86919a;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+.drop:before, .drop1:before, .drop2:before, .drop3:before, .drop4:before {
+  border-left: none;
+  border-top: none;
+  top: 1.2em;
+}
+.drop:after, .drop1:after, .drop2:after, .drop3:after, .drop4:after {
+  border-right: none;
+  border-bottom: none;
+  opacity: 0;
+}
+
+.mini-hack {
+  opacity: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.drop3{
+  left:20px;
+}
+.drop4{
+  left:40px;
+}

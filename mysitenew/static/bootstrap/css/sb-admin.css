@@ -549,6 +549,8 @@ form.login input[type="password"]
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
     letter-spacing: 0.5px;
     margin:2px;
+    background-color: rgba(0,0,0,0.5) !important;
+    color: #fff;
 }
 .btn-white{
     font-weight: 600;
@@ -556,9 +558,7 @@ form.login input[type="password"]
     border-radius: 10px !important;
     font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
-label{
-  display:none;
-}
+
 h3.trading{
   font-weight: 400;
   margin-bottom: .5rem;
@@ -574,3 +574,48 @@ h3.trading{
 .col-8 {
     text-align: right !important;
   }
+label{
+  display: none;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 5px 80px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+h5.wallet{
+  margin-bottom: -2rem;
+  font-family: inherit;
+  font-weight: 350;
+  font-size: 18px;
+  color: inherit;
+  text-align: center;
+  line-height: 1.5;
+}
+.card-body {
+    -webkit-box-flex: 1;
+    flex: 1 1 auto;
+    padding: 1.25rem 2rem !important;
+}
+.btn-apple {
+    font-weight: 400;
+    border: none;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    margin-top: 0px !important;
+    height: 40px;
+    position: absolute;
+    top: 55.85px;
+    width: 180px !important;
+    left: 80px;
+    color: #ffffff;
+    background-color: rgba(0,0,0,0.3);
+}
