@@ -55,7 +55,9 @@ def SignIn(request):
             username = data['username']
             password = data['password'] # 確認密碼有沒有對
             if LoginValidate(request, username, password):
-                return HttpResponseRedirect('/users/trading/')
+                # return render_to_response('trading.html',{'username': request.user.username})
+                return HttpResponseRedirect('/users/trading/') 
+                #return render(request,'trading.html', {'username': request.user.username})
             else:
                 error.append('Please input the correct password')
         else:
@@ -102,7 +104,7 @@ def ChangePassword(request):
                 if data['newPassword'] == data['newPassword2']:
                     newPassword = data['newPassword']
                     CreateNewFrom(request, newPassword)
-                    return render(request,'welcome.html', {'user': request.user.username})
+                    return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
 
                 else:
                     error.append('Please input the same password')
@@ -112,21 +114,22 @@ def ChangePassword(request):
             error.append('Please input the required domain')
     else:
         form = ChangepwdForm()
-    return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username})
+    return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
 #RICHER登入前-------------------------------------------------------------------------------------------
 
 #RICHER登入後-------------------------------------------------------------------------------------------
+
 def SelectPage(request, pageName):
     if not request.user.is_authenticated():  # prevent anonymous Sign in，尚未登入看不到頁面，要顯示錯誤
         return HttpResponseRedirect('/users/signin/')
-    elif('Trading' == pageName):
-        return render(request,'trading.html', {'username': request.user.username})
+    elif('Trading' == pageName):   
+        return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Order' == pageName):
-        return render(request,'order.html', {'username': request.user.username})
+        return render(request,'order.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Withdraw' == pageName):
-        return render(request,'withdraw.html', {'username': request.user.username})
+        return render(request,'withdraw.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Deposit' == pageName):
-        return render(request,'deposit.html', {'username': request.user.username})
+        return render(request,'deposit.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     else:
         return HttpResponseRedirect('/users/signin/') # 防呆
 
@@ -278,11 +281,11 @@ def BinanceDeposit(request):
 def SelectWallet(request, walletName):
     user = FilterUser(GetUserID(request))
     if('CexWallet' == walletName):
-        return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney, 'BTC' : user.CexBTC})
+        return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney, 'BTC' : user.CexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('BittrexWallet' == walletName):
-        return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney, 'BTC' : user.BittrexBTC})
+        return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney, 'BTC' : user.BittrexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('BinanceWallet' == walletName):
-        return render(request, 'Binance_Wallet.html', {'username' : user.username,'money' : user.Binancemoney, 'BTC' : user.BinanceBTC})
+        return render(request, 'Binance_Wallet.html', {'username' : user.username,'money' : user.Binancemoney, 'BTC' : user.BinanceBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
 def CexWallet(request):
     return SelectWallet(request, 'CexWallet')
 
