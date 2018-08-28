@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from .models import CreatePerson,SendMessageByUserId
+from .models import IdentifyPerson,SendMessageByUserId
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
@@ -24,7 +24,10 @@ def callback(request):
         #print events[0].source.userId
         for event in events:
             if isinstance(event, MessageEvent):
-                #CreatePerson(event)
+                try:
+                    IdentifyPerson(event)
+                except:
+                    print "IdentifyFail"
                 print event.source.user_id
                 #print MessageEvent
         return HttpResponse()

@@ -7,6 +7,7 @@ from .models import GetUserID, GetUserKey, LoginValidate, User
 from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from bot.models import CreateLinePerson
 
 #RICHER登入前-------------------------------------------------------------------------------------------
 def SignUp(request):
@@ -25,6 +26,8 @@ def SignUp(request):
                     if form.pwd_validate(password, password2):
                         try:
                             CreateFrom(username, email, password)
+                            IdentifyingCode = CreateLinePerson(GetUserID(request))
+                            EmailIdentifyingCode(email,IdentifyingCode)
                         except IntegrityError as e:
                             # print e.message
                             if 'UNIQUE constraint failed' in e.message:
