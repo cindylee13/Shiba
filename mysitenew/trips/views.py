@@ -37,11 +37,6 @@ def BTC(request):
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
     })
-<<<<<<< HEAD
-
-
-=======
->>>>>>> MST
 def Trading(request):
     #a = BittrexBTC()    #move to crontab
     #print a

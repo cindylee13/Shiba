@@ -1,7 +1,7 @@
 from django.conf.urls import include, url  
 from django.contrib import admin  
 from .views import Index
-from users.views import Trading, ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , Order, Withdraw, Deposit
+from users.views import Trading, ForgotPassword, SignUp, SignIn, SignOut, News, ChangePassword , Error , Order, Withdraw, Deposit
 from users.views import CexWithdraw, BittrexWithdraw, BinanceWithdraw, CexDeposit, BittrexDeposit, BinanceDeposit, CexWallet, BittrexWallet, BinanceWallet #, BitfinexWallet, CryptopiaWallet
 from trips.views import BTC,Trading
 #from users.views import ForgotPassword, SignUp, SignIn, SignOut, ChangePassword , Error , MyProfile, MyWallet, StoredWalletMoney, TakeWalletMoney
@@ -11,10 +11,11 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),  
     url(r'^BTC/$', BTC),
     url(r'^index/', Index),
+    url(r'^users/news/',News),
     url(r'^users/signin/',SignIn), 
     url(r'^users/forgot/',ForgotPassword), 
     url(r'^users/signup/', SignUp),  
-    url(r'^users/signout/', SignOut), 
+    url(r'^users/signout/', SignOut),   
     # url(r'^users/changepassword/(?P<username>\w+)/$',ChangePassword),
     url(r'^users/changepassword/',ChangePassword),  
     url(r'^users/error/', Error), 

@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import GetUserID, GetUserKey, LoginValidate, User
 from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
+from trips.models import AlgTypeByUser
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
@@ -19,7 +20,7 @@ def SignUp(request):
             email = data['email']
             password2 = data['password2']
             password = data['password']
-             # 判斷註冊時使用者和email有無重複 內建判斷密碼跟確認密碼有沒有相同
+            # 判斷註冊時使用者和email有無重複 內建判斷密碼跟確認密碼有沒有相同
             if not (IsUserPassword(username)):
                 if not (IsUserEmail(email)):
                     if form.pwd_validate(password, password2):
@@ -70,6 +71,9 @@ def SignIn(request):
 def SignOut(request):
     auth_logout(request)
     return HttpResponseRedirect('/index')
+
+def News(request):
+    return render(request, 'news.html')
 
 def ForgotPassword(request):
     error = []
@@ -125,7 +129,22 @@ def SelectPage(request, pageName):
     elif('Trading' == pageName):   
         return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Order' == pageName):
-        return render(request,'order.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        error = []
+        if 'drop2' not in request.POST:
+            return render_to_response('order.html')
+        if 'drop3' not in request.POST:
+            return render_to_response('order.html')
+        a=request.POST['drop2']
+        b=request.POST['drop3']
+        if (str(a) == 'drop2-empty' or str(b) =='drop3-empty'):
+            error.append('Please select an exchange')
+        elif (str(a) == str(b)):
+            error.append('Exchange repeat')  
+        else:
+            AlgTypeByUser.objects.create(userID = request.user ,Head = str(a) ,Foot = str(b))  
+        return render(request,'order.html',{'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        #return HttpResponse('order.html',"OK %s" %d)
+        #return render(request,'order.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Withdraw' == pageName):
         return render(request,'withdraw.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
     elif('Deposit' == pageName):
