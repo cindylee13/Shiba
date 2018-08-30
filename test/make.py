@@ -6,12 +6,11 @@ import matplotlib.pyplot as plt
 import redis
 import csv
 import time
-with open("111.json","r") as loadfile:
-    loaddict = json.load(loadfile)
-#r = redis.StrictRedis(host='localhost', port=6379, db=0)
-#d = r.get('PriceToAlg')
-#print "!!",d,type(d)
-#loaddict = json.loads(d)
+#with open("111.json","r") as loadfile:
+#    loaddict = json.load(loadfile)
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
+d = r.get('PriceToAlg')
+loaddict = json.loads(d)
 # print loaddict["BTCUSD"]["Bittrex"]["Bid"]
 coinList = ["BTC","ETH","USD","BCH","ZEC","BTG"]
 exchangeList = ["Bittrex","Cex","Bitfinex","Cryptopia"] #cex 每一行的4 5 6 (345) 中的 5(4) 是 cexeth
@@ -83,7 +82,6 @@ def minimum_spanning_tree(visited_vertices,X, copy_X=True):
 for i in mstlist:
     for j in mstlist:
         exchangecointtype = j["exchange"]+j["coin"]+"->"+i["exchange"]+i["coin"]
-        print "##############",exchangecointtype
         if(i["exchange"]==j["exchange"]):
             num = -(np.inf)
         elif(i["coin"]==j["coin"]):
@@ -124,7 +122,8 @@ edge_list,profit,visited_vertices = minimum_spanning_tree(visited_vertices,mstt)
 for i,j in zip(edge_list,profit):
     #print exchangecointnp
     print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
-    if (Find(visited_vertices[visited_vertices.index(i[1])])[1] == 'USD'):
+    name=Find(visited_vertices[visited_vertices.index(i[1])])
+    if (name[1] == 'USD' and profit[visited_vertices.index(i[1])] > 205):
         with open('output.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow([loaddict,profit[visited_vertices.index(i[1])],time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())])
