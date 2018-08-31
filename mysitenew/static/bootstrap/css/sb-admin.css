@@ -487,6 +487,7 @@ h4 {
 }
 h6 {
     position: absolute;
+    margin-right: 130px;
     bottom: 10.8px;
     right: 120px;
     color: #ffffff;
@@ -618,4 +619,15 @@ h5.wallet{
     left: 80px;
     color: #ffffff;
     background-color: rgba(0,0,0,0.3);
+}
+
+.dropdown-toggle-user{
+    color: rgba(255,255,255,1);
+}
+.dropdown-toggle-user:hover{
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+}
+.dropdown{
+  margin-top: 8px;
 }
