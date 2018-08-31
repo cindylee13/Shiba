@@ -37,8 +37,6 @@ def BTC(request):
         'CryptopiaBTCTable' : CryptopiaList,
         'dif':dif,
     })
-
-
 def Trading(request):
     #a = BittrexBTC()    #move to crontab
     #print a

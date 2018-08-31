@@ -84,17 +84,6 @@ class Purse(models.Model):
     Cexmoney = models.FloatField(default=0.0)
     userID = models.ForeignKey(User)
 #purse--------------------------------------
-#TransectionRecord--------------------------
-class TransectionRecord(models.Model):
-    userID = models.ForeignKey(User)
-    Fee = models.FloatField(default=0.0)
-    BidTransection = models.CharField(max_length=100)
-    AskTransection = models.CharField(max_length=100)
-    Bid = models.FloatField(default=0.0)
-    Ask = models.FloatField(default=0.0)
-    created_at = models.DateTimeField()
-    flag=models.CharField(max_length=1,default='0')
-#TransectionRecord--------------------------
 #Apple
 class Apple(models.Model):
 	userID = models.ForeignKey(User)
@@ -112,8 +101,23 @@ class BiBi(models.Model):
 	cointypeB = models.CharField(max_length = 64)
 	def __str__(self):
 		return self.userID
-
-#BiBi
+#choose for arbitrage
+class AlgTypeByUser(models.Model):
+	userID = models.ForeignKey(User)
+	Head = models.CharField(max_length = 64)
+	Foot = models.CharField(max_length = 64)
+	created_at = models.DateTimeField(auto_now=True)
+#TransectionRecord--------------------------
+class TransectionRecord(models.Model):
+    userID = models.ForeignKey(User)
+    Fee = models.FloatField(default=0.0)
+    BidTransection = models.CharField(max_length=100)
+    AskTransection = models.CharField(max_length=100)
+    Bid = models.FloatField(default=0.0)
+    Ask = models.FloatField(default=0.0)
+    created_at = models.DateTimeField()
+    flag = models.CharField(max_length=1,default='0')
+#TransectionRecord--------------------------
 #difference load in sqilte--------------------------
 class Difference(models.Model):
 	BidTransection = models.CharField(max_length=20)#CharField(max_length=100)
