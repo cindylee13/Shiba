@@ -163,6 +163,9 @@ def Withdraw(request):
 
 def Deposit(request):
     return SelectPage(request, 'Deposit')
+    
+def History(request):
+    return render(request, 'history.html')
 
 #Withdraw------------------------------------------------------------------------------
 def SelectWithdrawWalletSubtakeMoney(request, withdrawName, isTrueFalse, user):

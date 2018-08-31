@@ -12,17 +12,6 @@ body {
   background: #35414a;
 }
 
-.drop, .drop1{
-  width: 18em;
-  margin: 5em auto;
-  color: #ffffff;
-  text-transform: uppercase;
-  position: relative;
-  -webkit-transition: width 0.5s;
-  transition: width 0.5s;
-  will-change: width;
-  top: -40px;
-}
 .drop2, .drop3, .drop4{
   width: 17em;
   margin: 5em auto;
@@ -32,7 +21,6 @@ body {
   -webkit-transition: width 0.5s;
   transition: width 0.5s;
   will-change: width;
-  top: -40px;
 }
 .drop .option, .drop1 .option, .drop2 .option, .drop3 .option, .drop4 .option{
   padding: 1em;

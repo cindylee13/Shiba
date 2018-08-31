@@ -504,7 +504,7 @@ h2,h5,h4{
 
 form.login input[type="text"]
 {
-    width: 50%;
+    width: 100%;
     margin: 0;
     padding: 10px 10px;
     background: 0;
@@ -522,27 +522,23 @@ form.login input[type="text"]
 
 form.login input[type="password"]
 {
-    width: 150%;
-    margin: 0;
-    padding: 10px 10px;
-    background: 0;
-    border: 1px solid #000000;
-    outline: 0;
-    font-style: Open Sans;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-    color: #000000;
-    outline: 0;
-    border-radius: 15px;
+  width: 250%;
+      margin: 0;
+      padding: 10px 10px;
+      background: 0;
+      border: 1px solid #000000;
+      outline: 0;
+      font-style: Open Sans;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      color: #000000;
+      outline: 0;
+      border-radius: 15px;
+      margin-left: 120px;
 }
-.btn-primary{
-  background-color: rgba(0,0,0,0.5) !important;
-  color: #fff;
-  margin-top: -100px !important;
-  margin-left: 350px !important;
-}
+
 .btn {
     font-weight: 600;
     border: none;
@@ -614,7 +610,7 @@ h5.wallet{
     margin-top: 0px !important;
     height: 40px;
     position: absolute;
-    top: 55.85px;
+    top: 58px;
     width: 180px !important;
     left: 80px;
     color: #ffffff;
@@ -630,4 +626,50 @@ h5.wallet{
 }
 .dropdown{
   margin-top: 8px;
+}
+.btn-order {
+    background-color: rgba(0,0,0,0.5) !important;
+    color: #fff;
+    margin-top: -100px !important;
+    margin-left: 580px !important;
+  }
+.cm{
+  margin-left: 200px;
+}
+.orderP{
+  margin-top: 130px;
+}
+.pro{
+  margin-left: 50px;
+}
+.drop2, .drop3{
+  font-family: inherit!important;
+  font-size: inherit!important;
+  line-height: inherit!important;
+  padding: 1em!important;
+  cursor: pointer!important;
+  background-color: rgba(0,0,0,0.3)!important;
+  box-sizing: border-box!important;
+  margin: 0!important;
+  color: #ffffff!important;
+  text-transform: uppercase!important;
+  top:40px;
+}
+td, th{
+    width: 90px!important;
+}
+.btn-history{
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  margin: 2px;
+  background-color: rgba(0,0,0,0.5) !important;
+  color: #fff;
+  position: relative;
+  left: 240px;
+}
+.btn-history:hover{
+  color: rgba(255,255,255,0.7);
 }
