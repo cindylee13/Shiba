@@ -106,9 +106,7 @@ class AlgTypeByUser(models.Model):
 	userID = models.ForeignKey(User)
 	Head = models.CharField(max_length = 64)
 	Foot = models.CharField(max_length = 64)
-	created_at = models.DateTimeField()
-	def __str__(self):
-		return self.userID
+	created_at = models.DateTimeField(auto_now=True)
 #TransectionRecord--------------------------
 class TransectionRecord(models.Model):
     userID = models.ForeignKey(User)

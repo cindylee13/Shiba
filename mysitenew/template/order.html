@@ -122,67 +122,27 @@
         <div class="container">
         <div class="row">
           <div class="col-md-3">
-              <div class="drop2">
-                <div class="option active placeholder" data-value="placeholder">
-                  Choose Your Transaction
-                </div>
-                <div class="option" data-value="wow">
-                  Cex
-                </div>
-                <div class="option" data-value="drop">
-                  Bittrex
-                </div>
-                <div class="option" data-value="select">
-                  Binance
-                </div>
-                <div class="option" data-value="custom">
-                  Bitfinex
-                </div>
-                <div class="option" data-value="animation">
-                  Cryptopia
-                </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="drop3">
-                <div class="option active placeholder" data-value="placeholder">
-                  Choose Your Transaction
-                </div>
-                <div class="option" data-value="wow">
-                  Cex
-                </div>
-                <div class="option" data-value="drop">
-                  Bittrex
-                </div>
-                <div class="option" data-value="custom">
-                  Bitfinex
-                </div>
-                <div class="option" data-value="animation">
-                  Cryptopia
-                </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="drop4">
-                <div class="option active placeholder" data-value="placeholder">
-                  Choose Your Transaction
-                </div>
-                <div class="option" data-value="wow">
-                  Cex
-                </div>
-                <div class="option" data-value="drop">
-                  Bittrex
-                </div>
-                <div class="option" data-value="custom">
-                  Bitfinex
-                </div>
-                <div class="option" data-value="animation">
-                  Cryptopia
-                </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <input type="submit" value="STARTING EARNING!" class="btn-apple btn-block" />
+              <form action=" " method="post">
+                  {% for item in error %}
+                  <p style="color:red;">{{item}}</p>
+                  {% endfor %}
+                  <select name="drop2" >
+                    <option value="drop2-empty"> Choose Your Transaction </option>
+                    <option value="Cex">Cex</option>
+                    <option value="Bittrex">Bittrex</option>
+                    <option value="Bitfinex">Bitfinex</option>
+                    <option value="Cryptopia">Cryptopia</option>
+                  </select>
+                  <select name="drop3" >
+                    <option value="drop3-empty"> Choose Your Transaction </option>
+                    <option value="Cex">Cex</option>
+                    <option value="Bittrex">Bittrex</option>
+                    <option value="Bitfinex">Bitfinex</option>
+                    <option value="Cryptopia">Cryptopia</option>
+                  </select>
+
+                  <input type="submit" value="STARTING EARNING!"  href="/users/order/">
+              </form>
           </div>
         </div>
       </div>

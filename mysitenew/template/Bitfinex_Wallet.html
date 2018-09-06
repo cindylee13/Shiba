@@ -26,31 +26,31 @@
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
           <a class="nav-link" href="/users/trading/">
-            <i class="fa fa-fw fa-dashboard"></i>
+            <i class="fa fa-bar-chart" aria-hidden="true"></i>
             <span class="nav-link-text">Trading</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
           <a class="nav-link" href="/users/order/">
-            <i class="fa fa-fw fa-area-chart"></i>
+            <i class="fa fa-list" aria-hidden="true"></i>
             <span class="nav-link-text">Orders</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
           <a class="nav-link" href="/users/withdraw/">
-            <i class="fa fa-fw fa-dollar"></i>
+            <i class="fa fa-dollar" aria-hidden="true"></i>
             <span class="nav-link-text">Withdraw</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
           <a class="nav-link" href="/users/deposit/">
-            <i class="fa fa-fw fa-bitcoin"></i>
+            <i class="fa fa-exchange" aria-hidden="true"></i>
             <span class="nav-link-text">Deposit</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-calculator"></i>
+            <i class="fa fa-th-large" aria-hidden="true"></i>
             <span class="nav-link-text">Wallet</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
@@ -68,24 +68,16 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMyPage" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-calculator"></i>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+          <a class="nav-link" href="/users/changepassword/">
+            <i class="fa fa-user" aria-hidden="true"></i>
             <span class="nav-link-text">MyPage</span>
           </a>
-          <ul class="sidenav-second-level collapse" id="collapseMyPage">
-            <li>
-              <a href="#">Status</a>
-            </li>
-            <li>
-              <a href="/users/changepassword/">ChangePassword</a>
-            </li>
-          </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-          <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-table"></i>
-            <span class="nav-link-text">Contact</span>
+          <a class="nav-link" href="/users/history/">
+            <i class="fa fa-history" aria-hidden="true"></i>
+            <span class="nav-link-text">History</span>
           </a>
         </li>
       </ul>
@@ -97,9 +89,21 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        <h6>Hi {{username}} !</h6>
+        <li class="dropdown">
+            <a class="dropdown-toggle-user" data-toggle="dropdown" href="#" >
+              Total Amount : {{Total}}
+            </a>
+          <ul class="dropdown-menu" style="width:250px">
+            <li>CexWallet Money : {{CexMoney}} USD</li>
+            <li>BittrexWallet Money : {{BittrexMoney}} USD</li>
+            <li>BinanceWallet Money : {{BinanceMoney}} USD</li>
+          </ul>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+            <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
         </li>
       </ul>
     </div>
