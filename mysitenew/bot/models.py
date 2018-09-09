@@ -29,13 +29,12 @@ def CreatePerson(event):
      print event.message.text
 def SendMessage():
     message = TextSendMessage(text="Hijiji")
-    exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))
-    print exchanges#.objects.all()
+    exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
     for exchange in exchanges:
-        id = AlgTypeByUser.objects.filter(Head = exchange['Head'],Foot = exchange['Foot']).values('userID')
+        id = AlgTypeByUser.objects.filter(Head = exchange['Head'],Foot = exchange['Foot']).values('userID')#尋找每個符合配對交易所的user們
         for people in id:
             print people['userID']
-            try:
+            try:#寄送訊息 用try主因是怕有order但他卻沒註冊linebot
                 lineId = LineBot.objects.get(UserId = people['userID'])
                 print lineId
                 line_bot_api.push_message(lineId.LineId,message)

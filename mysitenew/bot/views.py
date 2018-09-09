@@ -42,8 +42,6 @@ def test(request):
     SendMessageByUserId(1,a)
     return render(request,"trading.html")
 def call(request):
-    #a =request.POST
-    message = TextSendMessage(text="Hijiji")
-    a=json.loads(request.body.decode('utf-8'))
+    a = json.loads(request.body.decode('utf-8'))
     SendMessage()
     return render(request,"trading.html")
