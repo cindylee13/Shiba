@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from .models import CreatePerson,SendMessageByUserId
+from .models import CreatePerson,SendMessage,LineBot
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 from django.shortcuts import render
-
+import json
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
@@ -40,4 +40,10 @@ def test(request):
     a=request.POST#.data
     print "aaaaa=",a
     SendMessageByUserId(1,a)
+    return render(request,"trading.html")
+def call(request):
+    #a =request.POST
+    message = TextSendMessage(text="Hijiji")
+    a=json.loads(request.body.decode('utf-8'))
+    SendMessage()
     return render(request,"trading.html")

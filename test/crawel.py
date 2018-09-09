@@ -85,8 +85,8 @@ url = {
             }
 def BitifinexConnect():
     for key in url:
-        print key
         if("Bitfinex" in url[key]):
+            print key
             QueueResult[key] = Queue.Queue()
             ws[key] = create_connection("wss://api2.bitfinex.com:3000/ws")
             ws[key].send(json.dumps({
@@ -126,7 +126,6 @@ def CrawlCex(url,cointype,nowtime):
     quote_page = url
     response = sessioncex.get(quote_page)
     data = response.json()
-    print data
     if(cointype == 'BTCUSD'):
         Insert('cex','btc',data['bid'],data['ask'],data['last'],nowtime)
     return {'transection':"Cex","Bid":float(data['bid']),"Ask":float(data['ask']),"Last":float(data['last'])}
@@ -138,7 +137,6 @@ def CrawlBitfinex(url,cointype,nowtime):
         ws = BitifinexConnect()
         result = ws[url].recv()
     result = json.loads(result)
-    print "!!",result,result[1]
     if(result[1]=='hb'):
         a = QueueResult[url].get()
         QueueResult[url].put(a)
@@ -155,12 +153,15 @@ def CrawlBitfinex(url,cointype,nowtime):
     return {'transection':"Bitfinex","Bid":float(a['Bid']),"Ask":float(a['Ask']),"Last":float(a['LAST_PRICE'])}
 def CrawlCryptopia(url,cointype,nowtime):
     quote_page = url
-    response = requests.get(quote_page)
-    data = response.json()['Data']
-    if(cointype == 'BTCUSD'):
-        Insert('cryptopia','btc',data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
-    return {'transection':"Cryptopia","Bid":float(data['BidPrice']),"Ask":float(data['AskPrice']),"Last":float(data['LastPrice'])}
-
+    try :
+        response = requests.get(quote_page)
+        data = response.json()['Data']
+        if(cointype == 'BTCUSD'):
+            Insert('cryptopia','btc',data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
+        return {'transection':"Cryptopia","Bid":float(data['BidPrice']),"Ask":float(data['AskPrice']),"Last":float(data['LastPrice'])}
+    except:
+        print cointype,"CrawlCryptopia error!"
+        return {}
 switch={"Bittrex":CrawlBittrex,"Bitfinex":CrawlBitfinex,"Cex":CrawlCex,"Cryptopia":CrawlCryptopia}
 
 def all(url):

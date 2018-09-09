@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^users/BittrexWallet/', BittrexWallet),
     url(r'^users/BinanceWallet/', BinanceWallet),
     url(r'^users/history/', History), 
-    url(r'^bot/', include('bot.urls')),
+    url(r'^bot/',include('bot.urls')),
     #url(r'^users/BitfinexWallet/', BitfinexWallet),
     #url(r'^users/CryptopiaWallet/', CryptopiaWallet),
 ]
