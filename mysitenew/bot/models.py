@@ -7,6 +7,8 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 from django.conf import settings
+from trips.models import AlgTypeByUser
+from django.db.models import Count
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
@@ -39,11 +41,16 @@ def IdentifyPerson(event):
      user.save()
      ########!!!!!!!!要多寫一個比對不符合的防呆!!!!!!!!!#############
      print event.message.text
-def SendMessageByUserId(Id,message):
-    #user = User.objects.get(userID='1')
-    #user=User.objects.get(username='testbot')
-    lineId = LineBot.objects.get(UserId = Id)
-    #print "~~~",lineId
-    #a=request.GET.get('user', '')
-    #message = TextSendMessage(text="123")
-    line_bot_api.push_message(lineId.LineId,message)
+def SendMessage():
+    message = TextSendMessage(text="Hijiji")
+    exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
+    for exchange in exchanges:
+        id = AlgTypeByUser.objects.filter(Head = exchange['Head'],Foot = exchange['Foot']).values('userID')#尋找每個符合配對交易所的user們
+        for people in id:
+            print people['userID']
+            try:#寄送訊息 用try主因是怕有order但他卻沒註冊linebot
+                lineId = LineBot.objects.get(UserId = people['userID'])
+                print lineId
+                line_bot_api.push_message(lineId.LineId,message)
+            except:
+                print "this person is not in bot's db"

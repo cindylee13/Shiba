@@ -5,14 +5,17 @@ from scipy.spatial.distance import pdist, squareform
 import matplotlib.pyplot as plt
 import redis
 import csv
-import time
-#with open("111.json","r") as loadfile:
-#    loaddict = json.load(loadfile)
+import datetime
+import requests
+import urllib
+with open("111.json","r") as loadfile:
+    loaddict = json.load(loadfile)
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
-d = r.get('PriceToAlg')
-loaddict = json.loads(d)
+#d = r.get('PriceToAlg')
+#loaddict = json.loads(d)
 # print loaddict["BTCUSD"]["Bittrex"]["Bid"]
 coinList = ["BTC","ETH","USD","BCH","ZEC","BTG"]
+vertices=24
 exchangeList = ["Bittrex","Cex","Bitfinex","Cryptopia"] #cex 每一行的4 5 6 (345) 中的 5(4) 是 cexeth
 typelist = ["Bid","Ask"]
 exchangeNum = 4
@@ -21,6 +24,8 @@ mstlist =[]
 mstnp = []
 exchangecointnp = []
 exchangecointtype = ""
+AllPath = []
+time = datetime.datetime.now()
 for i in exchangeList:
     for j in  coinList:
         coindict = {"exchange":i,"coin":j}
@@ -40,17 +45,16 @@ def FindCoinType(index,last):
     lastcoinType = last % coinTypeNum
     lastcexchange = last / coinTypeNum
     return coinList[lastcoinType],exchangeList[lastcexchange],coinList[coinType],exchangeList[exchange]
-
 def minimum_spanning_tree(visited_vertices,X, copy_X=True):
     """X are edge weights of fully connected graph"""
-    #if copy_X:
-    #    X = X.copy()
     if X.shape[0] != X.shape[1]:
         raise ValueError("X needs to be square matrix")
+    if copy_X:
+        X = X.copy()
     n_vertices = X.shape[0] #n*n return n
     spanning_edges = []
     # initialize with node 0:                                                                                         
-    profit=[200]                                                                                            
+    profit=[100]                                                                                            
     num_visited = 1
     # exclude self connections:
     diag_indices = np.arange(n_vertices)
@@ -78,8 +82,21 @@ def minimum_spanning_tree(visited_vertices,X, copy_X=True):
         X[new_edge[1], visited_vertices] = -(np.inf)
         num_visited += 1
     return np.vstack(spanning_edges),profit,visited_vertices
-
+def GetPath(edge,exchange,profit):
+    num = len(edge) - 1
+    p = 0
+    path = {'Profit':profit,'Path':[Find(exchange)]}
+    for i in range(0,len(edge)):
+        if(edge[num - i][1] == exchange):
+            path['Path'].append(Find(edge[num - i][0]))
+            exchange = edge[num - i][0]
+    AllPath.append(path)
+    return path['Path'][0][0],path['Path'][-1][0]
+def SendMessage():
+    print "send~~~"
+mydict={}
 for i in mstlist:
+    mydict[i['exchange']] = {}
     for j in mstlist:
         exchangecointtype = j["exchange"]+j["coin"]+"->"+i["exchange"]+i["coin"]
         if(i["exchange"]==j["exchange"]):
@@ -87,11 +104,12 @@ for i in mstlist:
         elif(i["coin"]==j["coin"]):
             num = -(np.inf)
         else:
+            mydict[i['exchange']][j['exchange']] = [0,time]
             if(makecoinsort(j["coin"],i["coin"]) == 1):
                 coin = i["coin"]+j["coin"]
                 if(coin in loaddict.keys()):
                     if(loaddict[coin][j["exchange"]] and loaddict[coin][i["exchange"]]):
-                        num = (1/loaddict[coin][i["exchange"]]["Ask"]) - (1/loaddict[coin][j["exchange"]]["Bid"])
+                        num = (1/loaddict[coin][i["exchange"]]["Ask"]*1.0025) - (1/loaddict[coin][j["exchange"]]["Bid"]*0.9975)
                     else:
                         num = -(np.inf)
                 else:
@@ -100,7 +118,7 @@ for i in mstlist:
                 coin = j["coin"]+i["coin"]
                 if(coin in loaddict.keys()):
                     if(loaddict[coin][j["exchange"]] and loaddict[coin][i["exchange"]]):
-                        num = loaddict[coin][i["exchange"]]["Bid"] - loaddict[coin][j["exchange"]]["Ask"]
+                        num = loaddict[coin][i["exchange"]]["Bid"]*0.9975 - loaddict[coin][j["exchange"]]["Ask"]*1.0025
                     else:
                         num = -(np.inf)
                 else:
@@ -108,34 +126,46 @@ for i in mstlist:
         exchangecointnp.append(exchangecointtype)
         mstnp.append(num)
 mst = np.array(mstnp)
-print len(mstnp)
 exchangecointarr = np.array(exchangecointnp)
-exchangecointarr.shape = (24,24)
-mst.shape = (24,24)
-mstt=mst.T
-print exchangecointarr.T
-print mstt
-visited_vertices = [2]#起點
-
-#visited_vertice_list = [visited_vertices,visited_vertices1,visited_vertices2,visited_vertices3]
-edge_list,profit,visited_vertices = minimum_spanning_tree(visited_vertices,mstt)
-for i,j in zip(edge_list,profit):
-    #print exchangecointnp
-    print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
-    name=Find(visited_vertices[visited_vertices.index(i[1])])
-    if (name[1] == 'USD' and profit[visited_vertices.index(i[1])] > 205):
-        with open('output.csv', 'a') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow([loaddict,profit[visited_vertices.index(i[1])],time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())])
-#print loaddict
-#print edge_list
-#print loaddict
-""" 
-for edge in edge_list:
-    i, j = edge
-    plt.plot([P[i, 0], P[j, 0]], [P[i, 1], P[j, 1]], c='r')"""
-#plt.show()
-
+exchangecointarr.shape = (vertices,vertices)
+mst.shape = (vertices,vertices)
+mstt = mst.T
+start = [2,8,14,20]
+with open('record.csv', 'r') as infile:
+    reader = csv.reader(infile)
+    for rows in reader:
+        k = rows[0]
+        v = rows[1]
+        p = rows[2]
+        t = datetime.datetime.strptime(rows[3],"%Y-%m-%d %H:%M:%S.%f")
+        if k in mydict:
+            mydict[k][v] = [p,t]
+for s in start:
+    edge_list = []
+    profit = []
+    visited_vertices = [s]
+    edge_list,profit,visited_vertices = minimum_spanning_tree(visited_vertices,mstt)
+    print "#"*100
+    for i,j in zip(edge_list,profit):
+        name = Find(visited_vertices[visited_vertices.index(i[1])])
+        earn = profit[visited_vertices.index(i[1])]
+        print i[0],"(",profit[visited_vertices.index(i[0])],Find(visited_vertices[visited_vertices.index(i[0])]),")",i[1],"(",profit[visited_vertices.index(i[1])],Find(visited_vertices[visited_vertices.index(i[1])]),")"
+        if (name[1] == 'USD' and earn > profit[0]*1.05):#destination is USD
+            start,destination = GetPath(edge_list,visited_vertices[visited_vertices.index(i[1])],earn)
+            infor = mydict[start][destination]
+            if(float(infor[0]) > earn or ((time - infor[1]).total_seconds() < 3600 and (time - infor[1]).total_seconds()!=0)):
+                continue
+            SendMessage()
+            mydict[start][destination] = [earn,time]
+with open('record.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile)
+    for keys,values in mydict.iteritems():
+        for key,value in values.iteritems():
+            writer.writerow([keys,key,value[0],value[1]])
+print AllPath
+#encoded_dict = urllib.urlencode(AllPath)
+r = requests.post('http://127.0.0.1:8000/bot/call1/', headers={'Content-type': 'application/json','Connection':'close'},json = AllPath,timeout=5)
+r.close()
 # array:
 #      BTC         ->        ETH
 # X元ETH買1元BTC(ETHBTC_BID)        1元BTC買X元ETH(ETHBTC_ASK)
