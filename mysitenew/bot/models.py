@@ -27,7 +27,7 @@ class LineBot(models.Model):
         return self.LineId
 
 def CreateLinePerson(userID):
-    LineBot.objects.create(UserId=userID,IdentifyingCode=GetRndStr())
+    LineBot.objects.create(UserId=userID,IdentifyingCode="#"+GetRndStr())
     def __str__(self):
         return self.IdentifyingCode
 
