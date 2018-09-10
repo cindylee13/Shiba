@@ -22,16 +22,17 @@ def GetRndStr():
 
 #Line Bot-----------------------------------------------
 class LineBot(models.Model):
-    UserId = models.ForeignKey(User)#CharField(max_length=100)
+    # UserId = models.ForeignKey(User)#CharField(max_length=100)
+    UserId = models.CharField(max_length=20)
     IdentifyingCode = models.CharField(max_length=20, default='SOME STRING')
     LineId = models.CharField(max_length=20)#CharField(max_length=100)
     def __str__(self):
         return self.LineId
 
 def CreateLinePerson(userID):
-    LineBot.objects.create(UserId=userID,IdentifyingCode="#"+GetRndStr())
-    def __str__(self):
-        return self.IdentifyingCode
+    IdentifyingCode="#"+GetRndStr()
+    LineBot.objects.create(UserId=userID,IdentifyingCode=IdentifyingCode)
+    return IdentifyingCode
 
 # Create your models here.
 def IdentifyPerson(event):

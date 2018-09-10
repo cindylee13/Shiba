@@ -39,7 +39,7 @@ class User(AbstractUser):
     class Meta(AbstractUser.Meta): 
         pass
     def __str__(self):
-		return self.userID
+		return self.uerID
 
 
 #RICHER登入前function-------------------------------------------------------------------------------------------
@@ -171,9 +171,12 @@ def EmailIdentifyingCode(email,IdentifyingCode):
     from_email = username
     to_list = [email]
     print "test1"
-    email_conn = smtplib.SMTP(host,port)
-    print "test2"
+    try:
+        email_conn = smtplib.SMTP(host,port)
+    except:
+        print "您輸入的信箱有誤"
     # 試試看能否跟Gmail Server溝通
+    print "網路問題"
     print(email_conn.ehlo())
     # TTLS安全認證機制
     email_conn.starttls()
@@ -181,6 +184,7 @@ def EmailIdentifyingCode(email,IdentifyingCode):
     # 登錄Gmail
     print(email_conn.login(username,password))
     # 寄信
+    print IdentifyingCode
     email_conn.sendmail(from_email, to_list, IdentifyingCode)
     # 關閉連線
     email_conn.quit()

@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, render
 from users.form import SignUpForm, SignInForm, ChangepwdForm ,StoredMoneyForm , TakeMoneyForm, ForgotPasswordForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import GetUserID, GetUserKey, LoginValidate, User
+from .models import GetUserID, GetUserKey, LoginValidate, User,EmailIdentifyingCode
 from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
 from trips.models import AlgTypeByUser
 from django.contrib.auth.decorators import login_required
@@ -27,15 +27,11 @@ def SignUp(request):
                     if form.pwd_validate(password, password2):
                         try:
                             CreateFrom(username, email, password)
-                            IdentifyingCode = CreateLinePerson(GetUserID(request))
-                            EmailIdentifyingCode(email,IdentifyingCode)
                         except IntegrityError as e:
-                            # print e.message
-                            if 'UNIQUE constraint failed' in e.message:
-                                LoginValidate(request, username, password) # 確認帳號密碼
-                                return render(request,'trading.html', {'username': username})
-                        else:
                             LoginValidate(request, username, password)
+                            IdentifyingCode = CreateLinePerson(GetUserID(request))
+                            print IdentifyingCode
+                            EmailIdentifyingCode(email,IdentifyingCode)
                             return render(request,'trading.html', {'username': username})
                     else:
                         error.append('Please input the same password')
@@ -73,7 +69,7 @@ def SignIn(request):
 
 def SignOut(request):
     auth_logout(request)
-    return HttpResponseRedirect('/index')
+    return HttpResponseRedirect('/index/')
 
 def News(request):
     return render(request, 'news.html')
