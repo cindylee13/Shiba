@@ -1,8 +1,9 @@
-[
-    {"Profit": 764.0779897810322, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD")]},
-    {"Profit": 762.7729889445146, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD")]},
-    {"Profit": 762.9810878548254, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "BTC"), ("Cex", "USD")]},
-    {"Profit": 761.6779604631007, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "BTC"), ("Cex", "USD")]},
-    {"Profit": 762.7729889445146, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"),("Bitfinex", "USD")]},
-    {"Profit": 768.0301633555472, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "USD")]}
-]
+
+
+
+{"Profit": 764.0779897810322, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD")]}, 
+{"Profit": 762.7729889445146, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD")]}, 
+{"Profit": 762.9810878548254, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "BTC"), ("Cex", "USD")]}, 
+{"Profit": 761.6779604631007, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "BTC"), ("Cex", "USD")]}, 
+{"Profit": 762.7729889445146, "Path": [("Cryptopia", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bitfinex", "USD")]}, 
+{"Profit": 768.0301633555472, "Path": [("Bitfinex", "USD"), ("Cex", "BTC"), ("Cryptopia", "BTG"), ("Bittrex", "BTC"), ("Cex", "BTG"), ("Bittrex", "USD"), ("Cex", "ETH"), ("Cryptopia", "USD")]}

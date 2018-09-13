@@ -56,9 +56,11 @@ def test(request):
     return render(request,"trading.html")
 def call(request):
     a = json.loads(request.body.decode('utf-8'))
-    print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    print type(a)
     SendMessage(a)
     print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     print a
     return render(request,"trading.html")
+
+
+
+

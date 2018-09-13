@@ -5,7 +5,7 @@ from django.db import models
 from users.models import User
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage
+from linebot.models import MessageEvent, TextSendMessage, TemplateSendMessage, ButtonsTemplate, MessageTemplateAction, CarouselTemplate, CarouselColumn, TemplateAction
 from django.conf import settings
 from trips.models import AlgTypeByUser
 from django.db.models import Count
@@ -33,8 +33,7 @@ def CreateLinePerson(userID):
     IdentifyingCode="#"+GetRndStr()
     LineBot.objects.create(UserId=userID,IdentifyingCode=IdentifyingCode)
     return IdentifyingCode
-
-# Create your models here.
+    
 def IdentifyPerson(event):
      print event.message.text
      user=LineBot.objects.select_for_update().filter(IdentifyingCode=event.message.text)[0]#這行原本是比對username 現在改為比對亂碼即可
@@ -42,22 +41,75 @@ def IdentifyPerson(event):
      user.save()
      ########!!!!!!!!要多寫一個比對不符合的防呆!!!!!!!!!#############
      print event.message.text
+
+
+
 def SendMessage(paths):
+    for path in paths:
+            # print "!"
+            # print path["Path"][0][1]
+        
+        Carousel_template = TemplateSendMessage(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=Makecolumn(paths[0]["Path"])
+            )
+        )
+        SendMessageByUserId(1,Carousel_template)
     # message = TextSendMessage(text="Hijiji")
-    exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
-    for exchange in exchanges:
-        head = exchange['Head']
-        foot = exchange['Foot']
-        id = AlgTypeByUser.objects.filter(Head = head,Foot = foot).values('userID')#尋找每個符合配對交易所的user們
-        print type(paths)
-        # for path in paths:
-        #     print "!"
-        #     print path.Path[0]
-        for people in id:
-            print people['userID']
-            try:#寄送訊息 用try主因是怕有order但他卻沒註冊linebot
-                lineId = LineBot.objects.get(UserId = people['userID'])
-                print lineId
-                line_bot_api.push_message(lineId.LineId,message)
-            except:
-                print "this person is not in bot's db"
+    # exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
+    # for exchange in exchanges:
+    #     head = exchange['Head']
+    #     foot = exchange['Foot']
+    #     id = AlgTypeByUser.objects.filter(Head = head,Foot = foot).values('userID')#尋找每個符合配對交易所的user們
+    #     print type(paths)
+        
+    #     for people in id:
+    #         print people['userID']
+    #         try:#寄送訊息 用try主因是怕有order但他卻沒註冊linebot
+    #             lineId = LineBot.objects.get(UserId = people['userID'])
+    #             print lineId
+    #             line_bot_api.push_message(lineId.LineId,message)
+    #         except:
+    #             print "this person is not in bot's db"
+
+def Makecolumn(exchanges):
+    columns = []
+    for num in range(0,len(exchanges),+3):
+        i=0
+        column = CarouselColumn(
+                    # thumbnail_image_url = "http://the-sun.on.cc/cnt/china_world/20150901/photo/0901-00423-025b1.jpg",
+                    title='part'+str(i+1),
+                    text='part'+str(i+1),
+                    actions=MakeAction(exchanges,num)
+                 )
+        columns.append(column)
+        if num+2 >= len(exchanges):
+            return columns
+        i=i+1
+    return columns
+
+def MakeAction(exchanges,nums):
+    actions = []
+    # print exchanges[nums]
+    for num in range(nums,nums+3):
+        action = MessageTemplateAction(label='qqq',text=exchanges[num][0]+exchanges[num][1]+"->"+exchanges[num+1][0]+exchanges[num+1][1])
+        actions.append(action)
+        if num+2 >= len(exchanges):
+            break
+    action = MessageTemplateAction(label="...",text="...")
+    if len(actions) % 3 == 1:
+        actions.append(action)
+        actions.append(action)
+    elif len(actions) % 3 == 2:
+        actions.append(action)
+    return actions
+
+def SendMessageByUserId(userID,message): 
+    #user = User.objects.get(userID='1') 
+    #user=User.objects.get(username='testbot') 
+    lineId = LineBot.objects.get(UserId = userID) 
+    #print "~~~",lineId 
+    #a=request.GET.get('user', '') 
+    #message = TextSendMessage(text="123") 
+    line_bot_api.push_message(lineId.LineId,message) 
