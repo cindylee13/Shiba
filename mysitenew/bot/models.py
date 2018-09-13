@@ -42,11 +42,17 @@ def IdentifyPerson(event):
      user.save()
      ########!!!!!!!!要多寫一個比對不符合的防呆!!!!!!!!!#############
      print event.message.text
-def SendMessage():
-    message = TextSendMessage(text="Hijiji")
+def SendMessage(paths):
+    # message = TextSendMessage(text="Hijiji")
     exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
     for exchange in exchanges:
-        id = AlgTypeByUser.objects.filter(Head = exchange['Head'],Foot = exchange['Foot']).values('userID')#尋找每個符合配對交易所的user們
+        head = exchange['Head']
+        foot = exchange['Foot']
+        id = AlgTypeByUser.objects.filter(Head = head,Foot = foot).values('userID')#尋找每個符合配對交易所的user們
+        print type(paths)
+        # for path in paths:
+        #     print "!"
+        #     print path.Path[0]
         for people in id:
             print people['userID']
             try:#寄送訊息 用try主因是怕有order但他卻沒註冊linebot
