@@ -1,12 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
-from .models import BittrexBTCTable
+from .models import BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable
+from .models import BittrexETHTable,CexETHTable,BinanceETHTable,BitfinexETHTable,CryptopiaETHTable
 from .transection import main,test
-from .models import CexBTCTable
-from .models import BinanceBTCTable,TransectionRecord
-from .models import BitfinexBTCTable
-from .models import CryptopiaBTCTable,GetDifference
+from .models import TransectionRecord
+from .models import GetDifference
 
 from django.core import serializers
 transection=[BittrexBTCTable,CexBTCTable,BinanceBTCTable,BitfinexBTCTable,CryptopiaBTCTable]
@@ -46,6 +45,12 @@ def Trading(request):
     BinanceList = BinanceBTCTable.objects.all()
     BitfinexList = BitfinexBTCTable.objects.all()
     CryptopiaList = CryptopiaBTCTable.objects.all()
+
+    BittrexETHList = BittrexETHTable.objects.all()
+    CexETHList = CexETHTable.objects.all()
+    BinanceETHList = BinanceETHTable.objects.all()
+    BitfinexETHList = BitfinexETHTable.objects.all()
+    CryptopiaETHList = CryptopiaETHTable.objects.all()
     #TransectionRecord=TransectionRecord.objects.all()
     #BittrexList = json.dumps(BittrexList)
     #b = CexBTC()
@@ -67,6 +72,11 @@ def Trading(request):
         'BinanceBTCTable' : BinanceList,
         'BitfinexBTCTable' : BitfinexList,
         'CryptopiaBTCTable' : CryptopiaList,
+        'BittrexETHTable' : BittrexETHList[0:500], 
+        'CexETHTable' : CexETHList[0:500],
+        'BinanceETHTable' : BinanceETHList,
+        'BitfinexETHTable' : BitfinexETHList,
+        'CryptopiaETHTable' : CryptopiaETHList,
         'Transection' : records
     })
 def userInfo(request):

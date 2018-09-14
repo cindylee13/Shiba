@@ -6,7 +6,7 @@
                 var pathData = [];
                 timedelta=5*60*1000
                 firstTime=new Date(paths)
-                data=all[id]
+                data=all[id+cointype]
                 $.each(data, function(index, value) {
                     if(value.date-firstTime >= timedelta)
                       pathData.push(value);
@@ -18,9 +18,9 @@
               {
                 var paths = svg.select('.lineask').attr("first");
                 var id = d3.select('svg').attr('id');
-                timedelta=5*60*1000
-                data=all[id];
-                g=paths._groups
+                timedelta=5 * 60 * 1000
+                data = all[id + cointype];
+                g = paths._groups
                 firstTime=new Date(paths)
                 var pathData = [];
                 data.map(Obj => {
@@ -55,6 +55,7 @@
                     .tickFormat(d3.timeFormat("%H:%M:%S")));
                   svg.select('.date').call(d3.axisTop(x)
                     .tickFormat(d3.timeFormat("%y-%m-%d")));
+                  svg.select('.yaxis').call(d3.axisLeft(y))
                   svg.select(".linebid").transition()   // change the line
                      //.duration(750)
                      .attr("d", line(data))
@@ -64,9 +65,9 @@
                      //.duration(750)
                      .attr("d", lineAsk(data))
                      .attr("first",firstTime);
-                  svg.select(".x.axis").transition() // change the x axis
+                  /*svg.select(".x.axis").transition() // change the x axis
                       //.duration(750)
-                      .call(x);
+                      .call(x);*/
                   svg.select(".y.axis").transition() // change the y axis
                       //.duration(750)
                       .call(y);
@@ -77,9 +78,14 @@
                   //svg.duration(4000).transition();
 
               }
+              function SetCointType(type)
+              {
+                  cointype = type
+              }
               function getDate(transectionName)
               {
-                firsttime=all[transectionName][0].date
-                //console.log("all="+all)
-                draw(all[transectionName],transectionName,firsttime)
+                coin = transectionName + cointype
+                console.log(coin)
+                firsttime = all[coin][0].date
+                draw(all[coin],transectionName,firsttime)
               }

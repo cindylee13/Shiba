@@ -119,16 +119,16 @@ def CrawlBittrex(url,cointype,nowtime):
     response = sessionbittrex.get(quote_page)
     data = response.json()['result']
     # print session.params
-    if(cointype == 'BTCUSD'):
-        Insert('bittrex','btc',data['Bid'],data['Ask'],data['Last'],nowtime)
+    if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
+        Insert('bittrex',cointype[0:3],data['Bid'],data['Ask'],data['Last'],nowtime)
         Update('Bittrex',data['Bid'],data['Ask'],nowtime)
     return {'transection':"Bittrex","Bid":float(data['Bid']),"Ask":float(data['Ask']),"Last":float(data['Last'])}
 def CrawlCex(url,cointype,nowtime):
     quote_page = url
     response = sessioncex.get(quote_page)
     data = response.json()
-    if(cointype == 'BTCUSD'):
-        Insert('cex','btc',data['bid'],data['ask'],data['last'],nowtime)
+    if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
+        Insert('cex',cointype[0:3],data['bid'],data['ask'],data['last'],nowtime)
         Update('Cex',data['bid'],data['ask'],nowtime)
     return {'transection':"Cex","Bid":float(data['bid']),"Ask":float(data['ask']),"Last":float(data['last'])}
 def CrawlBitfinex(url,cointype,nowtime):
@@ -142,8 +142,8 @@ def CrawlBitfinex(url,cointype,nowtime):
     if(result[1]=='hb'):
         a = QueueResult[url].get()
         QueueResult[url].put(a)
-        if(cointype == 'BTCUSD'):
-            Insert('bitfinex','btc',a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
+        if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
+            Insert('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
             Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
         return {'transection':"Bitfinex","Bid":float(a['Bid']),"Ask":float(a['Ask']),"Last":float(a['LAST_PRICE'])}
     zipbObj = zip(formatBitifinex, result)
@@ -152,7 +152,7 @@ def CrawlBitfinex(url,cointype,nowtime):
         QueueResult[url].get()
     QueueResult[url].put(a)
     if(cointype == 'BTCUSD'):
-        Insert('bitfinex','btc',a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
+        Insert('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
         Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
 
     return {'transection':"Bitfinex","Bid":float(a['Bid']),"Ask":float(a['Ask']),"Last":float(a['LAST_PRICE'])}
@@ -161,8 +161,8 @@ def CrawlCryptopia(url,cointype,nowtime):
     try :
         response = requests.get(quote_page)
         data = response.json()['Data']
-        if(cointype == 'BTCUSD'):
-            Insert('cryptopia','btc',data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
+        if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
+            Insert('cryptopia',cointype[0:3],data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
             Update('Cryptopia',data['BidPrice'],data['AskPrice'],nowtime)
         return {'transection':"Cryptopia","Bid":float(data['BidPrice']),"Ask":float(data['AskPrice'])}
     except:
@@ -198,6 +198,7 @@ def RunAlg():
     #os.system('python ' + alg1)
     os.system('python ' + alg2)
 def Insert(exchange,cointype,bid,ask,last,created_at):
+    cointype = cointype.lower()
     conn = sqlite3.connect("../mysitenew/db.sqlite3")
     cursor = conn.cursor()
     sql = '''INSERT INTO {} (ask,bid,last,created_at) VALUES (?,?,?,?)'''.format('trips_'+exchange+cointype+'table')

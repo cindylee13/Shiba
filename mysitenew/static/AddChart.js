@@ -1,4 +1,4 @@
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+margin = {top: 20, right: 50, bottom: 30, left: 50},
                 width = 960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
               var svg = d3.select("svg").append("svg")
@@ -55,7 +55,7 @@ var margin = {top: 20, right: 50, bottom: 30, left: 50},
 
 
                 svg.append("g")
-                    .attr("class", "y axis")
+                    .attr("class", "yaxis")
                     .call(yAxis)
                   .append("text")
                   .attr("fill", "#000")

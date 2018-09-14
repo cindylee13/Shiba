@@ -152,12 +152,16 @@
               <button type="button" class="btn btn-white" value="Minus" onclick="Minus()">-</button>
             </div>
             <div class = "col-8">
-              <button type="button" class="btn btn-secondary" value="BinanceChart" onclick="getDate(this.value)">Binance</button>
-              <button type="button" class="btn btn-secondary" value="BittrexChart" onclick="getDate(this.value)">Bittrex</button>
-              <button type="button" class="btn btn-secondary" value="CexChart" onclick="getDate(this.value)">Cex</button>
-              <button type="button" class="btn btn-secondary" value="BitfinexChart" onclick="getDate(this.value)">Bitfinex</button>
-              <button type="button" class="btn btn-secondary" value="CryptopiaChart" onclick="getDate(this.value)">Cryptopia</button>
-            </div>
+              <form>
+                <button type="button" class="btn btn-secondary" value="BinanceChart" onclick="getDate(this.value)">Binance</button>
+                <button type="button" class="btn btn-secondary" value="BittrexChart" onclick="getDate(this.value)">Bittrex</button>
+                <button type="button" class="btn btn-secondary" value="CexChart" onclick="getDate(this.value)">Cex</button>
+                <button type="button" class="btn btn-secondary" value="BitfinexChart" onclick="getDate(this.value)">Bitfinex</button>
+                <button type="button" class="btn btn-secondary" value="CryptopiaChart" onclick="getDate(this.value)">Cryptopia</button>
+                <button type="button" class="btn btn-secondary" value="BTC" onclick="SetCointType(this.value)">BTC</button>
+                <button type="button" class="btn btn-secondary" value="ETH" onclick="SetCointType(this.value)">ETH</button>
+              </form>
+              </div>
           </div>
         </div>
           <svg id="BittrexChart" width="960" height="500"></svg>
@@ -168,6 +172,11 @@
               Cex=[];
               Bitfinex=[];
               Cryptopia=[];
+              BittrexETH=[];
+              BinanceETH=[];
+              CexETH=[];
+              BitfinexETH=[];
+              CryptopiaETH=[];
               var parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S");
                 {% for CoinTable in BittrexBTCTable %}
                   temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
@@ -189,8 +198,31 @@
                   temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Cryptopia.push(temp);
                 {% endfor %}
-                all = {'CryptopiaChart':Cryptopia,'BitfinexChart':Bitfinex,'CexChart':Cex,'BinanceChart':Binance,'BittrexChart':Bittrex}
-                data = all['BittrexChart']
+                {% for CoinTable in BittrexETHTable %}
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  BittrexETH.push(temp);
+                {% endfor %}
+                {% for CoinTable in BinanceETHTable %}
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  BinanceETH.push(temp);
+                {% endfor %}
+                {% for CoinTable in CexETHTable %}
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  CexETH.push(temp);
+                {% endfor %}
+                {% for CoinTable in BitfinexETHTable %}
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  BitfinexETH.push(temp);
+                {% endfor %}
+                {% for CoinTable in CryptopiaETHTable %}
+                  temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
+                  CryptopiaETH.push(temp);
+                {% endfor %}
+                all = {'CryptopiaChartBTC':Cryptopia,'BitfinexChartBTC':Bitfinex,'CexChartBTC':Cex,'BinanceChartBTC':Binance,'BittrexChartBTC':Bittrex
+                      ,'CryptopiaChartETH':CryptopiaETH,'BitfinexChartETH':BitfinexETH,'CexChartETH':CexETH,'BinanceChartETH':BinanceETH,'BittrexChartETH':BittrexETH
+                      }
+                cointype = 'BTC'
+                data = all['BittrexChartBTC']
               </script>
               <script src={% static "AddChart.js" %}></script>
         </div>

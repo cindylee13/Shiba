@@ -24,10 +24,30 @@ class BittrexBTCTable(models.Model):
 	def __str__(self):
 		#return "%s" % self.datetime
 		return "%s" % self.created_at#  , "%s" % self.created_at
+class BittrexETHTable(models.Model):
+	ask = models.FloatField(default=0)#CharField(max_length=100)
+	bid = models.FloatField(default=0)#CharField(max_length=100)
+	last = models.CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
+	def __str__(self):
+		#return "%s" % self.datetime
+		return "%s" % self.created_at#  , "%s" % self.created_at
 #Bittrex-----------------------------------Bittrex----------------------------------------Bittrex-----1
 
 #Cex----------------------------------------Cex-----------------------------------------Cex-----------2
 class CexBTCTable(models.Model):
+	ask = models.FloatField(default=0)#CharField(max_length=100)
+	bid = models.FloatField(default=0)#CharField(max_length=100)
+	last = models.CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
+	def __str__(self):
+		return "%s" % self.created_at#  , "%s" % self.created_at
+		#return self.created_at
+class CexETHTable(models.Model):
 	ask = models.FloatField(default=0)#CharField(max_length=100)
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
@@ -49,10 +69,28 @@ class BinanceBTCTable(models.Model):
 		ordering = ['created_at']
 	def __str__(self):
 		return self.created_at
+class BinanceETHTable(models.Model):
+	ask = models.FloatField(default=0)#CharField(max_length=100)
+	bid = models.FloatField(default=0)#CharField(max_length=100)
+	last = models.CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
+	def __str__(self):
+		return self.created_at
 #Binance-----------------------------------Binance--------------------------------------Binance-------3
 
 #Bitfinex----------------------------------Bitfinex-------------------------------------Bitfinex------4
 class BitfinexBTCTable(models.Model):
+	ask = models.FloatField(default=0)#CharField(max_length=100)
+	bid = models.FloatField(default=0)#CharField(max_length=100)
+	last = models.CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
+	def __str__(self):
+		return self.created_at
+class BitfinexETHTable(models.Model):
 	ask = models.FloatField(default=0)#CharField(max_length=100)
 	bid = models.FloatField(default=0)#CharField(max_length=100)
 	last = models.CharField(max_length=100)
@@ -73,7 +111,18 @@ class CryptopiaBTCTable(models.Model):
 		ordering = ['created_at']
 	def __str__(self):
 		return self.created_at
+class CryptopiaETHTable(models.Model):
+	ask = models.FloatField(default=0)#CharField(max_length=100)
+	bid = models.FloatField(default=0)#CharField(max_length=100)
+	last = models.CharField(max_length=100)
+	created_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['created_at']
+	def __str__(self):
+		return self.created_at
 #Cryptopia----------------------------------Cryptopia------------------------------------Cryptopia----5
+
+
 #Purse--------------------------------------
 class Purse(models.Model):
     Bittrexmoney = models.FloatField(default=0.0)

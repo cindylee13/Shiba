@@ -1,0 +1,53 @@
+{
+"BTGUSD": 
+    {"Bittrex": {"Ask": 21.9, "Bid": 21.63652331, "Last": 21.9, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 21.714, "Bid": 21.612, "Last": 21.66, "transection": "Bitfinex"}, 
+    "Cryptopia": {}, 
+    "Cex": {"Ask": 21.64, "Bid": 21.41, "Last": 21.64, "transection": "Cex"}}, 
+"BCHETH": {
+    "Bittrex": {"Ask": 1.92363913, "Bid": 1.91000095, "Last": 1.91000095, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 1.9144, "Bid": 1.9103, "Last": 1.9106, "transection": "Bitfinex"}, 
+    "Cryptopia": {}, "Cex": {}}, 
+"BTCUSD": {"Bittrex": {"Ask": 7022.8, "Bid": 7021.9700001, "Last": 7021.97, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 7026.1, "Bid": 7026.0, "Last": 7026.6, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 7019.142256, "Bid": 7014.0, "Last": 7014.0, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 6965.5, "Bid": 6963.5, "Last": 6964.5, "transection": "Cex"}}, 
+"ETHBTC": {"Bittrex": {"Ask": 0.04099214, "Bid": 0.04098788, "Last": 0.04099214, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 0.040918, "Bid": 0.040917, "Last": 0.040917, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 0.04097405, "Bid": 0.04094424, "Last": 0.04097405, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 0.041034, "Bid": 0.040901, "Last": 0.041038, "transection": "Cex"}}, 
+"BTGETH": {"Bittrex": {"Ask": 0.0761767, "Bid": 0.07503023, "Last": 0.07617671, "transection": "Bittrex"}, 
+    "Bitfinex": {}, "Cryptopia": {}, "Cex": {}}, 
+"ZECBTC": {
+    "Bittrex": {"Ask": 0.02189999, "Bid": 0.02180019, "Last": 0.02182501, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 0.021841, "Bid": 0.021787, "Last": 0.021782, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 0.02184466, "Bid": 0.02180754, "Last": 0.021676, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 0.0219, "Bid": 0.021704, "Last": 0.021691, "transection": "Cex"}}, 
+"BTGBTC": {
+    "Bittrex": {"Ask": 0.00312499, "Bid": 0.00311247, "Last": 0.00310003, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 0.0030988, "Bid": 0.003068, "Last": 0.003075, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 0.00040669, "Bid": 0.00028, "Last": 0.00034116, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 0.003083, "Bid": 0.003075, "Last": 0.003062, "transection": "Cex"}}, 
+"BCHBTC": {
+    "Bittrex": {"Ask": 0.078564, "Bid": 0.07856399, "Last": 0.078564, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 0.0783, "Bid": 0.078296, "Last": 0.078298, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 0.07871, "Bid": 0.0784, "Last": 0.07872, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 0.07867, "Bid": 0.078076, "Last": 0.078371, "transection": "Cex"}}, 
+"ZECETH": {
+    "Bittrex": {"Ask": 0.53499999, "Bid": 0.53093495, "Last": 0.53093351, "transection": "Bittrex"}, 
+    "Bitfinex": {}, "Cryptopia": {}, "Cex": {}}, 
+"ETHUSD": {
+    "Bittrex": {"Ask": 287.66, "Bid": 287.61, "Last": 287.61, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 287.51, "Bid": 287.5, "Last": 287.54, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 288.51366731, "Bid": 286.29024002, "Last": 286.65378001, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 286.13, "Bid": 285.03, "Last": 285.03, "transection": "Cex"}}, 
+"BCHUSD": {
+    "Bittrex": {"Ask": 553.01422999, "Bid": 548.81887219, "Last": 551.0, "transection": "Bittrex"}, 
+    "Bitfinex": {"Ask": 550.02, "Bid": 550.01, "Last": 550.02, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 554.15995267, "Bid": 549.00000002, "Last": 541.78193327, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 547.98, "Bid": 545.01, "Last": 546.51, "transection": "Cex"}}, 
+ "ZECUSD": {
+    "Bittrex": {"Ask": 153.9999, "Bid": 153.00027108, "Last": 153.00000001, "transection": "Bittrex"},
+    "Bitfinex": {"Ask": 153.36, "Bid": 153.01, "Last": 153.02, "transection": "Bitfinex"}, 
+    "Cryptopia": {"Ask": 153.5815621, "Bid": 151.47191165, "Last": 152.24632238, "transection": "Cryptopia"}, 
+    "Cex": {"Ask": 152.35, "Bid": 151.5, "Last": 151.42, "transection": "Cex"}}}
