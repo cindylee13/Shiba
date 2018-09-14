@@ -164,8 +164,9 @@ with open('record.csv', 'w') as csvfile:
             writer.writerow([keys,key,value[0],value[1]])
 print AllPath
 #encoded_dict = urllib.urlencode(AllPath)
-r = requests.post('http://127.0.0.1:8000/bot/call1/', headers={'Content-type': 'application/json','Connection':'close'},json = AllPath,timeout=5)
-r.close()
+#r = requests.post('http://127.0.0.1:8000/bot/call1/', headers={'Content-type': 'application/json','Connection':'close'},json = AllPath,timeout=5)
+#r.close()
+
 # array:
 #      BTC         ->        ETH
 # X元ETH買1元BTC(ETHBTC_BID)        1元BTC買X元ETH(ETHBTC_ASK)

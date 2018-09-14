@@ -138,17 +138,13 @@
       </ul>
     </div>
   </nav>
-  <div class="content-wrapper">
-    <div class="container-fluid">
-      <!-- Area Chart Example-->
-      <div class="card mb-3">
-        <div class="card-header">
-            <i class="fa fa-area-chart"></i> Area Chart
-            <form action="/bot/test/" method="post">
-              <input type="submit" value="testlinebot"></input>
-            </form>
-        </div>
-      </div>
+    <div class="content-wrapper">
+      <div class="container-fluid">
+        <!-- Area Chart Example-->
+        <div class="card mb-3">
+          <div class="card-header">
+              <i class="fa fa-area-chart"></i> Area Chart
+          </div>
         <div class="card-body">
           <div class = "row">
             <div class = "col-4">
@@ -163,6 +159,7 @@
               <button type="button" class="btn btn-secondary" value="CryptopiaChart" onclick="getDate(this.value)">Cryptopia</button>
             </div>
           </div>
+        </div>
           <svg id="BittrexChart" width="960" height="500"></svg>
           <script>
               var timezone = "Asia/Taipei";
@@ -192,8 +189,8 @@
                   temp={'date':parseTime("{{CoinTable.created_at}}"),'closeBid':Number({{CoinTable.bid}}),'closeAsk':Number({{CoinTable.ask}})};
                   Cryptopia.push(temp);
                 {% endfor %}
-                all={'CryptopiaChart':Cryptopia,'BitfinexChart':Bitfinex,'CexChart':Cex,'BinanceChart':Binance,'BittrexChart':Bittrex}
-                data=all['BittrexChart']
+                all = {'CryptopiaChart':Cryptopia,'BitfinexChart':Bitfinex,'CexChart':Cex,'BinanceChart':Binance,'BittrexChart':Bittrex}
+                data = all['BittrexChart']
               </script>
               <script src={% static "AddChart.js" %}></script>
         </div>
@@ -201,7 +198,8 @@
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-table"></i> Data Table</div>
+          <i class="fa fa-table"></i> Data Table
+        </div>
         <div class="card-body">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
