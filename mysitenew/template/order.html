@@ -99,11 +99,24 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-              <h6>Hi {{username}} !</h6>
-            <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
-        </li>
+        <ul class="navbar-nav ml-auto">
+          <h6>Hi {{username}} !</h6>
+          <li class="dropdown">
+              <a class="dropdown-toggle-user" data-toggle="dropdown" href="#" >
+                Total Amount : {{Total}}
+              </a>
+            <ul class="dropdown-menu" style="width:250px">
+              <li>CexWallet Money : {{CexMoney}} USD</li>
+              <li>BittrexWallet Money : {{BittrexMoney}} USD</li>
+              <li>BinanceWallet Money : {{BinanceMoney}} USD</li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+              <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+          </li>
+        </ul>
       </ul>
     </div>
   </nav>
@@ -117,11 +130,15 @@
         <li class="breadcrumb-item active">Order</li>
       </ol>
 
-      <h1 class="apple">BiBi Theory <i class="fa fa-dollar"></i></h1>
+      <h1 class="apple">Make Your Own Order!</i></h1>
         <hr>
         <div class="container">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-12">
+            <p >Choose 2 transactions Here!<br>
+            After the authorization through "Line", we will send you notifications at the best timing to trade.</p>
+          </div>
+          <div class="col-md-12">
               <form action=" " method="post">
                   {% for item in error %}
                   <p style="color:red;">{{item}}</p>
@@ -149,12 +166,16 @@
       <div class="container">
         <div class"row">
           <div class="col-md-12">
-            <p>In economics and finance, arbitrage (/ˈɑːrbɪtrɑːʒ/, UK also /-trɪdʒ/) is the practice of taking advantage of a price difference
-               between two or more markets: striking a combination of matching deals that capitalize upon the imbalance, the profit being the
-               difference between the market prices. When used by academics, an arbitrage is a (imagined, hypothetical, thought experiment) transaction
-               that involves no negative cash flow at any probabilistic or temporal state and a positive cash flow in at least one state; in simple
-               terms, it is the possibility of a risk-free profit after transaction costs. For example, an arbitrage opportunity is present when there
-                  is the opportunity to instantaneously buy something for a low price and sell it for a higher price.</p>
+            <p class="orderP">
+              <hr>
+              What is Arbitrage?
+              <br>
+            In economics and finance, arbitrage is the practice of taking advantage of a price difference
+             between two or more markets: striking a combination of matching deals that capitalize upon the imbalance, the profit being the
+             difference between the market prices. When used by academics, an arbitrage is a transaction
+             that involves no negative cash flow at any probabilistic or temporal state and a positive cash flow in at least one state; in simple
+             terms, it is the possibility of a risk-free profit after transaction costs. For example, an arbitrage opportunity is present when there
+                is the opportunity to instantaneously buy something for a low price and sell it for a higher price.</p>
           </div>
         </div>
       </div>

@@ -571,6 +571,9 @@ h3.trading{
 .col-8 {
     text-align: right !important;
   }
+  .col-12 {
+      text-align: right !important;
+    }
 label{
   display: none;
 }
