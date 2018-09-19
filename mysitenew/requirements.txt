@@ -3,3 +3,4 @@ line-bot-sdk==1.5.0
 gunicorn==19.3.0
 Flask==0.12.2
 dj-static==0.0.6
+pytho==2.7.14
