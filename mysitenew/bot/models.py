@@ -9,6 +9,7 @@ from linebot.models import MessageEvent, TextSendMessage, TemplateSendMessage, B
 from django.conf import settings
 from trips.models import AlgTypeByUser
 from django.db.models import Count
+from users.models import GetUserID
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
