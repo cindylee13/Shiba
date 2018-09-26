@@ -28,11 +28,11 @@ def callback(request):
             a=event.message.text
             if (event.message.text)[0] == "#":
                 message = TextSendMessage(text="綁定成功!!")
-                try:
-                    IdentifyPerson(event)
-                except:
-                    print "IdentifyFail"
-                    message = TextSendMessage(text="綁定失敗請確認有無輸入錯誤!!")
+                #try:
+                IdentifyPerson(event)
+                #except Exception as e:
+                #    print "IdentifyFail!",e
+                #    message = TextSendMessage(text="綁定失敗請確認有無輸入錯誤!!")
                 line_bot_api.reply_message(event.reply_token,message)
                 print event.source.user_id
             elif isinstance(event, MessageEvent):
@@ -56,9 +56,8 @@ def test(request):
     return render(request,"trading.html")
 def call(request):
     a = json.loads(request.body.decode('utf-8'))
+    print a,"~~~"
     SendMessage(a)
-    print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    print a
     return render(request,"trading.html")
 
 
