@@ -160,7 +160,7 @@ def ResetUserPassword(email):
     print "test3"
     # 登錄Gmail
     print(email_conn.login(username,password))
-    text = "使用者您好這裡是Richer下方是您的臨時密碼<br>"+resetPassword+"<br>請盡快登入修改您的密碼唷~"
+    text = "使用者您好,這裡是Richer,下方是您的臨時密碼<br>"+resetPassword+"<br>請盡快登入修改您的密碼唷~"
     from_name  = "Richer"
     msg = MIMEMultipart()
     msg['Subject'] = "Want To Be Rich ? Let's use Richer!!! 驗證碼"
@@ -194,7 +194,7 @@ def EmailIdentifyingCode(email,IdentifyingCode):
     # 登錄Gmail
     print(email_conn.login(username,password))
     
-    text = "使用者您好這裡是Richer下方是您的驗證碼<br>"+IdentifyingCode+"<br>請盡快綁定您的line用戶唷~"
+    text = "使用者您好,這裡是Richer,下方是您的驗證碼<br>"+IdentifyingCode+"<br>請盡快綁定您的line用戶唷~"
     from_name  = "Richer"
     msg = MIMEMultipart()
     msg['Subject'] = "Want To Be Rich ? Let's use Richer!!! 驗證碼"
