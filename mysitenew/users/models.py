@@ -145,6 +145,7 @@ def ResetUserPassword(email):
     port = 25
     username = "frankboygx@gmail.com"
     password = "qdudfhxlvfjrdmwd"
+    subject = "Want To Be Rich ? Let's use Richer!!!  忘記密碼"
     from_email = username
     to_list = [email]
     print "test1"
@@ -157,8 +158,9 @@ def ResetUserPassword(email):
     print "test3"
     # 登錄Gmail
     print(email_conn.login(username,password))
+    text = "使用者您好這裡是Riher下方是您的臨時密碼\n"+resetPassword+"請盡快登入修改您的密碼唷~"
     # 寄信
-    email_conn.sendmail(from_email, to_list, resetPassword)
+    email_conn.sendmail(from_email, to_list, text)
     # 關閉連線
     email_conn.quit()
     return  "success"
@@ -168,6 +170,7 @@ def EmailIdentifyingCode(email,IdentifyingCode):
     port = 25
     username = "frankboygx@gmail.com"
     password = "qdudfhxlvfjrdmwd"
+    subject = "Want To Be Rich ? Let's use Richer!!! 驗證碼"
     from_email = username
     to_list = [email]
     print "test1"
@@ -175,8 +178,6 @@ def EmailIdentifyingCode(email,IdentifyingCode):
         email_conn = smtplib.SMTP(host,port)
     except:
         print "您輸入的信箱有誤"
-    # 試試看能否跟Gmail Server溝通
-    print "網路問題"
     print(email_conn.ehlo())
     # TTLS安全認證機制
     email_conn.starttls()
@@ -184,8 +185,9 @@ def EmailIdentifyingCode(email,IdentifyingCode):
     # 登錄Gmail
     print(email_conn.login(username,password))
     # 寄信
-    print IdentifyingCode
-    email_conn.sendmail(from_email, to_list, IdentifyingCode)
+    # print IdentifyingCode
+    text = "使用者您好這裡是Riher下方是您的驗證碼\n"+IdentifyingCode+"請盡快綁定您的line用戶唷~"
+    email_conn.sendmail(from_email, to_list, text)
     # 關閉連線
     email_conn.quit()
     return  "success"

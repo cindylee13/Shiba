@@ -50,10 +50,10 @@ def SendMessage(paths):
         Carousel_template = TemplateSendMessage(
             alt_text='Carousel template',
             template=CarouselTemplate(
-                columns=Makecolumn(path["Path"])
+                columns=Makecolumn(path["Path"],path["Profit"])
             )
         )
-        #SendMessageByUserId(1,Carousel_template)
+        #SendMessageByUserId(16,Carousel_template)
     # # message = TextSendMessage(text="Hijiji")
     #     # exchanges = AlgTypeByUser.objects.values('Head','Foot').annotate(num = Count('userID'))#知道有哪些交易所配對
         head = path["Path"][0][0]
@@ -69,18 +69,17 @@ def SendMessage(paths):
                 line_bot_api.push_message(str(lineId.LineId),Carousel_template)
                 print "send!"
             except Exception as e:
-                print e,"this person is not in bot's db"
+                print "this person is not in bot's db"
                 
         i=i+1
-def Makecolumn(exchanges):
+def Makecolumn(exchanges,profit):
     columns = []
     i=0
     for num in range(0,len(exchanges),+3):
-        
         column = CarouselColumn(
                     thumbnail_image_url = "https://i.imgur.com/NLs4V15.png",
-                    title='part'+str(i+1),
-                    text='part'+str(i+1),
+                    title='part'+str(i+1)+'   '+'profit' + str(profit),
+                    text=exchanges,
                     actions=MakeAction(exchanges,num)
                  )
         columns.append(column)
@@ -92,10 +91,12 @@ def Makecolumn(exchanges):
 def MakeAction(exchanges,nums):
     actions = []
     # print exchanges[nums]
+    print 
     for num in range(nums,nums+3):
-        action = MessageTemplateAction(label='請點擊我!!!',text=exchanges[num][0]+exchanges[num][1]+"->"+exchanges[num+1][0]+exchanges[num+1][1])
+        text = exchanges[num][0]+exchanges[num][1]+"->"+exchanges[num+1][0]+exchanges[num+1][1]+"\n"+"在"+exchanges[num][0]+"賣"+exchanges[num+1][1]+"換"+exchanges[num][1]+"(用"+exchanges[num+1][1]+"買"+exchanges[num][0]+")"+"\n"+"在"+exchanges[num][1]+"賣"+exchanges[num+1][0]+"換"+exchanges[num][0]+"(用"+exchanges[num+1][0]+"買"+exchanges[num][1]+")"
+        action = MessageTemplateAction(label=exchanges[num][0][0:5]+"->"+exchanges[num+1][0][0:5],text=text)
         actions.append(action)
-        if num+2 >= len(exchanges):
+        if num+2 >= len(exchanges) or num+1 >= len(exchanges):
             break
     action = MessageTemplateAction(label="___",text="___")
     if len(actions) % 3 == 1:
@@ -112,4 +113,4 @@ def SendMessageByUserId(userID,message):
     #print "~~~",lineId 
     #a=request.GET.get('user', '') 
     #message = TextSendMessage(text="123") 
-    line_bot_api.push_message('U8544861c58c5b546568',message) 
+    line_bot_api.push_message('U8544861c58c5b54656890cf44714aa5c',message) 

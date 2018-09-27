@@ -183,7 +183,7 @@ def RunAlg():
     # os.system('python ' + alg2)
     
 def UpdateOrCreate(exchange,cointype,bid,ask,last,created_at):
-    time_threshold = datetime.now() - timedelta(seconds=30)
+    time_threshold = datetime.now() - timedelta(hour= 1)
     conn = sqlite3.connect("../mysitenew/db.sqlite3")
     cursor = conn.cursor()
     try:
