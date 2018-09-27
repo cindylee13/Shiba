@@ -1,6 +1,7 @@
 import requests
 import time
 from datetime import datetime
+from datetime import timedelta
 import sqlite3
 import json
 import redis
@@ -64,23 +65,6 @@ url = {
                     "Cex":"https://cex.io/api/ticker/ZEC/USD", 
                     "Bitfinex":"ZECUSD", 
                     "Cryptopia":"https://www.cryptopia.co.nz/api/GetMarket/ZEC_USDT"
-                },
-        'BTGBTC':
-                {
-                    "Bittrex":"https://bittrex.com/api/v1.1/public/getticker?market=BTC-BTG", 
-                    "Cex":"https://cex.io/api/ticker/BTG/BTC", 
-                    "Bitfinex":"BTGBTC", 
-                    "Cryptopia":"https://www.cryptopia.co.nz/api/GetMarket/BTG_BTC"
-                },
-        'BTGETH':
-                {
-                    "Bittrex":"https://bittrex.com/api/v1.1/public/getticker?market=ETH-BTG", 
-                },
-        'BTGUSD':
-                {
-                    "Bittrex":"https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTG", 
-                    "Cex":"https://cex.io/api/ticker/BTG/USD", 
-                    "Bitfinex":"BTGUSD", 
                 }
             }
 def BitifinexConnect():
@@ -120,16 +104,16 @@ def CrawlBittrex(url,cointype,nowtime):
     data = response.json()['result']
     # print session.params
     if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
-        Insert('bittrex',cointype[0:3],data['Bid'],data['Ask'],data['Last'],nowtime)
-        Update('Bittrex',data['Bid'],data['Ask'],nowtime)
+        UpdateOrCreate('bittrex',cointype[0:3],data['Bid'],data['Ask'],data['Last'],nowtime)
+        # Update('Bittrex',data['Bid'],data['Ask'],nowtime)
     return {'transection':"Bittrex","Bid":float(data['Bid']),"Ask":float(data['Ask']),"Last":float(data['Last'])}
 def CrawlCex(url,cointype,nowtime):
     quote_page = url
     response = sessioncex.get(quote_page)
     data = response.json()
     if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
-        Insert('cex',cointype[0:3],data['bid'],data['ask'],data['last'],nowtime)
-        Update('Cex',data['bid'],data['ask'],nowtime)
+        UpdateOrCreate('cex',cointype[0:3],data['bid'],data['ask'],data['last'],nowtime)
+        # Update('Cex',data['bid'],data['ask'],nowtime)
     return {'transection':"Cex","Bid":float(data['bid']),"Ask":float(data['ask']),"Last":float(data['last'])}
 def CrawlBitfinex(url,cointype,nowtime):
     global ws
@@ -143,8 +127,8 @@ def CrawlBitfinex(url,cointype,nowtime):
         a = QueueResult[url].get()
         QueueResult[url].put(a)
         if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
-            Insert('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
-            Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
+            UpdateOrCreate('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
+            # Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
         return {'transection':"Bitfinex","Bid":float(a['Bid']),"Ask":float(a['Ask']),"Last":float(a['LAST_PRICE'])}
     zipbObj = zip(formatBitifinex, result)
     a = dict(zipbObj)
@@ -152,8 +136,8 @@ def CrawlBitfinex(url,cointype,nowtime):
         QueueResult[url].get()
     QueueResult[url].put(a)
     if(cointype == 'BTCUSD'):
-        Insert('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
-        Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
+        UpdateOrCreate('bitfinex',cointype[0:3],a['Bid'],a['Ask'],a['LAST_PRICE'],nowtime)
+        # Update('Bitfinex',a['Bid'],a['Ask'],nowtime)
 
     return {'transection':"Bitfinex","Bid":float(a['Bid']),"Ask":float(a['Ask']),"Last":float(a['LAST_PRICE'])}
 def CrawlCryptopia(url,cointype,nowtime):
@@ -162,8 +146,8 @@ def CrawlCryptopia(url,cointype,nowtime):
         response = requests.get(quote_page)
         data = response.json()['Data']
         if(cointype == 'BTCUSD' or cointype == 'ETHUSD'):
-            Insert('cryptopia',cointype[0:3],data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
-            Update('Cryptopia',data['BidPrice'],data['AskPrice'],nowtime)
+            UpdateOrCreate('cryptopia',cointype[0:3],data['BidPrice'],data['AskPrice'],data['LastPrice'],nowtime)
+            # Update('Cryptopia',data['BidPrice'],data['AskPrice'],nowtime)
         return {'transection':"Cryptopia","Bid":float(data['BidPrice']),"Ask":float(data['AskPrice'])}
     except:
         print cointype,"CrawlCryptopia error!"
@@ -196,7 +180,20 @@ def RunAlg():
     #alg2 = os.path.join(SaveDirectory,"transection","alg2.py")
     alg2 = os.path.join(SaveDirectory,"make.py")
     #os.system('python ' + alg1)
-    os.system('python ' + alg2)
+    # os.system('python ' + alg2)
+    
+def UpdateOrCreate(exchange,cointype,bid,ask,last,created_at):
+    time_threshold = datetime.now() - timedelta(seconds=30)
+    conn = sqlite3.connect("../mysitenew/db.sqlite3")
+    cursor = conn.cursor()
+    try:
+        sql = '''UPDATE {} SET ask=?,bid=?,last=?,created_at=? WHERE created_at<?''' .format('trips_'+exchange+cointype+'table')
+        cursor.execute(sql,(ask,bid,last,created_at,time_threshold))
+    except:
+        sql = '''INSERT INTO {} (ask,bid,last,created_at) VALUES (?,?,?,?)''' .format('trips_'+exchange+cointype+'table')
+        cursor.execute(sql,(ask,bid,last,created_at))
+    conn.commit()
+    
 def Insert(exchange,cointype,bid,ask,last,created_at):
     cointype = cointype.lower()
     conn = sqlite3.connect("../mysitenew/db.sqlite3")
@@ -224,21 +221,21 @@ main()
 def Crawel():
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
         r.set('PriceToAlg',json.dumps(infor),ex=3)"""
-"""def UpdateOrCreate(transection,table,bid,ask,last):
-  time_threshold = datetime.now() - timedelta(hours=3)
-  try:
-    result = table.objects.filter(created_at__lt=time_threshold)[0]
-  except IndexError:
-        result = table.objects.create(bid = bid, ask = ask, last= last)
-        coin={'transection':transection,'bid':int(bid),'ask':int(ask) ,'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
-        infor = json.dumps(coin)
-        Update('price',infor)
-  #return 'empty'
-  result.bid = bid
-  result.ask = ask 
-  result.last= last
-  result.save()
-  coin={'transection':transection,'bid':int(bid),'ask':int(ask),'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
-  infor = json.dumps(coin)
-  Update('price',infor)
-  return result.bid"""
+
+#   time_threshold = datetime.now() - timedelta(hours=3)
+#   try:
+#     result = table.objects.filter(created_at__lt=time_threshold)[0]
+#   except IndexError:
+#         result = table.objects.create(bid = bid, ask = ask, last= last)
+#         coin={'transection':transection,'bid':int(bid),'ask':int(ask) ,'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
+#         infor = json.dumps(coin)
+#         Update('price',infor)
+#   #return 'empty'
+#   result.bid = bid
+#   result.ask = ask
+#   result.last= last
+#   result.save()
+#   coin={'transection':transection,'bid':int(bid),'ask':int(ask),'created_at':datetime.strftime(result.created_at,'%Y-%m-%d %H:%M:%S')}
+#   infor = json.dumps(coin)
+#   Update('price',infor)
+#   return result.bid

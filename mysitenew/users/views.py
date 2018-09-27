@@ -25,14 +25,12 @@ def SignUp(request):
             if not (IsUserPassword(username)):
                 if not (IsUserEmail(email)):
                     if form.pwd_validate(password, password2):
-                        try:
-                            CreateFrom(username, email, password)
-                        except IntegrityError as e:
-                            LoginValidate(request, username, password)
-                            IdentifyingCode = CreateLinePerson(GetUserID(request))
-                            print IdentifyingCode
-                            EmailIdentifyingCode(email,IdentifyingCode)
-                            return render(request,'trading.html', {'username': username})
+                        CreateFrom(username, email, password)
+                        LoginValidate(request, username, password)
+                        IdentifyingCode = CreateLinePerson(GetUserID(request))
+                        print IdentifyingCode
+                        EmailIdentifyingCode(email,IdentifyingCode)
+                        return render(request,'trading.html', {'username': username})
                     else:
                         error.append('Please input the same password')
                 else:

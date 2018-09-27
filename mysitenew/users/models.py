@@ -35,7 +35,7 @@ class User(AbstractUser):
     CexBTC = models.FloatField(default=0.0)
     BittrexBTC = models.FloatField(default=0.0)
     BinanceBTC = models.FloatField(default=0.0)
-    userID = models.IntegerField(primary_key=True)
+    userID = models.AutoField (primary_key=True)
     class Meta(AbstractUser.Meta): 
         pass
     def __str__(self):
