@@ -30,7 +30,7 @@ def SignUp(request):
                         IdentifyingCode = CreateLinePerson(GetUserID(request))
                         print IdentifyingCode
                         EmailIdentifyingCode(email,IdentifyingCode)
-                        return render(request,'trading.html', {'username': username})
+                        return render(request,'qrcode.html', {'username': username})
                     else:
                         error.append('Please input the same password')
                 else:
@@ -71,6 +71,9 @@ def SignOut(request):
 
 def News(request):
     return render(request, 'news.html')
+
+def Qrcode(request):
+    return render(request, 'qrcode.html')
 
 def ForgotPassword(request):
     error = []
