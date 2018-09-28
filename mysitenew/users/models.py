@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login as auth_login,logout as auth
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import AbstractUser 
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 #RICHER登入前function-------------------------------------------------------------------------------------------
@@ -35,11 +37,11 @@ class User(AbstractUser):
     CexBTC = models.FloatField(default=0.0)
     BittrexBTC = models.FloatField(default=0.0)
     BinanceBTC = models.FloatField(default=0.0)
-    userID = models.IntegerField(primary_key=True)
+    userID = models.AutoField (primary_key=True)
     class Meta(AbstractUser.Meta): 
         pass
     def __str__(self):
-		return self.uerID
+		return self.userID
 
 
 #RICHER登入前function-------------------------------------------------------------------------------------------
@@ -143,10 +145,11 @@ def ResetUserPassword(email):
     
     host = "smtp.gmail.com"
     port = 25
-    username = "frankboygx@gmail.com"
-    password = "qdudfhxlvfjrdmwd"
+    username = "richer.btc@gmail.com"
+    password = "pnajyingaijxuqkc"
+    subject = "Want To Be Rich ? Let's use Richer!!!  忘記密碼"
     from_email = username
-    to_list = [email]
+    to_email = email
     print "test1"
     email_conn = smtplib.SMTP(host,port)
     print "test2"
@@ -157,8 +160,17 @@ def ResetUserPassword(email):
     print "test3"
     # 登錄Gmail
     print(email_conn.login(username,password))
+    text = "使用者您好,這裡是Richer,下方是您的臨時密碼<br>"+resetPassword+"<br>請盡快登入修改您的密碼唷~"
+    from_name  = "Richer"
+    msg = MIMEMultipart()
+    msg['Subject'] = "Want To Be Rich ? Let's use Richer!!! 驗證碼"
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg.attach(MIMEText(text, 'html', 'utf-8'))  ### 要修改的地方 ###
     # 寄信
-    email_conn.sendmail(from_email, to_list, resetPassword)
+    # print IdentifyingCode
+    
+    email_conn.sendmail(from_email, to_email, msg.as_string())
     # 關閉連線
     email_conn.quit()
     return  "success"
@@ -166,26 +178,33 @@ def ResetUserPassword(email):
 def EmailIdentifyingCode(email,IdentifyingCode):
     host = "smtp.gmail.com"
     port = 25
-    username = "frankboygx@gmail.com"
-    password = "qdudfhxlvfjrdmwd"
+    username = "richer.btc@gmail.com"
+    password = "pnajyingaijxuqkc"
     from_email = username
-    to_list = [email]
+    to_email = email
     print "test1"
     try:
         email_conn = smtplib.SMTP(host,port)
     except:
         print "您輸入的信箱有誤"
-    # 試試看能否跟Gmail Server溝通
-    print "網路問題"
     print(email_conn.ehlo())
     # TTLS安全認證機制
     email_conn.starttls()
     print "test3"
     # 登錄Gmail
     print(email_conn.login(username,password))
+    
+    text = "使用者您好,這裡是Richer,下方是您的驗證碼<br>"+IdentifyingCode+"<br>請盡快綁定您的line用戶唷~"
+    from_name  = "Richer"
+    msg = MIMEMultipart()
+    msg['Subject'] = "Want To Be Rich ? Let's use Richer!!! 驗證碼"
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg.attach(MIMEText(text, 'html', 'utf-8'))  ### 要修改的地方 ###
     # 寄信
-    print IdentifyingCode
-    email_conn.sendmail(from_email, to_list, IdentifyingCode)
+    # print IdentifyingCode
+    
+    email_conn.sendmail(from_email, to_email, msg.as_string())
     # 關閉連線
     email_conn.quit()
     return  "success"
