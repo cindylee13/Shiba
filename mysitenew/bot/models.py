@@ -19,7 +19,11 @@ def GetRndStr():
     rndByte = os.urandom(6)
     b64Str = base64.urlsafe_b64encode(rndByte)
     return b64Str
-
+class BotRecord(models.Model):
+    userID = models.ForeignKey(User)
+    HeadTransection = models.CharField(max_length=100)
+    FootTransection = models.CharField(max_length=100)
+    Profit = models.FloatField(default = 0.0)
 #Line Bot-----------------------------------------------
 class LineBot(models.Model):
     # UserId = models.ForeignKey(User)#CharField(max_length=100)
@@ -70,6 +74,8 @@ def SendMessage(paths):
                 print "send!"
             except Exception as e:
                 print "this person is not in bot's db"
+            users = User.objects.get(userID = people['userID'])
+            BotRecord.objects.create(userID = users , HeadTransection = head , FootTransection = foot , Profit=path["Profit"])
                 
         i=i+1
 def Makecolumn(exchanges,profit):
