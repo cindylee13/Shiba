@@ -61,10 +61,10 @@
               <a href="/users/BittrexWallet/">Bittrex_Wallet</a>
             </li>
             <li>
-              <a href="/users/BitfinexWallet">Bitfinex_Wallet</a>
+              <a href="/users/BitfinexWallet/">Bitfinex_Wallet</a>
             </li>
             <li>
-              <a href="/users/CryptopiaWallet">Cryptopia_Wallet</a>
+              <a href="/users/CryptopiaWallet/">Cryptopia_Wallet</a>
             </li>
           </ul>
         </li>
@@ -89,9 +89,22 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        <h6>Hi {{username}} !</h6>
+        <li class="dropdown">
+            <a class="dropdown-toggle-user" data-toggle="dropdown" href="#" >
+              Total Amount : {{Total}}
+            </a>
+          <ul class="dropdown-menu" style="width:250px">
+            <li>CexWallet Money : {{CexMoney}} USD</li>
+            <li>BittrexWallet Money : {{BittrexMoney}} USD</li>
+            <li>BitfinexWallet Money : {{BitfinexMoney}} USD</li>
+            <li>CryptopiaWallet Money : {{CryptopiaMoney}} USD</li>
+          </ul>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+            <i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
         </li>
       </ul>
     </div>
@@ -110,7 +123,7 @@
         <div class="tab-pane" id="cex_wallet">
           <h5>Bitcoin Balance</h5>
           <div class="row">
-            <div class= "col-sm-3"><h2>1.4291</h2> </div>
+            <div class= "col-sm-3"><h2>{{BTC}}</h2> </div>
             <div class= "col-sm-9"><h4>BTC</h4></div>
           </div>
 

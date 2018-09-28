@@ -33,10 +33,12 @@ def LoginValidate(request,username,password):
 class User(AbstractUser): 
     Cexmoney = models.FloatField(default=0.0)
     Bittrexmoney = models.FloatField(default=0.0)
-    Binancemoney = models.FloatField(default=0.0)
+    Bitfinexmoney = models.FloatField(default=0.0)
+    Cryptopiamoney = models.FloatField(default=0.0)
     CexBTC = models.FloatField(default=0.0)
     BittrexBTC = models.FloatField(default=0.0)
-    BinanceBTC = models.FloatField(default=0.0)
+    BitfinexBTC = models.FloatField(default=0.0)
+    CryptopiaBTC = models.FloatField(default=0.0)
     userID = models.AutoField (primary_key=True)
     class Meta(AbstractUser.Meta): 
         pass
@@ -108,19 +110,33 @@ def BittrexWithdrawWalletMoney(userID,amount):#takemoney
     return user.Bittrexmoney
 # Bittrexwalletfunction-----------------------------------------
 
-# Binancewalletfunction-----------------------------------------
-def BinanceDepositWalletMoney(userID,amount):#storedmoney
+# Bitfinexwalletfunction-----------------------------------------
+def BitfinexDepositWalletMoney(userID,amount):#storedmoney
     user = User.objects.select_for_update().filter(userID=userID)[0]
-    user.Binancemoney = user.Binancemoney + amount
+    user.Bitfinexmoney = user.Bitfinexmoney + amount
     user.save()
-    return user.Binancemoney
+    return user.Bitfinexmoney
 
-def BinanceWithdrawWalletMoney(userID,amount):#takemoney
+def BitfinexWithdrawWalletMoney(userID,amount):#takemoney
     user = User.objects.select_for_update().filter(userID=userID)[0]
-    user.Binancemoney = user.Binancemoney - amount
+    user.Bitfinexmoney = user.Bitfinexmoney - amount
     user.save()
-    return user.Binancemoney
-# Binancewalletfunction-----------------------------------------
+    return user.Bitfinexmoney
+# Bitfinexwalletfunction-----------------------------------------
+
+# Cryptopiawalletfunction-----------------------------------------
+def CryptopiaDepositWalletMoney(userID,amount):#storedmoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Cryptopiamoney = user.Cryptopiamoney + amount
+    user.save()
+    return user.Cryptopiamoney
+
+def CryptopiaWithdrawWalletMoney(userID,amount):#takemoney
+    user = User.objects.select_for_update().filter(userID=userID)[0]
+    user.Cryptopiamoney = user.Cryptopiamoney - amount
+    user.save()
+    return user.Cryptopiamoney
+# Cryptopiawalletfunction-----------------------------------------
 #RICHER登入後function-------------------------------------------------------------------------------------------
  
 

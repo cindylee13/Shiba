@@ -4,7 +4,7 @@ from users.form import SignUpForm, SignInForm, ChangepwdForm ,StoredMoneyForm , 
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import GetUserID, GetUserKey, LoginValidate, User,EmailIdentifyingCode
-from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BinanceDepositWalletMoney, BinanceWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
+from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BitfinexDepositWalletMoney, BitfinexWithdrawWalletMoney, CryptopiaDepositWalletMoney, CryptopiaWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
 from trips.models import AlgTypeByUser
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -99,7 +99,7 @@ def ChangePassword(request):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path)) # 判斷使用者有沒有登出過
     error = []
     if request.method== 'POST':
-        form = ChangepwdForm(request.POST)
+        form = ChangepwdForm(request.POST)   
         if form.is_valid():
             data = form.cleaned_data
             user = authenticate(username=request.user.username,
@@ -108,7 +108,7 @@ def ChangePassword(request):
                 if data['newPassword'] == data['newPassword2']:
                     newPassword = data['newPassword']
                     CreateNewFrom(request, newPassword)
-                    return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+                    return render(request,'trading.html', {'username': request.user.username,'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
 
                 else:
                     error.append('Please input the same password')
@@ -118,7 +118,8 @@ def ChangePassword(request):
             error.append('Please input the required domain')
     else:
         form = ChangepwdForm()
-    return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+    
+    return render(request,'changepassword.html', {'form': form, 'error': error, 'username': request.user.username, 'email' : request.user.email,'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
 #RICHER登入前-------------------------------------------------------------------------------------------
 
 #RICHER登入後-------------------------------------------------------------------------------------------
@@ -127,7 +128,7 @@ def SelectPage(request, pageName):
     if not request.user.is_authenticated():  # prevent anonymous Sign in，尚未登入看不到頁面，要顯示錯誤
         return HttpResponseRedirect('/users/signin/')
     elif('Trading' == pageName):   
-        return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('Order' == pageName):
         error = []
         if 'drop2' not in request.POST:
@@ -142,25 +143,14 @@ def SelectPage(request, pageName):
             error.append('Exchange repeat')  
         else:
             AlgTypeByUser.objects.create(userID = GetUserID(request) ,Head = str(a) ,Foot = str(b))  
-        return render(request,'order.html',{'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request,'order.html',{'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('Withdraw' == pageName):
-        return render(request,'withdraw.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request,'withdraw.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('Deposit' == pageName):
-        return render(request,'deposit.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request,'deposit.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('History' == pageName):   
-        #error = []
-        #if 'AlgTypeByUserI.created_at' not in request.POST: 
-        #    AlgTypeByUserTable = AlgTypeByUser.objects.all()
-        #    return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney, 'AlgTypeByUserTable' : AlgTypeByUserTable, 'errpr':error})
-        
-        #unit = AlgTypeByUser.objects.filter(userID=GetUserID(request))
-        #unit.delete()
-        #unit = AlgTypeByUser.objects.get(Head=request.AlgTypeByUser.objects.Head).delete()
-        #unit.save()
-        #unit = AlgTypeByUser.objects.get(Foot=request.AlgTypeByUser.objects.Foot).delete()
-        #unit.save()
         AlgTypeByUserTable = AlgTypeByUser.objects.all()
-        return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
+        return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
         
     else:
         return HttpResponseRedirect('/users/signin/') # 防呆
@@ -172,7 +162,7 @@ def DeleteOrder(request, id):
     unit = AlgTypeByUser.objects.filter(userID=GetUserID(request))
     unit[int(id)].delete()
     AlgTypeByUserTable = AlgTypeByUser.objects.all()
-    return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
+    return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
 
 def Order(request):
     return SelectPage(request, 'Order')
@@ -189,14 +179,23 @@ def History(request):
 #Withdraw------------------------------------------------------------------------------
 def SelectWithdrawWalletSubtakeMoney(request, withdrawName, isTrueFalse, user):
     if isTrueFalse == False:
-        return 'You wallet have '+ str(user.Cexmoney) +' USD'
+        if('CexWithdraw' == withdrawName):
+            return 'You wallet have '+ str(user.Cexmoney) +' USD'
+        elif('BittrexWithdraw' == withdrawName):
+            return 'You wallet have '+ str(user.Bittrexmoney) +' USD'
+        elif('BitfinexWithdraw' == withdrawName):
+            return 'You wallet have '+ str(user.Bitfinexmoney) +' USD'
+        elif('CryptopiaWithdraw' == withdrawName):
+            return 'You wallet have '+ str(user.Cryptopiamoney) +' USD'
     if isTrueFalse == True:
         if('CexWithdraw' == withdrawName):
             return HttpResponseRedirect('/users/CexWallet/')
         elif('BittrexWithdraw' == withdrawName):
             return HttpResponseRedirect('/users/BittrexWallet/')
-        elif('BinanceWithdraw' == withdrawName):
-            return HttpResponseRedirect('/users/BinanceWallet/')
+        elif('BitfinexWithdraw' == withdrawName):
+            return HttpResponseRedirect('/users/BitfinexWallet/')
+        elif('CryptopiaWithdraw' == withdrawName):
+            return HttpResponseRedirect('/users/CryptopiaWallet/')
 def IsSelectWithdrawWalletSubtakeMoney(request, withdrawName, user, userID, takemoney):
     if('CexWithdraw' == withdrawName):
         if IsWalletSubtakeMoney(user.Cexmoney, takemoney): 
@@ -210,11 +209,17 @@ def IsSelectWithdrawWalletSubtakeMoney(request, withdrawName, user, userID, take
         else:
             BittrexWithdrawWalletMoney(userID,takemoney)
             return True
-    elif('BinanceWithdraw' == withdrawName):
-        if IsWalletSubtakeMoney(user.Binancemoney, takemoney): 
+    elif('BitfinexWithdraw' == withdrawName):
+        if IsWalletSubtakeMoney(user.Bitfinexmoney, takemoney): 
             return False
         else:
-            BinanceWithdrawWalletMoney(userID,takemoney)
+            BitfinexWithdrawWalletMoney(userID,takemoney)
+            return True
+    elif('CryptopiaWithdraw' == withdrawName):
+        if IsWalletSubtakeMoney(user.Cryptopiamoney, takemoney): 
+            return False
+        else:
+            CryptopiaWithdrawWalletMoney(userID,takemoney)
             return True
 
 def selectWithdrawHtml(request, withdrawName, form, error):
@@ -222,8 +227,10 @@ def selectWithdrawHtml(request, withdrawName, form, error):
         return render(request,'CexWithdraw.html', {'form':form,'error':error})
     elif('BittrexWithdraw' == withdrawName):
         return render(request,'BittrexWithdraw.html', {'form':form,'error':error})
-    elif('BinanceWithdraw' == withdrawName):
-        return render(request,'BinanceWithdraw.html', {'form':form,'error':error})
+    elif('BitfinexWithdraw' == withdrawName):
+        return render(request,'BitfinexWithdraw.html', {'form':form,'error':error})
+    elif('CryptopiaWithdraw' == withdrawName):
+        return render(request,'BitfinexWithdraw.html', {'form':form,'error':error})
     else:
         return HttpResponseRedirect('/users/signin/') # 防呆
 
@@ -258,8 +265,11 @@ def CexWithdraw(request):
 def BittrexWithdraw(request):
     return selectWithdraw(request, 'BittrexWithdraw')
 
-def BinanceWithdraw(request):
-    return selectWithdraw(request, 'BinanceWithdraw')
+def BitfinexWithdraw(request):
+    return selectWithdraw(request, 'BitfinexWithdraw')
+
+def CryptopiaWithdraw(request):
+    return selectWithdraw(request, 'CryptopiaWithdraw')
 
 #Withdraw-----------------------------------------------------------------------------
 
@@ -272,17 +282,22 @@ def selectDepositStore(request, DepositName, userID, storedmoney):
     elif('BittrexDeposit' == DepositName):
         BittrexDepositWalletMoney(userID,storedmoney)
         return HttpResponseRedirect('/users/BittrexWallet/')
-    elif('BinanceDeposit' == DepositName):
-        BinanceDepositWalletMoney(userID,storedmoney)
-        return HttpResponseRedirect('/users/BinanceWallet/')
+    elif('BitfinexDeposit' == DepositName):
+        BitfinexDepositWalletMoney(userID,storedmoney)
+        return HttpResponseRedirect('/users/BitfinexWallet/')
+    elif('CryptopiaDeposit' == DepositName):
+        CryptopiaDepositWalletMoney(userID,storedmoney)
+        return HttpResponseRedirect('/users/CryptopiaWallet/')
 
 def selectDepositHtml(request, DepositName, form, error):
     if('CexDeposit' == DepositName):
         return render(request,'CexDeposit.html', {'form':form,'error':error})
     elif('BittrexDeposit' == DepositName):
         return render(request,'BittrexDeposit.html', {'form':form,'error':error})
-    elif('BinanceDeposit' == DepositName):
-        return render(request,'BinanceDeposit.html', {'form':form,'error':error})
+    elif('BitfinexDeposit' == DepositName):
+        return render(request,'BitfinexDeposit.html', {'form':form,'error':error})
+    elif('CryptopiaDeposit' == DepositName):
+        return render(request,'CryptopiaDeposit.html', {'form':form,'error':error})
     else:
         return HttpResponseRedirect('/users/signin/') # 防呆
 
@@ -313,8 +328,11 @@ def CexDeposit(request):
 def BittrexDeposit(request):
     return selectDeposit(request, 'BittrexDeposit')
 
-def BinanceDeposit(request):
-    return selectDeposit(request, 'BinanceDeposit')
+def BitfinexDeposit(request):
+    return selectDeposit(request, 'BitfinexDeposit')
+
+def CryptopiaDeposit(request):
+    return selectDeposit(request, 'CryptopiaDeposit')
 
 #Deposit------------------------------------------------------------------------------
 
@@ -322,19 +340,24 @@ def BinanceDeposit(request):
 def SelectWallet(request, walletName):
     user = FilterUser(GetUserID(request))
     if('CexWallet' == walletName):
-        return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney, 'BTC' : user.CexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request, 'Cex_Wallet.html', {'username' : user.username,'money' : user.Cexmoney, 'BTC' : user.CexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('BittrexWallet' == walletName):
-        return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney, 'BTC' : user.BittrexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
-    elif('BinanceWallet' == walletName):
-        return render(request, 'Binance_Wallet.html', {'username' : user.username,'money' : user.Binancemoney, 'BTC' : user.BinanceBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BinanceMoney' : request.user.Binancemoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Binancemoney})
+        return render(request, 'Bittrex_Wallet.html', {'username' : user.username,'money' : user.Bittrexmoney, 'BTC' : user.BittrexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
+    elif('BitfinexWallet' == walletName):
+        return render(request, 'Bitfinex_Wallet.html', {'username' : user.username,'money' : user.Bitfinexmoney, 'BTC' : user.BitfinexBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
+    elif('CryptopiaWallet' == walletName):
+        return render(request, 'Cryptopia_Wallet.html', {'username' : user.username,'money' : user.Cryptopiamoney, 'BTC' : user.CryptopiaBTC, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
 def CexWallet(request):
     return SelectWallet(request, 'CexWallet')
 
 def BittrexWallet(request):
     return SelectWallet(request, 'BittrexWallet')
 
-def BinanceWallet(request):
-    return SelectWallet(request, 'BinanceWallet')
+def BitfinexWallet(request):
+    return SelectWallet(request, 'BitfinexWallet')
+
+def CryptopiaWallet(request):
+    return SelectWallet(request, 'CryptopiaWallet')
 #Wallet------------------------------------------------------------------------------
 
 def Error(request):
