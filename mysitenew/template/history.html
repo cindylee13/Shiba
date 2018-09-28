@@ -14,7 +14,7 @@
   <link href={% static "bootstrap/vendor/font-awesome/css/font-awesome.min.css" %} rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href={% static "bootstrap/css/sb-admin.css" %} rel="stylesheet">
-  
+
   </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -122,6 +122,31 @@
         <li class="breadcrumb-item active">History</li>
       </ol>
 
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fa fa-table"></i> Order History</div>
+          <div class="card-body">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <tbody>
+                  <tr>
+                    {% for AlgTypeByUserI in AlgTypeByUserTable %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{AlgTypeByUserI.created_at}}</td>
+                      <td>{{AlgTypeByUserI.Head}}</td>
+                      <td>{{AlgTypeByUserI.Foot}}</td>
+                      <td>
+                        <form action=" " method="post">
+                        <td><a name = "counter" type="submit" value="" href="{% url 'DeleteOrder' id=forloop.counter0 %}">delete<a></td>
+                        </form>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
         <div class="card mb-3">
           <div class="card-header">
             <i class="fa fa-table"></i> Transaction History</div>
