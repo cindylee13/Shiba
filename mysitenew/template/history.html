@@ -154,17 +154,12 @@
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                   <tr>
-                    {% for AlgTypeByUserI in AlgTypeByUserTable %}
+                    {% for AlgTypeByUserDataI in AlgTypeByUserDataTable %}
                     <tr>
                       <td>{{ forloop.counter }}</td>
-                      <td>{{AlgTypeByUserI.created_at}}</td>
-                      <td>{{AlgTypeByUserI.Head}}</td>
-                      <td>{{AlgTypeByUserI.Foot}}</td>
-                      <td>
-                        <form action=" " method="post">
-                        <td><a name = "counter" type="submit" value="" href="{% url 'DeleteOrder' id=forloop.counter0 %}">delete<a></td>
-                        </form>
-                      </td>
+                      <td>{{AlgTypeByUserDataI.created_at}}</td>
+                      <td>{{AlgTypeByUserDataI.Head}}</td>
+                      <td>{{AlgTypeByUserDataI.Foot}}</td>
                     </tr>
                     {% endfor %}
                   </tr>

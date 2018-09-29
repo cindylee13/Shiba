@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import GetUserID, GetUserKey, LoginValidate, User,EmailIdentifyingCode
 from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, BittrexDepositWalletMoney, BittrexWithdrawWalletMoney, BitfinexDepositWalletMoney, BitfinexWithdrawWalletMoney, CryptopiaDepositWalletMoney, CryptopiaWithdrawWalletMoney,CheckUserEmail ,ResetUserPassword, IsUserPassword, IsUserEmail, CreateFrom, CreateNewFrom, IsWalletSubtakeMoney
-from trips.models import AlgTypeByUser
+from trips.models import AlgTypeByUser, AlgTypeByUserData, TransectionRecord
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from bot.models import CreateLinePerson
@@ -131,18 +131,28 @@ def SelectPage(request, pageName):
         return render(request,'trading.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('Order' == pageName):
         error = []
+        isRepeat = 0
         if 'drop2' not in request.POST:
             return render_to_response('order.html')
         if 'drop3' not in request.POST:
             return render_to_response('order.html')
         a=request.POST['drop2']
         b=request.POST['drop3']
+        unit = AlgTypeByUser.objects.filter(userID=GetUserID(request))
+        for item in range(0, len(unit)):
+            if(str(unit[item].Head)==str(a) and str(unit[item].Foot==str(b))):
+                isRepeat = 1
+                break
+
         if (str(a) == 'drop2-empty' or str(b) =='drop3-empty'):
             error.append('Please select an exchange')
         elif (str(a) == str(b)):
-            error.append('Exchange repeat')  
+            error.append('Exchange repeat') 
+        elif (isRepeat== 1): 
+            error.append('Repeat Orders')
         else:
-            AlgTypeByUser.objects.create(userID = GetUserID(request) ,Head = str(a) ,Foot = str(b))  
+            AlgTypeByUser.objects.create(userID = GetUserID(request) ,Head = str(a) ,Foot = str(b))
+            AlgTypeByUserData.objects.create(userID = GetUserID(request) ,Head = str(a) ,Foot = str(b))
         return render(request,'order.html',{'error': error, 'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('Withdraw' == pageName):
         return render(request,'withdraw.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
@@ -150,7 +160,8 @@ def SelectPage(request, pageName):
         return render(request,'deposit.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('History' == pageName):   
         AlgTypeByUserTable = AlgTypeByUser.objects.all()
-        return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
+        AlgTypeByUserDataTable = AlgTypeByUserData.objects.all()
+        return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable, 'AlgTypeByUserDataTable':AlgTypeByUserDataTable})
         
     else:
         return HttpResponseRedirect('/users/signin/') # 防呆
@@ -162,7 +173,8 @@ def DeleteOrder(request, id):
     unit = AlgTypeByUser.objects.filter(userID=GetUserID(request))
     unit[int(id)].delete()
     AlgTypeByUserTable = AlgTypeByUser.objects.all()
-    return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable})
+    AlgTypeByUserDataTable = AlgTypeByUserData.objects.all()
+    return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable, 'AlgTypeByUserDataTable':AlgTypeByUserDataTable})
 
 def Order(request):
     return SelectPage(request, 'Order')
