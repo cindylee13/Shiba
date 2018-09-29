@@ -84,8 +84,8 @@ def Makecolumn(exchanges,profit):
     for num in range(0,len(exchanges),+3):
         column = CarouselColumn(
                     thumbnail_image_url = "https://i.imgur.com/NLs4V15.png",
-                    title='part'+str(i+1)+'   '+'profit' + str(profit),
-                    text=exchanges,
+                    title='part'+str(i+1),
+                    text='profit' + str(profit),
                     actions=MakeAction(exchanges,num)
                  )
         columns.append(column)
