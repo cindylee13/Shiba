@@ -156,6 +156,12 @@ class AlgTypeByUser(models.Model):
 	Head = models.CharField(max_length = 64)
 	Foot = models.CharField(max_length = 64)
 	created_at = models.DateTimeField(auto_now=True)
+
+class AlgTypeByUserData(models.Model):
+	userID = models.IntegerField(max_length = 20)
+	Head = models.CharField(max_length = 64)
+	Foot = models.CharField(max_length = 64)
+	created_at = models.DateTimeField(auto_now=True)
 #TransectionRecord--------------------------
 class TransectionRecord(models.Model):
     userID = models.ForeignKey(User)
