@@ -8,7 +8,7 @@ from .models import FilterUser, CexDepositWalletMoney, CexWithdrawWalletMoney, B
 from trips.models import AlgTypeByUser, AlgTypeByUserData, TransectionRecord
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from bot.models import CreateLinePerson
+from bot.models import CreateLinePerson,BotRecord
 
 #RICHER登入前-------------------------------------------------------------------------------------------
 def SignUp(request):
@@ -159,8 +159,8 @@ def SelectPage(request, pageName):
     elif('Deposit' == pageName):
         return render(request,'deposit.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney})
     elif('History' == pageName):   
-        AlgTypeByUserTable = AlgTypeByUser.objects.all()
-        AlgTypeByUserDataTable = AlgTypeByUserData.objects.all()
+        AlgTypeByUserTable = AlgTypeByUser.objects.filter(userID = GetUserID(request))
+        AlgTypeByUserDataTable = BotRecord.objects.filter(userID = GetUserID(request))
         return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable, 'AlgTypeByUserDataTable':AlgTypeByUserDataTable})
         
     else:
@@ -172,8 +172,9 @@ def Trading(request):
 def DeleteOrder(request, id):
     unit = AlgTypeByUser.objects.filter(userID=GetUserID(request))
     unit[int(id)].delete()
-    AlgTypeByUserTable = AlgTypeByUser.objects.all()
-    AlgTypeByUserDataTable = AlgTypeByUserData.objects.all()
+
+    AlgTypeByUserTable = AlgTypeByUser.objects.filter(userID = GetUserID(request))
+    AlgTypeByUserDataTable = BotRecord.objects.filter(userID = GetUserID(request))
     return render(request,'history.html', {'username': request.user.username, 'CexMoney' : request.user.Cexmoney, 'BittrexMoney' : request.user.Bittrexmoney, 'BitfinexMoney' : request.user.Bitfinexmoney, 'CryptopiaMoney' : request.user.Cryptopiamoney, 'Total' :request.user.Cexmoney + request.user.Bittrexmoney + request.user.Bitfinexmoney + request.user.Cryptopiamoney, 'AlgTypeByUserTable' : AlgTypeByUserTable, 'AlgTypeByUserDataTable':AlgTypeByUserDataTable})
 
 def Order(request):
